@@ -1,13 +1,36 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useGetWordsQuery, Word } from '../generated/services/langApi';
 
-import { RootState } from '../model/store';
+const imagePath = (img: string) => `https://react-learnwords-example.herokuapp.com/${img}`;
+
+const Word = ({ word }: { word: Word }) => (
+  <div className="word">
+    { word.image &&
+      <img src={imagePath(word.image)} alt="" />
+    }
+    <ul>
+      <li>
+        Id: {word.id}
+      </li>
+      <li>
+        Word:{word.word}
+      </li>
+      <li>
+        Translation: {word.wordTranslate}
+      </li>
+    </ul>
+  </div>
+);
 
 const Main = () => {
-  const message = useSelector((state: RootState) => state.message);
+  const { data: words, isLoading } = useGetWordsQuery({});
+
   return (
     <div className="application">
-      <h1>{message}</h1>
+      {isLoading && <h1>Loading</h1>}
+      { words &&
+        words.map((word) => <Word word={word}/>)
+      }
     </div>
   );
 };

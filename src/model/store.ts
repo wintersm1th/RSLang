@@ -1,21 +1,16 @@
-import { configureStore, createSlice } from '@reduxjs/toolkit';
-
-interface DummyState {
-  message: string;
-}
-
-const initialState: DummyState = {
-  message: 'Hello world',
-};
-
-const dummySlice = createSlice({
-  name: 'dummySubstate',
-  initialState,
-  reducers: {},
-});
+import { combineReducers, configureStore } from '@reduxjs/toolkit';
+import { langApiBase } from '../generated/langApiBase';
+// import { langApi } from '../generated/services/langApi';
 
 const store = configureStore({
-  reducer: dummySlice.reducer,
+  reducer: combineReducers({
+    [langApiBase.reducerPath]: langApiBase.reducer
+  }),
+
+  middleware: (gDM) =>
+    gDM()
+    .concat(langApiBase.middleware)
+
 });
 
 export type RootState = ReturnType<typeof store.getState>;
