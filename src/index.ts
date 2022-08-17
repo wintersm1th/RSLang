@@ -1,4 +1,4 @@
-import './styles/scss/base.scss';
+import './styles/css/base.css';
 
 import DIContainer from './DI/DIContainer';
 import DI_TYPES from './DI/DITypes';

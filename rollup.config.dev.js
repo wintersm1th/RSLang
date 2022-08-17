@@ -6,6 +6,7 @@ import typescript from '@rollup/plugin-typescript';
 import serve from 'rollup-plugin-serve';
 import livereload from 'rollup-plugin-livereload';
 import css from 'rollup-plugin-import-css';
+import html from '@rollup/plugin-html';
 
 export default {
   input: 'src/index.ts',
@@ -29,10 +30,11 @@ export default {
       'process.env.NODE_ENV': JSON.stringify('production'),
     }),
     commonjs(),
+    html(),
     serve({
       open: true,
       verbose: true,
-      contentBase: ['', 'public'],
+      contentBase: ['dist'],
       host: 'localhost',
       port: 9000,
     }),
