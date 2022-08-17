@@ -180,9 +180,7 @@
         }
       ],
       "get": {
-        "tags": [
-          "Words"
-        ],
+        "tags": ["Words"],
         "security": [],
         "summary": "Get a chunk of words",
         "description": "Gets a chunk of words",
@@ -216,9 +214,7 @@
         }
       ],
       "get": {
-        "tags": [
-          "Words"
-        ],
+        "tags": ["Words"],
         "security": [],
         "summary": "Get a word with assets by id",
         "description": "Gets a word with assets by id",
@@ -238,9 +234,7 @@
     },
     "/users": {
       "post": {
-        "tags": [
-          "Users"
-        ],
+        "tags": ["Users"],
         "security": [],
         "summary": "Create a new user",
         "description": "Creates a new user",
@@ -299,9 +293,7 @@
         }
       ],
       "get": {
-        "tags": [
-          "Users"
-        ],
+        "tags": ["Users"],
         "summary": "Get user",
         "description": "Gets user",
         "responses": {
@@ -324,9 +316,7 @@
         }
       },
       "put": {
-        "tags": [
-          "Users"
-        ],
+        "tags": ["Users"],
         "summary": "Update a user",
         "description": "Updates a user",
         "requestBody": {
@@ -370,9 +360,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "Users"
-        ],
+        "tags": ["Users"],
         "summary": "Delete a user",
         "description": "Deletes a user by id",
         "responses": {
@@ -398,9 +386,7 @@
         }
       ],
       "get": {
-        "tags": [
-          "Users"
-        ],
+        "tags": ["Users"],
         "summary": "Get new user tokens",
         "description": "Gets new user tokens",
         "responses": {
@@ -433,9 +419,7 @@
         }
       ],
       "get": {
-        "tags": [
-          "Users/Words"
-        ],
+        "tags": ["Users/Words"],
         "summary": "Get all user words",
         "description": "Gets all user words",
         "responses": {
@@ -480,9 +464,7 @@
         }
       ],
       "post": {
-        "tags": [
-          "Users/Words"
-        ],
+        "tags": ["Users/Words"],
         "summary": "Create a user word",
         "description": "Create a user word by id",
         "requestBody": {
@@ -527,9 +509,7 @@
         }
       },
       "get": {
-        "tags": [
-          "Users/Words"
-        ],
+        "tags": ["Users/Words"],
         "summary": "Get a user word by id",
         "description": "Gets a user word by id",
         "responses": {
@@ -552,9 +532,7 @@
         }
       },
       "put": {
-        "tags": [
-          "Users/Words"
-        ],
+        "tags": ["Users/Words"],
         "summary": "Update a user word",
         "description": "Updates a user word by id",
         "requestBody": {
@@ -599,9 +577,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "Users/Words"
-        ],
+        "tags": ["Users/Words"],
         "summary": "Delete user word",
         "description": "Deletes user words by id",
         "responses": {
@@ -663,9 +639,7 @@
         }
       ],
       "get": {
-        "tags": [
-          "Users/AggregatedWords"
-        ],
+        "tags": ["Users/AggregatedWords"],
         "summary": "Get all user aggregated words",
         "description": "Gets all user aggregated words",
         "responses": {
@@ -710,9 +684,7 @@
         }
       ],
       "get": {
-        "tags": [
-          "Users/AggregatedWords"
-        ],
+        "tags": ["Users/AggregatedWords"],
         "summary": "Get a user aggregated word by id",
         "description": "Gets a user aggregated word by id",
         "responses": {
@@ -748,9 +720,7 @@
         }
       ],
       "get": {
-        "tags": [
-          "Users/Statistic"
-        ],
+        "tags": ["Users/Statistic"],
         "summary": "Get statistics",
         "description": "Gets statistics",
         "responses": {
@@ -773,9 +743,7 @@
         }
       },
       "put": {
-        "tags": [
-          "Users/Statistic"
-        ],
+        "tags": ["Users/Statistic"],
         "summary": "Upsert statistics",
         "description": "Upserts new statistics",
         "requestBody": {
@@ -834,9 +802,7 @@
         }
       ],
       "get": {
-        "tags": [
-          "Users/Setting"
-        ],
+        "tags": ["Users/Setting"],
         "summary": "Get settings",
         "description": "Gets settings",
         "responses": {
@@ -859,9 +825,7 @@
         }
       },
       "put": {
-        "tags": [
-          "Users/Setting"
-        ],
+        "tags": ["Users/Setting"],
         "summary": "Upsert settings",
         "description": "Upserts new settings",
         "requestBody": {
@@ -909,9 +873,7 @@
     },
     "/signin": {
       "post": {
-        "tags": [
-          "Sign In"
-        ],
+        "tags": ["Sign In"],
         "security": [],
         "summary": "Sign in",
         "description": "Logins a user and returns a JWT-token",

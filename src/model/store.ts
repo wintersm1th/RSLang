@@ -4,13 +4,10 @@ import { langApiBase } from '../generated/langApiBase';
 
 const store = configureStore({
   reducer: combineReducers({
-    [langApiBase.reducerPath]: langApiBase.reducer
+    [langApiBase.reducerPath]: langApiBase.reducer,
   }),
 
-  middleware: (gDM) =>
-    gDM()
-    .concat(langApiBase.middleware)
-
+  middleware: (gDM) => gDM().concat(langApiBase.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

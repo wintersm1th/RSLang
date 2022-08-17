@@ -1,10 +1,6 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import {
-  BrowserRouter,
-  Routes,
-  Route
-} from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import store from '../model/store';
 
@@ -17,14 +13,14 @@ export default function WrappedMain() {
     <Provider store={store}>
       <BrowserRouter>
         <Routes>
-          <Route path='/' element={<Main />}>
-            <Route path='dictionary' element={<Dictionary />} />
-            <Route path='games' element={<Games />} >
-              <Route path='sprint' element={<h1>Sprint game</h1>} />
-              <Route path='second' element={<h1>Second game</h1>} />
+          <Route path="/" element={<Main />}>
+            <Route path="dictionary" element={<Dictionary />} />
+            <Route path="games" element={<Games />}>
+              <Route path="sprint" element={<h1>Sprint game</h1>} />
+              <Route path="second" element={<h1>Second game</h1>} />
             </Route>
           </Route>
-        </Routes> 
+        </Routes>
       </BrowserRouter>
     </Provider>
   );

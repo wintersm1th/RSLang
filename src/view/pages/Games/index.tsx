@@ -5,11 +5,11 @@ const Games = () => {
   return (
     <>
       <h1>Games page</h1>
-      <Link to='sprint'>Sprint game</Link>
-      <Link to='second'>Sprint game</Link>
+      <Link to="sprint">Sprint game</Link>
+      <Link to="second">Sprint game</Link>
       <Outlet />
     </>
-  )
-}
+  );
+};
 
 export default Games;

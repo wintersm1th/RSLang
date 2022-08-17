@@ -1,4 +1,4 @@
-import type { ConfigFile } from '@rtk-query/codegen-openapi'
+import type { ConfigFile } from '@rtk-query/codegen-openapi';
 
 const config: ConfigFile = {
   schemaFile: './api/langApi.json',
@@ -7,6 +7,6 @@ const config: ConfigFile = {
   outputFile: './services/langApi.ts',
   exportName: 'langApi',
   hooks: true,
-}
+};
 
-export default config
+export default config;
