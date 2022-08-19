@@ -4,10 +4,6 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 
 const Auth = () => {
-    const state = {
-        email: "",
-        password: ""
-    };
 
     return (
         <Box
@@ -20,7 +16,7 @@ const Auth = () => {
         >
             <TextField id="login" label="Логин" variant="outlined" />
             <TextField id="password" label="Пароль" variant="outlined" />
-            <Button variant="outlined">Авторизоватся</Button>
+            <Button variant="outlined">Авторизоваться</Button>
         </Box>
     );
 }

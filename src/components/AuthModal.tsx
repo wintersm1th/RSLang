@@ -4,7 +4,8 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import {Tab, Tabs } from '@mui/material';
-import Auth from './Auth;
+import Auth from "./Auth";
+import Register from "./Register";
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -35,7 +36,7 @@ const AuthModal = () => {
         setValue(newValue);
     };
 
-    function a11yProps(index: number) {
+    function tabProps(index: number) {
         return {
             id: `simple-tab-${index}`,
             'aria-controls': `simple-tabpanel-${index}`,
@@ -67,7 +68,7 @@ const AuthModal = () => {
         <div className="auth-link">
             <Button onClick={handleOpen} sx={{
                 color: 'white'
-            }}>Авторизация / Регистрация </Button>
+            }}>Авторизация / Регистрация</Button>
             <Modal
                 open={open}
                 onClose={handleClose}
@@ -77,15 +78,15 @@ const AuthModal = () => {
                 <Box sx={style}>
                     <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                         <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-                            <Tab label="Авторизация" {...a11yProps(0)} />
-                            <Tab label="Регистрация" {...a11yProps(1)} />
+                            <Tab label="Авторизация" {...tabProps(0)} />
+                            <Tab label="Регистрация" {...tabProps(1)} />
                         </Tabs>
                     </Box>
                     <TabPanel value={value} index={0}>
                         <Auth />
                     </TabPanel>
                     <TabPanel value={value} index={1}>
-                        Item Two
+                        <Register />
                     </TabPanel>
                 </Box>
             </Modal>
