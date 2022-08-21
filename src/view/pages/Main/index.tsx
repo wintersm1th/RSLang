@@ -5,6 +5,7 @@ import Box from '@mui/material/Box';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Button from '@mui/material/Button';
+import Footer from '../../../components/footer/footer';
 
 const Main = () => {
   return (
@@ -22,6 +23,7 @@ const Main = () => {
       <Box>
         <Outlet />
       </Box>
+      <Footer />
     </Box>
   );
 };
