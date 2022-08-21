@@ -20,6 +20,7 @@
     "@emotion/react": "^11.10.0",
     "@emotion/styled": "^11.10.0",
     "@hookform/resolvers": "^2.9.7",
+    "@mui/lab": "^5.0.0-alpha.95",
     "@mui/material": "^5.10.1",
     "@reduxjs/toolkit": "^1.8.3",
     "@rollup/plugin-babel": "^5.3.1",
