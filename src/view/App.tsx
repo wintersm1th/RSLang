@@ -7,6 +7,8 @@ import store from '../model/store';
 import Main from './pages/Main';
 import Games from './pages/Games';
 import Dictionary from './pages/Dictionary';
+import Sprint from './pages/Sprint';
+import Audiocall from './pages/Audiocall';
 
 export default function WrappedMain() {
   return (
@@ -15,10 +17,9 @@ export default function WrappedMain() {
         <Routes>
           <Route path="/" element={<Main />}>
             <Route path="dictionary" element={<Dictionary />} />
-            <Route path="games" element={<Games />}>
-              <Route path="sprint" element={<h1>Sprint game</h1>} />
-              <Route path="second" element={<h1>Second game</h1>} />
-            </Route>
+            <Route path="games" element={<Games />} />
+            <Route path="games/sprint" element={<Sprint />} />
+            <Route path="games/audiocall" element={<Audiocall />} />
           </Route>
         </Routes>
       </BrowserRouter>
