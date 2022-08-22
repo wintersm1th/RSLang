@@ -5,10 +5,10 @@ import DI_TYPES from './DITypes';
 
 import IApp from '../IApp';
 import App from '../App';
-import IRegisterService from "../services/interfaces/IRegisterService";
-import RegisterService from "../services/RegisterService";
-import IAuthService from "../services/interfaces/IAuthService";
-import AuthService from "../services/AuthService";
+import IRegisterService from '../services/interfaces/IRegisterService';
+import RegisterService from '../services/RegisterService';
+import IAuthService from '../services/interfaces/IAuthService';
+import AuthService from '../services/AuthService';
 
 const DIContainer = new Container();
 

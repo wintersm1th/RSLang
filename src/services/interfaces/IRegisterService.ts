@@ -1,7 +1,7 @@
-import IRegisterCreateParams from "./IRegisterCreateParams";
+import IRegisterCreateParams from './IRegisterCreateParams';
 
 interface IRegisterService {
-  createUser: (params: IRegisterCreateParams) => Promise<boolean>
+  createUser: (params: IRegisterCreateParams) => Promise<boolean>;
 }
 
 export default IRegisterService;

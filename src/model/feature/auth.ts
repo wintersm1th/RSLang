@@ -1,8 +1,8 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import IAuthManage from "../../services/interfaces/IAuthManage";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import IAuthManage from '../../services/interfaces/IAuthManage';
 
-const initialState : IAuthManage = {
-  registerErrorMessage : null,
+const initialState: IAuthManage = {
+  registerErrorMessage: null,
   authErrorMessage: null,
   isRegisterSuccess: null,
   isAuthSuccess: null,
@@ -31,15 +31,9 @@ const slice = createSlice({
     successRegister(state) {
       state.registerErrorMessage = null;
       state.isRegisterSuccess = true;
-    }
-  }
+    },
+  },
 });
 
 export default slice;
-export const {
-  setRegisterMessage,
-  setAuthMessage,
-  clearMessage,
-  successAuth,
-  successRegister,
-} = slice.actions
+export const { setRegisterMessage, setAuthMessage, clearMessage, successAuth, successRegister } = slice.actions;

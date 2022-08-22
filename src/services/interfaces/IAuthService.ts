@@ -1,8 +1,8 @@
-import IAuthParams from "./IAuthParams";
+import IAuthParams from './IAuthParams';
 
 interface IAuthService {
-  authorize: (params: IAuthParams) => Promise<boolean>
-  start: () => void
+  authorize: (params: IAuthParams) => Promise<boolean>;
+  start: () => void;
 }
 
 export default IAuthService;
