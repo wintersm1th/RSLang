@@ -8,14 +8,24 @@ const Games = () => {
       <div className="games">
         <h1>Выберите игру</h1>
         <div className="games__container">
-          <GameCard title="Аудиовызов" classname="audiocall" url="audiocall">
+          <GameCard 
+            title="Аудиовызов" 
+            classname="audiocall" 
+            url="audiocall"
+            imgSrc="/assets/img/audiocall_img.jpg"            
+          >            
             <p>
-              Описание игры или картинка
+              «Аудиовызов» - тренировка, которая улучшает восприятие речи на слух.
             </p>            
           </GameCard>
-          <GameCard title="Спринт" classname="sprint" url="sprint">
+          <GameCard 
+            title="Спринт" 
+            classname="sprint" 
+            url="sprint"
+            imgSrc="/assets/img/sprint_img.jpg"
+          >
             <p>
-              Описание игры или картинка
+              «Спринт» - тренировка для повторения слов из вашего словаря. Угадай как можно больше слов за 60 секунд
             </p>            
           </GameCard>
         </div>

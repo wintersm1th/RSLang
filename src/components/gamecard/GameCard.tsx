@@ -10,10 +10,12 @@ export const GameCard: FC<GameCardProps> = ({
   classname,
   url,
   children,
+  imgSrc,
 }) => {
   return (
     <div className={'game-card games__' + classname}>
       <h2>{title}</h2>
+      <img src={imgSrc} alt={url} />
       <div className="description">{children}</div>
       <Button 
         component={Link} 

@@ -3,4 +3,5 @@ export interface GameCardProps {
   classname: string
   url: string
   children: React.ReactNode
+  imgSrc: string
 }
