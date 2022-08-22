@@ -1,13 +1,16 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import {Tab, Tabs } from '@mui/material';
 import Auth from "./Auth";
 import Register from "./Register";
-import ITabPanelProps from "../services/interfaces/ITabPanelProps";
 
+interface ITabPanelProps {
+    children?: React.ReactNode;
+    index: number;
+    value: number;
+}
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -48,7 +51,7 @@ const AuthModal = () => {
             >
                 {value === index && (
                     <Box sx={{ p: 3 }}>
-                        <Typography>{children}</Typography>
+                        {children}
                     </Box>
                 )}
             </div>
