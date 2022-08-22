@@ -5,6 +5,9 @@ import { injectable } from 'inversify';
 import IApp from './IApp';
 
 import AppView from './view/App';
+import DIContainer from './DI/DIContainer';
+import IAuthService from './services/interfaces/IAuthService';
+import DI_TYPES from './DI/DITypes';
 
 @injectable()
 export default class App implements IApp {
@@ -12,6 +15,7 @@ export default class App implements IApp {
 
   run(root: HTMLDivElement) {
     this.reactRoot = ReactDOM.createRoot(root);
+    DIContainer.get<IAuthService>(DI_TYPES.AuthService).start();
     this.render();
   }
 
