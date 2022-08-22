@@ -10,7 +10,6 @@ import Button from '@mui/material/Button';
 import { Link } from 'react-router-dom';
 import AuthModal from '../AuthModal';
 
-
 const Header = () => {
   const userInfo = useSelector((state: RootState) => state[userSlice.name]);
 
@@ -35,7 +34,7 @@ const Header = () => {
       </Toolbar>
       {userInfo.name?.length ? userInfo.name : <AuthModal />}
     </AppBar>
-  )
-}
+  );
+};
 
 export default Header;

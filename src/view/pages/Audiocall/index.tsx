@@ -5,7 +5,7 @@ const Audiocall = () => {
     <>
       <h1>Audiocall game</h1>
     </>
-  )
-}
+  );
+};
 
 export default Audiocall;

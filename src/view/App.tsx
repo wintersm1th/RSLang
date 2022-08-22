@@ -14,9 +14,7 @@ import Header from './components/header/Header';
 import Team from './pages/Team';
 import Statistics from './pages/Statistics';
 
-
 export default function WrappedMain() {
-
   return (
     <Provider store={store}>
       <BrowserRouter>

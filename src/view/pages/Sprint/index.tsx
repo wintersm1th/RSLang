@@ -5,7 +5,7 @@ const Sprint = () => {
     <>
       <h1>Sprint game</h1>
     </>
-  )
-}
+  );
+};
 
 export default Sprint;
