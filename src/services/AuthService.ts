@@ -6,7 +6,7 @@ import IAuthService from "./interfaces/IAuthService";
 import IAuthParams from "./interfaces/IAuthParams";
 import { setUserInfo } from "../model/feature/user";
 import IUserInfo from "./interfaces/IUserInfo";
-import { isKnownError, isParsingError, isSerializedError, isSuccessResponse } from "./utils/ErrorResposne";
+import {isCustomError, isFetchError, isParsingError, isSerializedError, isSuccessResponse, isUnknownError } from "./utils/ErrorResposne";
 
 @injectable()
 export default class AuthService implements IAuthService {
@@ -16,25 +16,32 @@ export default class AuthService implements IAuthService {
 
     return sub.then((response) => {
       if (isSuccessResponse<Auth>(response)) {
-        const userInfo = response.data as IUserInfo;
+        const { data: userInfo } = response;
+
         store.dispatch(successAuth());
+
         this.setUserData(userInfo);
         return true;
       }
 
+      const error = response.error;
+
       let message: string = '';
 
-      if (isSerializedError(response.error)) {
-        message = response.error.message ?? 'Неизвестная ошибка';
-      } else if (isParsingError(response.error)) {
-        message = response.error.data
-      } else if (isKnownError(response.error)) {
-        message = response.error.error;
-      } else {
+      if (isSerializedError(error)) {
+        message = error.message ?? 'Неизвестная ошибка';
+      } else if (isUnknownError(error)) {
         message = 'Неизвестная ошибка';
+      } else if (isParsingError(error)) {
+        message = error.data ?? 'Неизвестная ошибка'
+      } else if (isFetchError(error) || isCustomError(error)) {
+        message = error.error;
+      } else {
+        throw Error('Undefined behavior');
       }
 
       store.dispatch(setAuthMessage(message));
+
       return false;
     })
   }
@@ -44,7 +51,14 @@ export default class AuthService implements IAuthService {
   }
 
   protected setUserData(userInfo: IUserInfo): void {
-    store.dispatch(setUserInfo({ name: userInfo?.name, userId: userInfo?.userId, token: userInfo?.token, refreshToken: userInfo?.refreshToken }))
+    const thunk = setUserInfo({
+      name: userInfo?.name,
+      userId: userInfo?.userId,
+      token: userInfo?.token,
+      refreshToken: userInfo?.refreshToken
+    });
+
+    store.dispatch(thunk);
   }
 }
 

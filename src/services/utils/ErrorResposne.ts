@@ -1,4 +1,3 @@
-import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import { SerializedError } from "@reduxjs/toolkit";
 
 interface UnknownError {
@@ -19,36 +18,19 @@ interface ParsingError {
   error: string;
 }
 
-interface CustomError{
-
+interface CustomError {
   status: 'CUSTOM_ERROR';
   data?: unknown;
   error: string;
 }
 
-function isSuccessResponse<T>(response: {data: T} | {error: FetchBaseQueryError | SerializedError }): response is {data: T}
-{
-  return 'data' in response;
-}
+type KnownError = FetchError | ParsingError | CustomError;
 
-function isKnownError(error: UnknownError | FetchError | ParsingError | CustomError): error is FetchError | ParsingError | CustomError
-{
-  return 'error' in error;
-}
+export const isSuccessResponse = <T>(response: Object): response is {data: T} => 'data' in response;
 
-function isSerializedError(error: Object): error is SerializedError
-{
-  return 'message' in error;
-}
+export const isSerializedError = (error: Object): error is SerializedError => !('status' in error);
+export const isUnknownError = (error: { status: number | string}): error is UnknownError => typeof error.status === 'number';
 
-function isParsingError(error: {status: string}): error is ParsingError
-{
-  return error.status === 'PARSING_ERROR';
-}
-
-export {
-  isSuccessResponse,
-  isKnownError,
-  isSerializedError,
-  isParsingError
-}
+export const isFetchError = (error: KnownError): error is FetchError => error.status === 'FETCH_ERROR';
+export const isParsingError = (error: KnownError): error is ParsingError => error.status === 'PARSING_ERROR';
+export const isCustomError = (error: KnownError): error is CustomError => error.status === 'CUSTOM_ERROR';

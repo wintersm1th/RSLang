@@ -1,8 +1,8 @@
 interface IUserInfo {
-  userId: string | undefined;
-  name: string | undefined;
-  token: string | undefined;
-  refreshToken: string | undefined;
+  userId?: string;
+  name?: string;
+  token?: string;
+  refreshToken?: string;
 }
 
 export default IUserInfo;
