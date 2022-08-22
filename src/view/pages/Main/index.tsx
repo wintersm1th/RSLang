@@ -9,7 +9,7 @@ import AuthModal from '../../components/AuthModal';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../model/store';
 import userSlice from '../../../model/feature/user';
-import Footer from '../../../components/footer/footer';
+import Footer from '../../components/footer/footer';
 
 const Main = () => {
   const userInfo = useSelector((state: RootState) => state[userSlice.name]);

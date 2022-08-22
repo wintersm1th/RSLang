@@ -1,9 +1,14 @@
 import React, { FC } from 'react'
 import { Link } from 'react-router-dom';
-
-import { GameCardProps } from '../../interfaces/gamePage'
 import Button from '@mui/material/Button';
 
+export interface GameCardProps {
+  title: string
+  classname: string
+  url: string
+  children: React.ReactNode
+  imgSrc: string
+}
 
 export const GameCard: FC<GameCardProps> = ({
   title,

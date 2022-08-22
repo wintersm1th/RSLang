@@ -1,5 +1,5 @@
 import React from 'react';
-import { GameCard } from '../../../components/gamecard/GameCard';
+import { GameCard } from '../../components/gamecard/GameCard';
 import './games.styles.css'
 
 const Games = () => {
