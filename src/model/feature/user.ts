@@ -1,7 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import IUserInfo from '../../services/interfaces/IUserInfo';
+import { RootState } from '../store';
 
-const initialState: IUserInfo = {
+type UserInfoState = IUserInfo;
+
+const initialState: UserInfoState = {
   name: '',
   userId: '',
   token: '',
@@ -20,7 +23,7 @@ const slice = createSlice({
       localStorage.setItem('userInfo', JSON.stringify(payload));
     },
 
-    resetUserInfo(state, _: PayloadAction<void>) {
+    resetUserInfo(state) {
       state.name = '';
       state.userId = '';
       state.token = '';
@@ -29,6 +32,8 @@ const slice = createSlice({
     },
   },
 });
+
+export const selectUserInfo = (state: RootState): UserInfoState => state[slice.name];
 
 export default slice;
 export const { setUserInfo, resetUserInfo } = slice.actions;

@@ -23,7 +23,7 @@ export default class AuthService implements IAuthService {
 
     return sub.then((response) => {
       if (isSuccessResponse<Auth>(response)) {
-        const { data: userInfo } = response;
+        const userInfo = response.data as Required<Auth>;
 
         store.dispatch(successAuth());
 
@@ -54,18 +54,14 @@ export default class AuthService implements IAuthService {
   }
 
   start(): void {
-    const userInfo = JSON.parse(localStorage.getItem('userInfo') as string);
-    this.setUserData(userInfo);
+    const storagedUserParams = localStorage.getItem('userInfo');
+    if (storagedUserParams !== null) {
+      const userInfo: IUserInfo = JSON.parse(storagedUserParams);
+      this.setUserData(userInfo);
+    }
   }
 
   protected setUserData(userInfo: IUserInfo): void {
-    const thunk = setUserInfo({
-      name: userInfo?.name,
-      userId: userInfo?.userId,
-      token: userInfo?.token,
-      refreshToken: userInfo?.refreshToken,
-    });
-
-    store.dispatch(thunk);
+    store.dispatch(setUserInfo(userInfo));
   }
 }
