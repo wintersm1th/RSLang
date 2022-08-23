@@ -1,10 +1,10 @@
 import { Auth, langApi } from '../generated/services/langApi';
 import store from '../model/store';
 import { injectable } from 'inversify';
-import { setAuthMessage, successAuth } from '../model/feature/auth';
+import { clearMessage, setAuthMessage, successAuth } from "../model/feature/auth";
 import IAuthService from './interfaces/IAuthService';
 import IAuthParams from './interfaces/IAuthParams';
-import { setUserInfo } from '../model/feature/user';
+import { setUserInfo } from "../model/feature/user";
 import IUserInfo from './interfaces/IUserInfo';
 import {
   isCustomError,
@@ -26,7 +26,7 @@ export default class AuthService implements IAuthService {
         const { data: userInfo } = response;
 
         store.dispatch(successAuth());
-
+        clearMessage();
         this.setUserData(userInfo);
         return true;
       }
@@ -56,6 +56,10 @@ export default class AuthService implements IAuthService {
   start(): void {
     const userInfo = JSON.parse(localStorage.getItem('userInfo') as string);
     this.setUserData(userInfo);
+  }
+
+  logout(): void {
+    this.setUserData({});
   }
 
   protected setUserData(userInfo: IUserInfo): void {

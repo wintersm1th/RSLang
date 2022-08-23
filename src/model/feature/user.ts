@@ -19,16 +19,8 @@ const slice = createSlice({
       state.refreshToken = payload.refreshToken;
       localStorage.setItem('userInfo', JSON.stringify(payload));
     },
-
-    resetUserInfo(state, _: PayloadAction<void>) {
-      state.name = '';
-      state.userId = '';
-      state.token = '';
-      state.refreshToken = '';
-      localStorage.removeItem('userInfo');
-    },
   },
 });
 
 export default slice;
-export const { setUserInfo, resetUserInfo } = slice.actions;
+export const { setUserInfo } = slice.actions;

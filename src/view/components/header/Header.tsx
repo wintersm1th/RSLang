@@ -9,6 +9,7 @@ import Button from '@mui/material/Button';
 
 import { Link } from 'react-router-dom';
 import AuthModal from '../AuthModal';
+import UserLink from "../UserLink";
 
 const Header = () => {
   const userInfo = useSelector((state: RootState) => state[userSlice.name]);
@@ -32,7 +33,7 @@ const Header = () => {
           О команде
         </Button>
       </Toolbar>
-      {userInfo.name?.length ? userInfo.name : <AuthModal />}
+      {userInfo.name?.length ? <UserLink /> : <AuthModal />}
     </AppBar>
   );
 };
