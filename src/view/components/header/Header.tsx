@@ -9,7 +9,7 @@ import Button from '@mui/material/Button';
 
 import { Link } from 'react-router-dom';
 import AuthModal from '../AuthModal';
-import UserLink from "../UserLink";
+import UserLink from '../UserLink';
 
 const Header = () => {
   const userInfo = useSelector((state: RootState) => state[userSlice.name]);
