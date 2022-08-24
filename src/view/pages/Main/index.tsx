@@ -3,7 +3,7 @@ import { Outlet } from 'react-router-dom';
 
 import Box from '@mui/material/Box';
 import { useSelector } from 'react-redux';
-import { selectUserInfo } from '../../../model/feature/user';
+import { selectState as selectAuth } from '../../../model/feature/userAuthParams';
 import { api } from '../../../model/service/api';
 
 import Container from '@mui/material/Container';
@@ -23,8 +23,8 @@ import TableBody from '@mui/material/TableBody';
 import Stack from '@mui/material/Stack';
 
 const UserWordsTable = () => {
-  const { userId } = useSelector(selectUserInfo);
-  const { data: userWords } = api.useGetUserWordsQuery({ id: userId });
+  const { user } = useSelector(selectAuth);
+  const { data: userWords } = user ? api.useGetUserWordsQuery({ id: user.id }) : { data: undefined };
 
   return (
     <TableContainer component={Paper}>
@@ -46,14 +46,14 @@ const UserWordsTable = () => {
               </TableRow>
             )
           }
-        </TableBody>
+        </TableBody>  
       </Table>
     </TableContainer>
   )
 }
 
 const AddUserWordComponent = () => {
-  const { userId } = useSelector(selectUserInfo);
+  const { user } = useSelector(selectAuth);
 
   const [wordId, setWordId] = useState('');
   const [payloadValue, setPayloadValue] = useState('');
@@ -61,14 +61,16 @@ const AddUserWordComponent = () => {
   const [addWord] = api.usePostUserWordsMutation();
 
   const handleCreateWordButtonClick = () => {
-    addWord({
-      difficulty,
-      wordId,
-      payload: {
-        value: payloadValue
-      },
-      id: userId
-    })
+    if (user !== null) {
+      addWord({
+        difficulty,
+        wordId,
+        payload: {
+          value: payloadValue
+        },
+        id: user.id
+      })
+    }
   }
   return (
     <Stack direction={'row'}>
@@ -81,15 +83,19 @@ const AddUserWordComponent = () => {
 }
 
 const Main = () => {
-  const { token, userId } = useSelector(selectUserInfo);
+  const { user } = useSelector(selectAuth);
   return (
     <Container>
 
       <h1>Hello Main!</h1>
-      <Typography>{`Token : ${token}`}</Typography>
-      <Typography>{`UserId: ${userId}`}</Typography>
-      <AddUserWordComponent/>
-      <UserWordsTable/>
+      { user &&
+        <>
+          <Typography>{`Token : ${user.token}`}</Typography>
+          <Typography>{`UserId: ${user.id}`}</Typography>
+          <AddUserWordComponent/>
+          <UserWordsTable/>
+        </>
+      }
       <Box>
         <Outlet />
       </Box>

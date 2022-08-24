@@ -4,7 +4,7 @@ import { injectable } from 'inversify';
 import { clearMessage, setAuthMessage, successAuth } from '../model/feature/auth';
 import IAuthService from './interfaces/IAuthService';
 import IAuthParams from './interfaces/IAuthParams';
-import { setUserInfo } from '../model/feature/user';
+import { clearUserInfo, setUserInfo } from '../model/feature/userAuthParams';
 import IUserInfo from './interfaces/IUserInfo';
 import {
   isCustomError,
@@ -14,6 +14,7 @@ import {
   isSuccessResponse,
   isUnknownError,
 } from './utils/ErrorResposne';
+import { LOCAL_STORAGE_AUTH_KEY } from '../core/constants';
 
 @injectable()
 export default class AuthService implements IAuthService {
@@ -23,11 +24,18 @@ export default class AuthService implements IAuthService {
 
     return sub.then((response) => {
       if (isSuccessResponse<Auth>(response)) {
-        const userInfo = response.data as Required<Auth>;
+        const { userId, name, token, refreshToken } = response.data as Required<Auth>;
+
+        this.login({
+          name,
+          token,
+          refreshToken,
+          id: userId,
+        });
 
         store.dispatch(successAuth());
         clearMessage();
-        this.setUserData(userInfo);
+
         return true;
       }
 
@@ -54,18 +62,20 @@ export default class AuthService implements IAuthService {
   }
 
   start(): void {
-    const storagedUserParams = localStorage.getItem('userInfo');
+    const storagedUserParams = localStorage.getItem(LOCAL_STORAGE_AUTH_KEY);
+
     if (storagedUserParams !== null) {
       const userInfo: IUserInfo = JSON.parse(storagedUserParams);
-      this.setUserData(userInfo);
+      this.login(userInfo);
     }
   }
 
-  logout(): void {
-    this.setUserData({});
+  login(authParams: IUserInfo) {
+    store.dispatch(setUserInfo(authParams));
   }
 
-  protected setUserData(userInfo: IUserInfo): void {
-    store.dispatch(setUserInfo(userInfo));
+  logout(): void {
+    store.dispatch(clearUserInfo());
+    localStorage.removeItem(LOCAL_STORAGE_AUTH_KEY);
   }
 }

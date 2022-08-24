@@ -3,7 +3,7 @@ import { langApiBase } from '../generated/langApiBase';
 import { api } from './service/api';
 
 import errorResponseSlice from './feature/auth';
-import userSlice from './feature/user';
+import userSlice from './feature/userAuthParams';
 
 const store = configureStore({
   reducer: {

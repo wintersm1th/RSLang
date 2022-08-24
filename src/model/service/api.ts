@@ -1,6 +1,8 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/dist/query/react";
 import { RootState } from "../store";
 
+import { selectState as selectUserAuthParams } from '../feature/userAuthParams';
+
 export type User = {
   name: string;
   email: string;
@@ -61,8 +63,9 @@ export const api = createApi({
     prepareHeaders(headers, { getState, endpoint }) {
       if (enpointsWithAuthorization.includes(endpoint)) {
         const state: RootState = getState() as RootState;
-        if (state.userSlice) {
-          const token = state.userSlice.token;
+        const userAuthParams = selectUserAuthParams(state);
+        if (userAuthParams.user !== null) {
+          const { token } = userAuthParams.user;
           headers.set('Authorization', `Bearer ${token}`);
         }
       }
