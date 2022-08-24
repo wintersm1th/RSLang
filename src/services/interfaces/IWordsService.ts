@@ -1,6 +1,6 @@
 export type UserWordParameters = {
   isDifficult: boolean;
-  isFavorite: boolean;
+  isLearned: boolean;
 }
 
 interface IWordsService {

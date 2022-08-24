@@ -23,7 +23,7 @@ export default class WordsService implements IWordsService {
     const word = await this.getUserWord(wordId);
 
     if (word === null) {
-      return this.createUserWord({ id: userId, wordId }, { isDifficult: true, isFavorite: false });
+      return this.createUserWord({ id: userId, wordId }, { isDifficult: true, isLearned: false });
     }
 
     return this.unsafeUpdateWord({ id: authParams.id, wordId }, { ...word, isDifficult: true });
@@ -39,10 +39,10 @@ export default class WordsService implements IWordsService {
     const word = await this.getUserWord(wordId);
 
     if (word === null) {
-      return this.createUserWord({ id: authParams.id, wordId }, { isDifficult: false, isFavorite: true });
+      return this.createUserWord({ id: authParams.id, wordId }, { isDifficult: false, isLearned: true });
     }
 
-    return this.unsafeUpdateWord({ id: authParams.id, wordId }, { ...word, isFavorite: true });
+    return this.unsafeUpdateWord({ id: authParams.id, wordId }, { ...word, isLearned: true });
   }
 
   async removeWordDifficultMark(wordId: string): Promise<boolean> {
@@ -58,7 +58,7 @@ export default class WordsService implements IWordsService {
       throw Error('Undefined behavior')
     }
 
-    return this.unsafeUpdateWord({ id: authParams.id, wordId }, { ...word, isFavorite: true });
+    return this.unsafeUpdateWord({ id: authParams.id, wordId }, { ...word, isLearned: true });
   }
 
   async removeWordLearnedMark(wordId: string): Promise<boolean> {
@@ -74,7 +74,7 @@ export default class WordsService implements IWordsService {
       throw Error('Undefined behavior');
     }
 
-    return this.unsafeUpdateWord({ id: authParams.id, wordId }, { ...word, isFavorite: true });
+    return this.unsafeUpdateWord({ id: authParams.id, wordId }, { ...word, isLearned: true });
   }
 
   private async unsafeUpdateWord(
@@ -117,7 +117,7 @@ export default class WordsService implements IWordsService {
 
   private async createUserWord(
     { id, wordId }: { id: string, wordId: string },
-    { isDifficult, isFavorite }: UserWordParameters
+    { isDifficult, isLearned: isFavorite }: UserWordParameters
   ) {
     const createUserWordThnk = api.endpoints.createUserWord.initiate({
       id,
@@ -125,7 +125,7 @@ export default class WordsService implements IWordsService {
       difficulty: '',
       payload: {
         isDifficult,
-        isFavorite,
+        isLearned: isFavorite,
       }
     });
 
