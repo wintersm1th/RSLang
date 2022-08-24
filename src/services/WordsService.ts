@@ -12,51 +12,127 @@ import IAuthService from "./interfaces/IAuthService";
 export default class WordsService implements IWordsService {
   constructor(@inject(DI_TYPES.AuthService) private authService: IAuthService) { }
 
-  async addWord(wordId: string, payload: UserWordParameters): Promise<boolean> {
+  async setWordDifficultMark(wordId: string): Promise<boolean> {
     const authParams = this.authService.getAuthParams();
-    
+
     if (authParams === null) {
       return false;
     }
+
     const { id: userId } = authParams;
-    const createUserWordThnk = api.endpoints.createUserWord.initiate({
-      id: userId,
-      wordId: wordId,
-      difficulty: 'alwaysempty',
-      payload: {
-        isDifficult: payload.isDifficult,
-        isFavorite: payload.isFavorite
-      }
-    });
+    const word = await this.getUserWord(wordId);
 
-    store.dispatch(createUserWordThnk);
+    if (word === null) {
+      return this.createUserWord({ id: userId, wordId }, { isDifficult: true, isFavorite: false });
+    }
 
-    return true;
+    return this.unsafeUpdateWord({ id: authParams.id, wordId }, { ...word, isDifficult: true });
   }
 
-
-  async markWordAsFavorite(wordId: string) {
+  async setWordLearnedMark(wordId: string): Promise<boolean> {
     const authParams = this.authService.getAuthParams();
 
     if (authParams === null) {
-      return;
+      return false;
     }
+
+    const word = await this.getUserWord(wordId);
+
+    if (word === null) {
+      return this.createUserWord({ id: authParams.id, wordId }, { isDifficult: false, isFavorite: true });
+    }
+
+    return this.unsafeUpdateWord({ id: authParams.id, wordId }, { ...word, isFavorite: true });
+  }
+
+  async removeWordDifficultMark(wordId: string): Promise<boolean> {
+    const authParams = this.authService.getAuthParams();
+
+    if (authParams === null) {
+      return false;
+    }
+
+    const word = await this.getUserWord(wordId);
+
+    if (word === null) {
+      throw Error('Undefined behavior')
+    }
+
+    return this.unsafeUpdateWord({ id: authParams.id, wordId }, { ...word, isFavorite: true });
+  }
+
+  async removeWordLearnedMark(wordId: string): Promise<boolean> {
+    const authParams = this.authService.getAuthParams();
+
+    if (authParams === null) {
+      return false;
+    }
+
+    const word = await this.getUserWord(wordId);
+
+    if (word === null) {
+      throw Error('Undefined behavior');
+    }
+
+    return this.unsafeUpdateWord({ id: authParams.id, wordId }, { ...word, isFavorite: true });
+  }
+
+  private async unsafeUpdateWord(
+    {id, wordId}: {id: string, wordId: string},
+    payload: UserWordParameters
+    ) {
+      const wordUpdateThunk = api.endpoints.updateUserWord.initiate({
+        id,
+        wordId,
+        difficulty: '',
+      optional: payload
+    });
+
+    return store
+      .dispatch(wordUpdateThunk)
+      .then((reponse) => {
+        return !('error' in reponse);
+      });
+  }
+
+  private async getUserWord(wordId: string): Promise<UserWordParameters | null> {
+    const authParams = this.authService.getAuthParams();
+
+    if (!authParams) {
+      return null;
+    }
+
     const { id: userId } = authParams;
 
     const getUserWordThunk = api.endpoints.readUserWord.initiate({ id: userId, wordId });
+    const getUserWordSub = store.dispatch(getUserWordThunk);
 
-    const userWordSub = store.dispatch(getUserWordThunk);
-
-    const { data } = await userWordSub;
-
-    if (data === undefined) {
-      this.addWord(wordId, { isDifficult: true, isFavorite: false });
-    } else {
-      
+    try {
+      const { data } = await getUserWordSub;
+      return data?.optional ?? null;
+    } catch {
+      return null;
     }
   }
 
-  markWordAsDifficult() {
-    
+  private async createUserWord(
+    { id, wordId }: { id: string, wordId: string },
+    { isDifficult, isFavorite }: UserWordParameters
+  ) {
+    const createUserWordThnk = api.endpoints.createUserWord.initiate({
+      id,
+      wordId,
+      difficulty: '',
+      payload: {
+        isDifficult,
+        isFavorite,
+      }
+    });
+
+    return store
+      .dispatch(createUserWordThnk)
+      .then((response) => {
+        return !('error' in response);
+      });
   }
 }

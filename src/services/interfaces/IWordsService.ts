@@ -4,7 +4,11 @@ export type UserWordParameters = {
 }
 
 interface IWordsService {
-  addWord(wordId: string, params: UserWordParameters): Promise<boolean>;
+  setWordDifficultMark(wordId: string): Promise<boolean>;
+  removeWordDifficultMark(wordId: string): Promise<boolean>;
+
+  setWordLearnedMark(wordId: string): Promise<boolean>;
+  removeWordLearnedMark(wordId: string): Promise<boolean>;
 }
 
 export default IWordsService;
