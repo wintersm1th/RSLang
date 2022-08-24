@@ -5,8 +5,6 @@ import './main.css';
 import { MainCard } from '../../components/maincard/MainCard';
 import Button from '@mui/material/Button';
 
-import Container from '@mui/material/Container';
-
 const Main = () => {
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column' }}>
