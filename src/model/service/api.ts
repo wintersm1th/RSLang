@@ -136,7 +136,6 @@ export const api = createApi({
       providesTags: ['UserWord'],
       query: ({ id }) => ({
         url: `/users/${id}/words`,
-        method: 'GET'
       })
     }),
 
@@ -151,7 +150,7 @@ export const api = createApi({
       invalidatesTags: ['UserWord'],
       query: ({ id, wordId, difficulty, optional}) => ({
         url: `users/${id}/words/${wordId}`,
-        method: 'POST',
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
         },
