@@ -72,6 +72,7 @@ export default class AuthService implements IAuthService {
 
   login(authParams: IUserInfo) {
     store.dispatch(setUserInfo(authParams));
+    localStorage.setItem(LOCAL_STORAGE_AUTH_KEY, JSON.stringify(authParams));
   }
 
   logout(): void {
