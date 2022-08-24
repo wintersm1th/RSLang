@@ -14,7 +14,8 @@ export type ArgUserId = {
 }
 
 export type UserWordPayload = {
-  value: string;
+  isDifficult: boolean;
+  isFavorite: boolean;
 }
 
 export type UserWord = {
