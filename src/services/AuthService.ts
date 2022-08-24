@@ -15,7 +15,6 @@ import {
   isUnknownError,
 } from './utils/ErrorResposne';
 import { LOCAL_STORAGE_AUTH_KEY } from '../core/constants';
-import { PARAM_TYPES } from 'inversify/lib/constants/metadata_keys';
 
 @injectable()
 export default class AuthService implements IAuthService {
