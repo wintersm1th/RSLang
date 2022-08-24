@@ -4,7 +4,7 @@ import { injectable } from 'inversify';
 import { clearMessage, setAuthMessage, successAuth } from '../model/feature/auth';
 import IAuthService from './interfaces/IAuthService';
 import IAuthParams from './interfaces/IAuthParams';
-import { clearUserInfo, setUserInfo } from '../model/feature/userAuthParams';
+import { clearUserInfo, selectState, setUserInfo } from '../model/feature/userAuthParams';
 import IUserInfo from './interfaces/IUserInfo';
 import {
   isCustomError,
@@ -15,6 +15,7 @@ import {
   isUnknownError,
 } from './utils/ErrorResposne';
 import { LOCAL_STORAGE_AUTH_KEY } from '../core/constants';
+import { PARAM_TYPES } from 'inversify/lib/constants/metadata_keys';
 
 @injectable()
 export default class AuthService implements IAuthService {
@@ -77,5 +78,10 @@ export default class AuthService implements IAuthService {
   logout(): void {
     store.dispatch(clearUserInfo());
     localStorage.removeItem(LOCAL_STORAGE_AUTH_KEY);
+  }
+
+  getAuthParams(): IUserInfo | null {
+    const { user: params } = selectState(store.getState());
+    return params;
   }
 }

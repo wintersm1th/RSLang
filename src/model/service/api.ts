@@ -23,25 +23,46 @@ export type UserWord = {
   optional: UserWordPayload;
 }
 
-export type GetUserWordsArg = {
+export type GetUserWordArg = {
   id: string;
+  wordId: string;
 }
+
 export type GetUserWordResponse = {
   id: string;
   wordId: string;
   difficulty: string;
   optional: UserWordPayload;
 }
+
+export type UpdateUserWordArg = {
+  id: string;
+  wordId: string;
+  difficulty: string;
+  optional: UserWordPayload;
+}
+
+export type UpdateUserWordResponse = {
+  id: string;
+  wordId: string;
+  difficulty: string;
+  optional: UserWordPayload;
+}
+
+export type GetUserWordsArg = {
+  id: string;
+}
+
 export type GetUserWordsResponse = GetUserWordResponse[];
 
-export type PostUserWordsArg = {
+export type CreateUserWordArg = {
   id: string;
   wordId: string;
   difficulty: string;
   payload: UserWordPayload;
 }
 
-export type PostUserWordsResponse = {
+export type CreateUserWordResponse = {
   id: string;
   wordId: UserWordPayload;
 }
@@ -52,13 +73,16 @@ export type DeleteUserWordsArg = {
 }
 
 const enpointsWithAuthorization = [
-  'getUserWords',
-  'postUserWords'
+  'createUserWord',
+  'readUserWords',
+  'readUserWord',
+  'updateUserWord',
+  'deleteUserWord'
 ]
 
 export const api = createApi({
   reducerPath: 'api',
-  tagTypes: ['UserWords'],
+  tagTypes: ['UserWord'],
   baseQuery: fetchBaseQuery({
     baseUrl: 'https://react-learnwords-example.herokuapp.com',
     prepareHeaders(headers, { getState, endpoint }) {
@@ -74,16 +98,8 @@ export const api = createApi({
     }
   }),
   endpoints: (builder) => ({
-    getUserWords: builder.query<GetUserWordsResponse, ArgUserId>({
-      providesTags: ['UserWords'],
-      query: ({ id }) => ({
-        url: `/users/${id}/words`,
-        method: 'GET'
-      })
-    }),
-
-    postUserWords: builder.mutation<PostUserWordsResponse, PostUserWordsArg>({
-      invalidatesTags: ['UserWords'],
+    createUserWord: builder.mutation<CreateUserWordResponse, CreateUserWordArg>({
+      invalidatesTags: ['UserWord'],
       query: ({ id, wordId, difficulty, payload }) => ({
         url: `/users/${id}/words/${wordId}`,
         method: 'POST',
@@ -97,8 +113,35 @@ export const api = createApi({
       })
     }),
 
-    deleteUserWords: builder.mutation<void, DeleteUserWordsArg>({
-      invalidatesTags: ['UserWords'],
+    readUserWords: builder.query<GetUserWordsResponse, ArgUserId>({
+      providesTags: ['UserWord'],
+      query: ({ id }) => ({
+        url: `/users/${id}/words`,
+        method: 'GET'
+      })
+    }),
+
+    readUserWord: builder.query<GetUserWordResponse, GetUserWordArg>({
+      providesTags: ['UserWord'],
+      query: ({ id, wordId }) => ({
+        url: `/users/${id}/words/${wordId}`
+      })
+    }),
+
+    updateUserWord: builder.mutation<UpdateUserWordResponse, UpdateUserWordArg>({
+      invalidatesTags: ['UserWord'],
+      query: ({ id, wordId, difficulty, optional}) => ({
+        url: `users/${id}/words/${wordId}`,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ difficulty, optional })
+      })
+    }),
+
+    deleteUserWord: builder.mutation<void, DeleteUserWordsArg>({
+      invalidatesTags: ['UserWord'],
       query: ({ id, wordId}) => ({
         url: `/users/${id}/words/${wordId}`,
         method: 'DELETE',
