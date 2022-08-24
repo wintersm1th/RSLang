@@ -23,17 +23,10 @@ const slice = createSlice({
       localStorage.setItem('userInfo', JSON.stringify(payload));
     },
 
-    resetUserInfo(state) {
-      state.name = '';
-      state.userId = '';
-      state.token = '';
-      state.refreshToken = '';
-      localStorage.removeItem('userInfo');
-    },
   },
 });
 
 export const selectUserInfo = (state: RootState): UserInfoState => state[slice.name];
 
 export default slice;
-export const { setUserInfo, resetUserInfo } = slice.actions;
+export const { setUserInfo } = slice.actions;

@@ -1,7 +1,7 @@
 import { Auth, langApi } from '../generated/services/langApi';
 import store from '../model/store';
 import { injectable } from 'inversify';
-import { setAuthMessage, successAuth } from '../model/feature/auth';
+import { clearMessage, setAuthMessage, successAuth } from '../model/feature/auth';
 import IAuthService from './interfaces/IAuthService';
 import IAuthParams from './interfaces/IAuthParams';
 import { setUserInfo } from '../model/feature/user';
@@ -26,7 +26,7 @@ export default class AuthService implements IAuthService {
         const userInfo = response.data as Required<Auth>;
 
         store.dispatch(successAuth());
-
+        clearMessage();
         this.setUserData(userInfo);
         return true;
       }
@@ -59,6 +59,10 @@ export default class AuthService implements IAuthService {
       const userInfo: IUserInfo = JSON.parse(storagedUserParams);
       this.setUserData(userInfo);
     }
+  }
+
+  logout(): void {
+    this.setUserData({});
   }
 
   protected setUserData(userInfo: IUserInfo): void {
