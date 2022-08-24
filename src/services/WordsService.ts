@@ -84,7 +84,7 @@ export default class WordsService implements IWordsService {
       const wordUpdateThunk = api.endpoints.updateUserWord.initiate({
         id,
         wordId,
-        difficulty: '',
+        difficulty: 'blank',
       optional: payload
     });
 
@@ -119,10 +119,10 @@ export default class WordsService implements IWordsService {
     { id, wordId }: { id: string, wordId: string },
     { isDifficult, isLearned: isFavorite }: UserWordParameters
   ) {
-    const createUserWordThnk = api.endpoints.createUserWord.initiate({
+    const createUserWordThunk = api.endpoints.createUserWord.initiate({
       id,
       wordId,
-      difficulty: '',
+      difficulty: 'blank',
       payload: {
         isDifficult,
         isLearned: isFavorite,
@@ -130,7 +130,7 @@ export default class WordsService implements IWordsService {
     });
 
     return store
-      .dispatch(createUserWordThnk)
+      .dispatch(createUserWordThunk)
       .then((response) => {
         return !('error' in response);
       });
