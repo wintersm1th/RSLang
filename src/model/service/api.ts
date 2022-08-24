@@ -1,7 +1,10 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/dist/query/react";
-import { RootState } from "../store";
 
+import { IWord } from "../../core/IWord";
+
+import { RootState } from "../store";
 import { selectState as selectUserAuthParams } from '../feature/userAuthParams';
+import { UserWordParameters } from "../../services/interfaces/IWordsService";
 
 export type User = {
   name: string;
@@ -13,10 +16,7 @@ export type ArgUserId = {
   id: string;
 }
 
-export type UserWordPayload = {
-  isDifficult: boolean;
-  isFavorite: boolean;
-}
+export type UserWordPayload = UserWordParameters;
 
 export type UserWord = {
   difficulty: string;
@@ -72,6 +72,15 @@ export type DeleteUserWordsArg = {
   wordId: string;
 }
 
+export type ReadWordsArg = {
+  group: string;
+  page: string;
+}
+
+export type ReadWordResponse = IWord;
+
+export type ReadWordsResponse = IWord[];
+
 const enpointsWithAuthorization = [
   'createUserWord',
   'readUserWords',
@@ -98,6 +107,16 @@ export const api = createApi({
     }
   }),
   endpoints: (builder) => ({
+    readWords: builder.query<ReadWordsResponse, ReadWordsArg>({
+      query: ({ group, page }) => ({
+        url: `/words`,
+        params: {
+          group,
+          page
+        }
+      }),
+    }),
+
     createUserWord: builder.mutation<CreateUserWordResponse, CreateUserWordArg>({
       invalidatesTags: ['UserWord'],
       query: ({ id, wordId, difficulty, payload }) => ({
@@ -146,6 +165,6 @@ export const api = createApi({
         url: `/users/${id}/words/${wordId}`,
         method: 'DELETE',
       })
-    })
+    }),
   })
 });
