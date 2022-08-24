@@ -49,8 +49,8 @@ const WordCard = ({ word }: WordCardProps) => {
       <CardActions>
         { auth &&
           <>
-            <Button variant={'contained'} onClick={handleAddToLearned}>Сложное</Button>
-            <Button variant={'contained'} onClick={handleAddToDifficult}>Избранное</Button>
+            <Button variant={'contained'} onClick={handleAddToLearned}>Изученное</Button>
+            <Button variant={'contained'} onClick={handleAddToDifficult}>Сложное</Button>
           </>
         }
       </CardActions>
