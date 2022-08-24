@@ -12,11 +12,11 @@ import DI_TYPES from '../../DI/DITypes';
 const UserLink = () => {
   const authService = DIContainer.get<IAuthService>(DI_TYPES.AuthService);
   const { user } = useSelector(selectAuth);
-  
+
   const handleClick = () => {
     authService.logout();
   };
-  
+
   return (
     <div className="auth-link">
       {`${user?.name} `}

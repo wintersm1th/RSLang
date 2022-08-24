@@ -1,7 +1,7 @@
 export type UserWordParameters = {
   isDifficult: boolean;
   isLearned: boolean;
-}
+};
 
 interface IWordsService {
   setWordDifficultMark(wordId: string): Promise<boolean>;

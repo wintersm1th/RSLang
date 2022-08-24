@@ -1,16 +1,16 @@
-import { inject, injectable } from "inversify";
+import { inject, injectable } from 'inversify';
 
-import DI_TYPES from "../DI/DITypes";
+import DI_TYPES from '../DI/DITypes';
 
 import store from '../model/store';
 import { api } from '../model/service/api';
 
-import IWordsService, { UserWordParameters } from "./interfaces/IWordsService";
-import IAuthService from "./interfaces/IAuthService";
+import IWordsService, { UserWordParameters } from './interfaces/IWordsService';
+import IAuthService from './interfaces/IAuthService';
 
 @injectable()
 export default class WordsService implements IWordsService {
-  constructor(@inject(DI_TYPES.AuthService) private authService: IAuthService) { }
+  constructor(@inject(DI_TYPES.AuthService) private authService: IAuthService) {}
 
   async setWordDifficultMark(wordId: string): Promise<boolean> {
     const authParams = this.authService.getAuthParams();
@@ -55,7 +55,7 @@ export default class WordsService implements IWordsService {
     const word = await this.getUserWord(wordId);
 
     if (word === null) {
-      throw Error('Undefined behavior')
+      throw Error('Undefined behavior');
     }
 
     return this.unsafeUpdateWord({ id: authParams.id, wordId }, { ...word, isLearned: true });
@@ -77,22 +77,17 @@ export default class WordsService implements IWordsService {
     return this.unsafeUpdateWord({ id: authParams.id, wordId }, { ...word, isLearned: true });
   }
 
-  private async unsafeUpdateWord(
-    {id, wordId}: {id: string, wordId: string},
-    payload: UserWordParameters
-    ) {
-      const wordUpdateThunk = api.endpoints.updateUserWord.initiate({
-        id,
-        wordId,
-        difficulty: 'blank',
-      optional: payload
+  private async unsafeUpdateWord({ id, wordId }: { id: string; wordId: string }, payload: UserWordParameters) {
+    const wordUpdateThunk = api.endpoints.updateUserWord.initiate({
+      id,
+      wordId,
+      difficulty: 'blank',
+      optional: payload,
     });
 
-    return store
-      .dispatch(wordUpdateThunk)
-      .then((reponse) => {
-        return !('error' in reponse);
-      });
+    return store.dispatch(wordUpdateThunk).then((reponse) => {
+      return !('error' in reponse);
+    });
   }
 
   private async getUserWord(wordId: string): Promise<UserWordParameters | null> {
@@ -116,7 +111,7 @@ export default class WordsService implements IWordsService {
   }
 
   private async createUserWord(
-    { id, wordId }: { id: string, wordId: string },
+    { id, wordId }: { id: string; wordId: string },
     { isDifficult, isLearned: isFavorite }: UserWordParameters
   ) {
     const createUserWordThunk = api.endpoints.createUserWord.initiate({
@@ -126,13 +121,11 @@ export default class WordsService implements IWordsService {
       payload: {
         isDifficult,
         isLearned: isFavorite,
-      }
+      },
     });
 
-    return store
-      .dispatch(createUserWordThunk)
-      .then((response) => {
-        return !('error' in response);
-      });
+    return store.dispatch(createUserWordThunk).then((response) => {
+      return !('error' in response);
+    });
   }
 }

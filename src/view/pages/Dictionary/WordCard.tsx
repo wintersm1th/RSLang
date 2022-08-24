@@ -21,7 +21,7 @@ const imagePath = (img: string) => `https://react-learnwords-example.herokuapp.c
 
 type WordCardProps = {
   word: IWord;
-}
+};
 
 const WordCard = ({ word }: WordCardProps) => {
   const wordsService: IWordsService = DIContainer.get(DI_TYPES.WordsService);
@@ -47,15 +47,19 @@ const WordCard = ({ word }: WordCardProps) => {
         </ul>
       </CardContent>
       <CardActions>
-        { auth &&
+        {auth && (
           <>
-            <Button variant={'contained'} onClick={handleAddToLearned}>Изученное</Button>
-            <Button variant={'contained'} onClick={handleAddToDifficult}>Сложное</Button>
+            <Button variant={'contained'} onClick={handleAddToLearned}>
+              Изученное
+            </Button>
+            <Button variant={'contained'} onClick={handleAddToDifficult}>
+              Сложное
+            </Button>
           </>
-        }
+        )}
       </CardActions>
     </Card>
   );
-}
+};
 
 export default WordCard;

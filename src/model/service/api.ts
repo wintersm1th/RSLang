@@ -1,10 +1,10 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/dist/query/react";
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/dist/query/react';
 
-import { IWord } from "../../core/IWord";
+import { IWord } from '../../core/IWord';
 
-import { RootState } from "../store";
+import { RootState } from '../store';
 import { selectState as selectUserAuthParams } from '../feature/userAuthParams';
-import { UserWordParameters } from "../../services/interfaces/IWordsService";
+import { UserWordParameters } from '../../services/interfaces/IWordsService';
 
 export type User = {
   name: string;
@@ -14,44 +14,44 @@ export type User = {
 
 export type ArgUserId = {
   id: string;
-}
+};
 
 export type UserWordPayload = UserWordParameters;
 
 export type UserWord = {
   difficulty: string;
   optional: UserWordPayload;
-}
+};
 
 export type GetUserWordArg = {
   id: string;
   wordId: string;
-}
+};
 
 export type GetUserWordResponse = {
   id: string;
   wordId: string;
   difficulty: string;
   optional: UserWordPayload;
-}
+};
 
 export type UpdateUserWordArg = {
   id: string;
   wordId: string;
   difficulty: string;
   optional: UserWordPayload;
-}
+};
 
 export type UpdateUserWordResponse = {
   id: string;
   wordId: string;
   difficulty: string;
   optional: UserWordPayload;
-}
+};
 
 export type GetUserWordsArg = {
   id: string;
-}
+};
 
 export type GetUserWordsResponse = GetUserWordResponse[];
 
@@ -60,22 +60,22 @@ export type CreateUserWordArg = {
   wordId: string;
   difficulty: string;
   payload: UserWordPayload;
-}
+};
 
 export type CreateUserWordResponse = {
   id: string;
   wordId: UserWordPayload;
-}
+};
 
 export type DeleteUserWordsArg = {
   id: string;
   wordId: string;
-}
+};
 
 export type ReadWordsArg = {
   group: string;
   page: string;
-}
+};
 
 export type ReadWordResponse = IWord;
 
@@ -86,8 +86,8 @@ const enpointsWithAuthorization = [
   'readUserWords',
   'readUserWord',
   'updateUserWord',
-  'deleteUserWord'
-]
+  'deleteUserWord',
+];
 
 export const api = createApi({
   reducerPath: 'api',
@@ -104,7 +104,7 @@ export const api = createApi({
         }
       }
       return headers;
-    }
+    },
   }),
   endpoints: (builder) => ({
     readWords: builder.query<ReadWordsResponse, ReadWordsArg>({
@@ -112,8 +112,8 @@ export const api = createApi({
         url: `/words`,
         params: {
           group,
-          page
-        }
+          page,
+        },
       }),
     }),
 
@@ -123,47 +123,47 @@ export const api = createApi({
         url: `/users/${id}/words/${wordId}`,
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           difficulty,
           optional: payload,
-        })
-      })
+        }),
+      }),
     }),
 
     readUserWords: builder.query<GetUserWordsResponse, ArgUserId>({
       providesTags: ['UserWord'],
       query: ({ id }) => ({
         url: `/users/${id}/words`,
-      })
+      }),
     }),
 
     readUserWord: builder.query<GetUserWordResponse, GetUserWordArg>({
       providesTags: ['UserWord'],
       query: ({ id, wordId }) => ({
-        url: `/users/${id}/words/${wordId}`
-      })
+        url: `/users/${id}/words/${wordId}`,
+      }),
     }),
 
     updateUserWord: builder.mutation<UpdateUserWordResponse, UpdateUserWordArg>({
       invalidatesTags: ['UserWord'],
-      query: ({ id, wordId, difficulty, optional}) => ({
+      query: ({ id, wordId, difficulty, optional }) => ({
         url: `users/${id}/words/${wordId}`,
         method: 'PUT',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ difficulty, optional })
-      })
+        body: JSON.stringify({ difficulty, optional }),
+      }),
     }),
 
     deleteUserWord: builder.mutation<void, DeleteUserWordsArg>({
       invalidatesTags: ['UserWord'],
-      query: ({ id, wordId}) => ({
+      query: ({ id, wordId }) => ({
         url: `/users/${id}/words/${wordId}`,
         method: 'DELETE',
-      })
+      }),
     }),
-  })
+  }),
 });

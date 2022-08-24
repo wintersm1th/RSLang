@@ -7,7 +7,7 @@ type UserInfoState = {
 };
 
 const initialState: UserInfoState = {
-  user: null  
+  user: null,
 };
 
 const slice = createSlice({
@@ -19,14 +19,11 @@ const slice = createSlice({
     },
     clearUserInfo(state) {
       state.user = null;
-    }
+    },
   },
 });
 
 export const selectState = (state: RootState): UserInfoState => state[slice.name];
 
 export default slice;
-export const {
-  setUserInfo,
-  clearUserInfo
-} = slice.actions;
+export const { setUserInfo, clearUserInfo } = slice.actions;
