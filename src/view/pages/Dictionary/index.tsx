@@ -60,7 +60,7 @@ const Main = () => {
             ))}
         </Grid>
         <Box display="flex" justifyContent="center">
-          <Pagination count={10} page={+page} onChange={(_e, newPage) => setPage(String(newPage))} />
+          <Pagination count={29} page={+page} onChange={(_e, newPage) => setPage(String(newPage))} />
         </Box>
       </Paper>
     </Container>
