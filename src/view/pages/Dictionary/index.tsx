@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 
-import { useGetWordsQuery } from '../../../generated/services/langApi';
+import { api } from '../../../model/service/api';
 
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
@@ -20,7 +20,7 @@ const Main = () => {
   const [page, setPage] = useState('1');
   const [group, setGroup] = useState('0');
 
-  const { data: words } = useGetWordsQuery({ group, page: page });
+  const { data: words } = api.useReadWordsQuery({ group, page: page });
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -41,7 +41,7 @@ const Main = () => {
         <Grid container spacing={5} marginBottom="30px">
           {words &&
             words.map((word) => (
-              <Grid item xs={4}>
+              <Grid item xs={4} key={word.id}>
                 <WordCard word={word} />
               </Grid>
             ))}
