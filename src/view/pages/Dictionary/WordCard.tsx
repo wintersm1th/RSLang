@@ -1,4 +1,14 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
+
+import DIContainer from '../../../DI/DIContainer';
+import DI_TYPES from '../../../DI/DITypes';
+
+import { selectState as selectAuthParams } from '../../../model/feature/userAuthParams';
+
+import IWord from '../../../core/IWord';
+
+import IWordsService from '../../../services/interfaces/IWordsService';
 
 import Button from '@mui/material/Button';
 
@@ -7,18 +17,25 @@ import CardMedia from '@mui/material/CardMedia';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
 
-import { Word } from '../../../generated/services/langApi';
-
 const imagePath = (img: string) => `https://react-learnwords-example.herokuapp.com/${img}`;
 
 type WordCardProps = {
-  word: Word;
+  word: IWord;
 }
 
 const WordCard = ({ word }: WordCardProps) => {
-  const handleAddToDifficult = () => {};
-  const handleAddToFavorite = () => {};
-  
+  const wordsService: IWordsService = DIContainer.get(DI_TYPES.WordsService);
+  const { user: auth } = useSelector(selectAuthParams);
+
+  const handleAddToDifficult = () => {
+    console.log('WordId:', word.id);
+    wordsService.setWordDifficultMark(word.id);
+  };
+
+  const handleAddToLearned = () => {
+    wordsService.setWordDifficultMark(word.id);
+  };
+
   return (
     <Card>
       {word.image && <CardMedia image={imagePath(word.image)} sx={{ height: 200 }} />}
@@ -30,8 +47,12 @@ const WordCard = ({ word }: WordCardProps) => {
         </ul>
       </CardContent>
       <CardActions>
-        <Button variant={'contained'} onClick={handleAddToFavorite}>Сложное</Button>
-        <Button variant={'contained'} onClick={handleAddToDifficult}>Избранное</Button>
+        { auth &&
+          <>
+            <Button variant={'contained'} onClick={handleAddToLearned}>Сложное</Button>
+            <Button variant={'contained'} onClick={handleAddToDifficult}>Избранное</Button>
+          </>
+        }
       </CardActions>
     </Card>
   );
