@@ -12,7 +12,7 @@ const initialState: UserInfoState = {
 };
 
 const slice = createSlice({
-  name: 'userAuthParams',
+  name: 'auth',
   initialState,
   reducers: {
     setAuth(state, { payload: { name, id, token, refreshToken } }: PayloadAction<IAuth>) {
