@@ -33,7 +33,7 @@ const WordCard = ({ word }: WordCardProps) => {
   };
 
   const handleAddToLearned = () => {
-    wordsService.setWordDifficultMark(word.id);
+    wordsService.setWordLearnedMark(word.id);
   };
 
   return (
