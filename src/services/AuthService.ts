@@ -8,7 +8,7 @@ import { Auth, langApi } from '../generated/services/langApi';
 
 import IAuthService, { AuthorizeParams } from './interfaces/IAuthService';
 
-import { clearAuth, selectState, setAuth } from '../model/feature/userAuthParams';
+import { clearAuth, selectState, setAuth } from '../model/feature/auth';
 
 import {
   isCustomError,
@@ -17,7 +17,7 @@ import {
   isSerializedError,
   isSuccessResponse,
   isUnknownError,
-} from './utils/ErrorResposne';
+} from './utils/ErrorResponse';
 
 import { LOCAL_STORAGE_AUTH_KEY } from '../core/constants';
 

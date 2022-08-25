@@ -5,7 +5,7 @@ import { api } from './service/api';
 import { slice as loginFormSlice } from './feature/forms/login';
 import { slice as registrationFormSlice } from './feature/forms/registration';
 
-import userSlice from './feature/userAuthParams';
+import userSlice from './feature/auth';
 
 const store = configureStore({
   reducer: {

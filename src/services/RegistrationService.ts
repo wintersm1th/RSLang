@@ -12,7 +12,7 @@ import {
   isSerializedError,
   isSuccessResponse,
   isUnknownError,
-} from './utils/ErrorResposne';
+} from './utils/ErrorResponse';
 
 @injectable()
 export default class RegisterService implements IRegisterService {

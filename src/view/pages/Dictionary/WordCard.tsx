@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import DIContainer from '../../../DI/DIContainer';
 import DI_TYPES from '../../../DI/DITypes';
 
-import { selectState as selectAuthParams } from '../../../model/feature/userAuthParams';
+import { selectState as selectAuthParams } from '../../../model/feature/auth';
 
 import IWord from '../../../core/IWord';
 

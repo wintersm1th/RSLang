@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/dist/query/react';
 import { IWord } from '../../core/IWord';
 
 import { RootState } from '../store';
-import { selectState as selectUserAuthParams } from '../feature/userAuthParams';
+import { selectState as selectUserAuthParams } from '../feature/auth';
 import { UserWordParameters } from '../../services/interfaces/IWordsService';
 
 export type User = {

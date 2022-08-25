@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { selectState as selectUserState } from '../../../model/feature/userAuthParams';
+import { selectState as selectUserState } from '../../../model/feature/auth';
 
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';

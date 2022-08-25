@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { Logout } from '@mui/icons-material';
 import Button from '@mui/material/Button';
 
-import { selectState as selectAuth } from '../../model/feature/userAuthParams';
+import { selectState as selectAuth } from '../../model/feature/auth';
 import DIContainer from '../../DI/DIContainer';
 import IAuthService from '../../services/interfaces/IAuthService';
 import DI_TYPES from '../../DI/DITypes';
