@@ -22,7 +22,6 @@ const baseConfig = {
               url: false,
             },
           },
-          'sass-loader',
         ],
       },
     ],

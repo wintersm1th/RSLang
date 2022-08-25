@@ -1,7 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import userSlice from '../../../model/feature/user';
-import { RootState } from '../../../model/store';
+import { selectState as selectUserState } from '../../../model/feature/userAuthParams';
 
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
@@ -12,7 +11,7 @@ import AuthModal from '../AuthModal';
 import UserLink from '../UserLink';
 
 const Header = () => {
-  const userInfo = useSelector((state: RootState) => state[userSlice.name]);
+  const { user } = useSelector(selectUserState);
 
   return (
     <AppBar position="sticky">
@@ -33,7 +32,7 @@ const Header = () => {
           О команде
         </Button>
       </Toolbar>
-      {userInfo.name?.length ? <UserLink /> : <AuthModal />}
+      {user?.name.length ? <UserLink /> : <AuthModal />}
     </AppBar>
   );
 };

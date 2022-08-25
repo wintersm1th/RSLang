@@ -4,7 +4,7 @@ import { injectable } from 'inversify';
 import { clearMessage, setAuthMessage, successAuth } from '../model/feature/auth';
 import IAuthService from './interfaces/IAuthService';
 import IAuthParams from './interfaces/IAuthParams';
-import { setUserInfo } from '../model/feature/user';
+import { clearUserInfo, selectState, setUserInfo } from '../model/feature/userAuthParams';
 import IUserInfo from './interfaces/IUserInfo';
 import {
   isCustomError,
@@ -14,6 +14,7 @@ import {
   isSuccessResponse,
   isUnknownError,
 } from './utils/ErrorResposne';
+import { LOCAL_STORAGE_AUTH_KEY } from '../core/constants';
 
 @injectable()
 export default class AuthService implements IAuthService {
@@ -23,11 +24,18 @@ export default class AuthService implements IAuthService {
 
     return sub.then((response) => {
       if (isSuccessResponse<Auth>(response)) {
-        const { data: userInfo } = response;
+        const { userId, name, token, refreshToken } = response.data as Required<Auth>;
+
+        this.login({
+          name,
+          token,
+          refreshToken,
+          id: userId,
+        });
 
         store.dispatch(successAuth());
         clearMessage();
-        this.setUserData(userInfo);
+
         return true;
       }
 
@@ -54,22 +62,26 @@ export default class AuthService implements IAuthService {
   }
 
   start(): void {
-    const userInfo = JSON.parse(localStorage.getItem('userInfo') as string);
-    this.setUserData(userInfo);
+    const storagedUserParams = localStorage.getItem(LOCAL_STORAGE_AUTH_KEY);
+
+    if (storagedUserParams !== null) {
+      const userInfo: IUserInfo = JSON.parse(storagedUserParams);
+      this.login(userInfo);
+    }
+  }
+
+  login(authParams: IUserInfo) {
+    store.dispatch(setUserInfo(authParams));
+    localStorage.setItem(LOCAL_STORAGE_AUTH_KEY, JSON.stringify(authParams));
   }
 
   logout(): void {
-    this.setUserData({});
+    store.dispatch(clearUserInfo());
+    localStorage.removeItem(LOCAL_STORAGE_AUTH_KEY);
   }
 
-  protected setUserData(userInfo: IUserInfo): void {
-    const thunk = setUserInfo({
-      name: userInfo?.name,
-      userId: userInfo?.userId,
-      token: userInfo?.token,
-      refreshToken: userInfo?.refreshToken,
-    });
-
-    store.dispatch(thunk);
+  getAuthParams(): IUserInfo | null {
+    const { user: params } = selectState(store.getState());
+    return params;
   }
 }

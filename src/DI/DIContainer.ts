@@ -9,11 +9,14 @@ import IRegisterService from '../services/interfaces/IRegisterService';
 import RegisterService from '../services/RegisterService';
 import IAuthService from '../services/interfaces/IAuthService';
 import AuthService from '../services/AuthService';
+import IWordsService from '../services/interfaces/IWordsService';
+import WordsService from '../services/WordsService';
 
 const DIContainer = new Container();
 
 DIContainer.bind<IApp>(DI_TYPES.App).to(App).inSingletonScope();
 DIContainer.bind<IRegisterService>(DI_TYPES.RegisterService).to(RegisterService).inSingletonScope();
 DIContainer.bind<IAuthService>(DI_TYPES.AuthService).to(AuthService).inSingletonScope();
+DIContainer.bind<IWordsService>(DI_TYPES.WordsService).to(WordsService).inSingletonScope();
 
 export default DIContainer;
