@@ -4,7 +4,7 @@ import IAuth from '../core/IAuth';
 
 import store from '../model/store';
 import { slice as loginFormSlice } from '../model/feature/forms/login';
-import { Auth, langApi } from '../generated/services/langApi';
+import { api } from '../model/service/api';
 
 import IAuthService, { AuthorizeParams } from './interfaces/IAuthService';
 
@@ -23,13 +23,13 @@ import { LOCAL_STORAGE_AUTH_KEY } from '../core/constants';
 
 @injectable()
 export default class AuthService implements IAuthService {
-  async authorize(params: AuthorizeParams): Promise<boolean> {
-    const result = langApi.endpoints.postSignin.initiate({ body: params });
+  async authorize({ email, password }: AuthorizeParams): Promise<boolean> {
+    const result = api.endpoints.signin.initiate({ email, password });
     const sub = store.dispatch(result);
 
     return sub.then((response) => {
-      if (isSuccessResponse<Auth>(response)) {
-        const { userId, name, token, refreshToken } = response.data as Required<Auth>;
+      if (isSuccessResponse(response)) {
+        const { userId, name, token, refreshToken } = response.data;
 
         this.login({
           name,

@@ -81,6 +81,31 @@ export type ReadWordResponse = IWord;
 
 export type ReadWordsResponse = IWord[];
 
+export type CreateUserArg = {
+  name: string;
+  email: string;
+  password: string;
+}
+
+export type CreateUserResponse = {
+  name: string;
+  email: string;
+  password: string;
+}
+
+export type SigninArg = {
+  email: string;
+  password: string;
+}
+
+export type SigninResponse = {
+  userId: string;
+  token: string;
+  refreshToken: string;
+  message: string;
+  name: string;
+}
+
 const enpointsWithAuthorization = [
   'createUserWord',
   'readUserWords',
@@ -122,13 +147,10 @@ export const api = createApi({
       query: ({ id, wordId, difficulty, payload }) => ({
         url: `/users/${id}/words/${wordId}`,
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+        body: {
           difficulty,
           optional: payload,
-        }),
+        },
       }),
     }),
 
@@ -151,10 +173,10 @@ export const api = createApi({
       query: ({ id, wordId, difficulty, optional }) => ({
         url: `users/${id}/words/${wordId}`,
         method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
+        body: {
+          difficulty,
+          optional
         },
-        body: JSON.stringify({ difficulty, optional }),
       }),
     }),
 
@@ -163,6 +185,29 @@ export const api = createApi({
       query: ({ id, wordId }) => ({
         url: `/users/${id}/words/${wordId}`,
         method: 'DELETE',
+      }),
+    }),
+
+    createUser: builder.mutation<CreateUserResponse, CreateUserArg>({
+      query: ({ email, name, password }) => ({
+        url: `/users`,
+        method: 'POST',
+        body: {
+          email,
+          name,
+          password
+        }
+      }),
+    }),
+
+    signin: builder.mutation<SigninResponse, SigninArg>({
+      query: ({ email, password }) => ({
+        url: `/signin`,
+        method: 'POST',
+        body: {
+          email,
+          password
+        }
       }),
     }),
   }),
