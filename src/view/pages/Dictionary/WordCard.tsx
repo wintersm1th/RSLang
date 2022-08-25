@@ -16,26 +16,43 @@ import Card from '@mui/material/Card';
 import CardMedia from '@mui/material/CardMedia';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
+import { api } from '../../../model/service/api';
+import IAuth from '../../../core/IAuth';
 
 const imagePath = (img: string) => `https://react-learnwords-example.herokuapp.com/${img}`;
+
+type WordCardExtensionProps = {
+  wordId: string;
+  auth: IAuth;
+}
+
+const WordCardExtension = ({ wordId, auth: { id: _userId } }: WordCardExtensionProps) => {
+  const wordsService: IWordsService = DIContainer.get(DI_TYPES.WordsService);
+
+  const handleAddToDifficult = () => {
+    wordsService.setWordDifficultMark(wordId);
+  };
+
+  const handleAddToLearned = () => {
+    wordsService.setWordLearnedMark(wordId);
+  };
+  return (<>
+    <Button variant={'contained'} onClick={handleAddToLearned}>
+      Изученное
+    </Button>
+    <Button variant={'contained'} onClick={handleAddToDifficult}>
+      Сложное
+    </Button>
+  </>)
+}
 
 type WordCardProps = {
   word: IWord;
 };
 
 const WordCard = ({ word }: WordCardProps) => {
-  const wordsService: IWordsService = DIContainer.get(DI_TYPES.WordsService);
   const { user: auth } = useSelector(selectAuthParams);
-
-  const handleAddToDifficult = () => {
-    console.log('WordId:', word.id);
-    wordsService.setWordDifficultMark(word.id);
-  };
-
-  const handleAddToLearned = () => {
-    wordsService.setWordLearnedMark(word.id);
-  };
-
+  
   return (
     <Card>
       {word.image && <CardMedia image={imagePath(word.image)} sx={{ height: 200 }} />}
@@ -47,16 +64,7 @@ const WordCard = ({ word }: WordCardProps) => {
         </ul>
       </CardContent>
       <CardActions>
-        {auth && (
-          <>
-            <Button variant={'contained'} onClick={handleAddToLearned}>
-              Изученное
-            </Button>
-            <Button variant={'contained'} onClick={handleAddToDifficult}>
-              Сложное
-            </Button>
-          </>
-        )}
+        {auth && <WordCardExtension auth={auth} wordId={word.id} />}
       </CardActions>
     </Card>
   );
