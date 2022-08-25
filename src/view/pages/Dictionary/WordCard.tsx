@@ -16,7 +16,7 @@ import Card from '@mui/material/Card';
 import CardMedia from '@mui/material/CardMedia';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
-import { api } from '../../../model/service/api';
+
 import IAuth from '../../../core/IAuth';
 
 const imagePath = (img: string) => `https://react-learnwords-example.herokuapp.com/${img}`;
