@@ -4,15 +4,21 @@ import { useSelector } from 'react-redux';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { object, string, TypeOf } from 'zod';
 
-import { Alert, Box, TextField } from '@mui/material';
+import { Box, TextField } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import DIContainer from '../../DI/DIContainer';
 import DI_TYPES from '../../DI/DITypes';
-import IRegisterService from '../../services/interfaces/IRegisterService';
-import { RootState } from '../../model/store';
-import errorResponseSlice from '../../model/feature/auth';
+
+import IRegisterService from '../../services/interfaces/IRegisterationService';
+
+import {
+  selectState as selectRegistrationFormState
+} from '../../model/feature/forms/registration';
+
+import { isFailVariant, isSuccessVariant } from '../../model/helpers/forms';
+import { FormMessage } from './FormMessage';
 
 const registerSchema = object({
   login: string().min(1, 'Поле "Логин" обязательно для заполнения').max(32, 'Максимум 32 символа для логина'),
@@ -27,7 +33,7 @@ const registerSchema = object({
 type RegisterInput = TypeOf<typeof registerSchema>;
 
 const RegisterPage = () => {
-  const registerService = DIContainer.get<IRegisterService>(DI_TYPES.RegisterService);
+  const registerService = DIContainer.get<IRegisterService>(DI_TYPES.RegistrationService);
 
   const {
     register,
@@ -38,7 +44,7 @@ const RegisterPage = () => {
     resolver: zodResolver(registerSchema),
   });
 
-  const Auth = useSelector((state: RootState) => state[errorResponseSlice.name]);
+  const { variant: formVariant } = useSelector(selectRegistrationFormState);
 
   const onSubmitHandler: SubmitHandler<RegisterInput> = async (values) => {
     const { login: name, email, password } = values;
@@ -51,21 +57,8 @@ const RegisterPage = () => {
   return (
     <Box sx={{ maxWidth: '30rem' }}>
       <Box component="form" noValidate autoComplete="off" onSubmit={handleSubmit(onSubmitHandler)}>
-        {Auth.isRegisterSuccess ? (
-          <Alert sx={{ mb: 2 }} severity="success">
-            Вы успешно зарегистрировались
-          </Alert>
-        ) : (
-          ''
-        )}
-
-        {Auth.registerErrorMessage ? (
-          <Alert sx={{ mb: 2 }} severity="error">
-            Ошибка: {Auth.registerErrorMessage}
-          </Alert>
-        ) : (
-          ''
-        )}
+        { isSuccessVariant(formVariant) && <FormMessage message={formVariant.message} severity={'success'} />}
+        { isFailVariant(formVariant) && <FormMessage message={formVariant.message} severity={'error'} />}
 
         <TextField
           sx={{ mb: 2 }}

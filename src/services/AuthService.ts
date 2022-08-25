@@ -1,11 +1,15 @@
-import { Auth, langApi } from '../generated/services/langApi';
-import store from '../model/store';
 import { injectable } from 'inversify';
-import { clearMessage, setAuthMessage, successAuth } from '../model/feature/auth';
-import IAuthService from './interfaces/IAuthService';
-import IAuthParams from './interfaces/IAuthParams';
-import { clearUserInfo, selectState, setUserInfo } from '../model/feature/userAuthParams';
-import IUserInfo from './interfaces/IUserInfo';
+
+import IAuth from '../core/IAuth';
+
+import store from '../model/store';
+import { slice as loginFormSlice } from '../model/feature/forms/login';
+import { Auth, langApi } from '../generated/services/langApi';
+
+import IAuthService, { AuthorizeParams } from './interfaces/IAuthService';
+
+import { clearAuth, selectState, setAuth } from '../model/feature/userAuthParams';
+
 import {
   isCustomError,
   isFetchError,
@@ -14,11 +18,12 @@ import {
   isSuccessResponse,
   isUnknownError,
 } from './utils/ErrorResposne';
+
 import { LOCAL_STORAGE_AUTH_KEY } from '../core/constants';
 
 @injectable()
 export default class AuthService implements IAuthService {
-  async authorize(params: IAuthParams): Promise<boolean> {
+  async authorize(params: AuthorizeParams): Promise<boolean> {
     const result = langApi.endpoints.postSignin.initiate({ body: params });
     const sub = store.dispatch(result);
 
@@ -33,8 +38,8 @@ export default class AuthService implements IAuthService {
           id: userId,
         });
 
-        store.dispatch(successAuth());
-        clearMessage();
+        const { success } = loginFormSlice.actions;
+        store.dispatch(success('Вы успешно авторизовались'));      
 
         return true;
       }
@@ -55,7 +60,8 @@ export default class AuthService implements IAuthService {
         throw Error('Undefined behavior');
       }
 
-      store.dispatch(setAuthMessage(message));
+      const { fail } = loginFormSlice.actions;
+      store.dispatch(fail(message));
 
       return false;
     });
@@ -65,22 +71,22 @@ export default class AuthService implements IAuthService {
     const storagedUserParams = localStorage.getItem(LOCAL_STORAGE_AUTH_KEY);
 
     if (storagedUserParams !== null) {
-      const userInfo: IUserInfo = JSON.parse(storagedUserParams);
-      this.login(userInfo);
+      const auth: IAuth = JSON.parse(storagedUserParams);
+      this.login(auth);
     }
   }
 
-  login(authParams: IUserInfo) {
-    store.dispatch(setUserInfo(authParams));
-    localStorage.setItem(LOCAL_STORAGE_AUTH_KEY, JSON.stringify(authParams));
+  login(auth: IAuth) {
+    store.dispatch(setAuth(auth));
+    localStorage.setItem(LOCAL_STORAGE_AUTH_KEY, JSON.stringify(auth));
   }
 
   logout(): void {
-    store.dispatch(clearUserInfo());
+    store.dispatch(clearAuth());
     localStorage.removeItem(LOCAL_STORAGE_AUTH_KEY);
   }
 
-  getAuthParams(): IUserInfo | null {
+  getAuth(): IAuth | null {
     const { user: params } = selectState(store.getState());
     return params;
   }

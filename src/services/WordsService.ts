@@ -13,7 +13,7 @@ export default class WordsService implements IWordsService {
   constructor(@inject(DI_TYPES.AuthService) private authService: IAuthService) {}
 
   async setWordDifficultMark(wordId: string): Promise<boolean> {
-    const authParams = this.authService.getAuthParams();
+    const authParams = this.authService.getAuth();
 
     if (authParams === null) {
       return false;
@@ -30,7 +30,7 @@ export default class WordsService implements IWordsService {
   }
 
   async setWordLearnedMark(wordId: string): Promise<boolean> {
-    const authParams = this.authService.getAuthParams();
+    const authParams = this.authService.getAuth();
 
     if (authParams === null) {
       return false;
@@ -46,7 +46,7 @@ export default class WordsService implements IWordsService {
   }
 
   async removeWordDifficultMark(wordId: string): Promise<boolean> {
-    const authParams = this.authService.getAuthParams();
+    const authParams = this.authService.getAuth();
 
     if (authParams === null) {
       return false;
@@ -62,7 +62,7 @@ export default class WordsService implements IWordsService {
   }
 
   async removeWordLearnedMark(wordId: string): Promise<boolean> {
-    const authParams = this.authService.getAuthParams();
+    const authParams = this.authService.getAuth();
 
     if (authParams === null) {
       return false;
@@ -91,7 +91,7 @@ export default class WordsService implements IWordsService {
   }
 
   private async getUserWord(wordId: string): Promise<UserWordParameters | null> {
-    const authParams = this.authService.getAuthParams();
+    const authParams = this.authService.getAuth();
 
     if (!authParams) {
       return null;

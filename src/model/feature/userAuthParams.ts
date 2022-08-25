@@ -1,9 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import IUserInfo from '../../services/interfaces/IUserInfo';
+
+import IAuth from '../../core/IAuth';
 import { RootState } from '../store';
 
 type UserInfoState = {
-  user: IUserInfo | null;
+  user: IAuth | null;
 };
 
 const initialState: UserInfoState = {
@@ -14,16 +15,21 @@ const slice = createSlice({
   name: 'userAuthParams',
   initialState,
   reducers: {
-    setUserInfo(state, { payload: { name, id, token, refreshToken } }: PayloadAction<IUserInfo>) {
+    setAuth(state, { payload: { name, id, token, refreshToken } }: PayloadAction<IAuth>) {
       state.user = { name, id, token, refreshToken };
     },
-    clearUserInfo(state) {
+    
+    clearAuth(state) {
       state.user = null;
     },
   },
 });
 
+export const {
+  setAuth,
+  clearAuth 
+} = slice.actions;
+
 export const selectState = (state: RootState): UserInfoState => state[slice.name];
 
 export default slice;
-export const { setUserInfo, clearUserInfo } = slice.actions;

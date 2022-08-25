@@ -1,16 +1,19 @@
 import * as React from 'react';
-import { Alert, Box, TextField } from '@mui/material';
+
+import { useSelector } from 'react-redux';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { object, string, TypeOf } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useState } from 'react';
-import { LoadingButton } from '@mui/lab';
+
 import DIContainer from '../../DI/DIContainer';
 import DI_TYPES from '../../DI/DITypes';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../model/store';
-import errorResponseSlice from '../../model/feature/auth';
+
+import { Box, TextField } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 import IAuthService from '../../services/interfaces/IAuthService';
+import { selectState } from '../../model/feature/forms/login';
+import { isFailVariant, isSuccessVariant } from '../../model/helpers/forms';
+import { FormMessage } from './FormMessage';
 
 const registerSchema = object({
   email: string().email('Неверно указан Email'),
@@ -20,9 +23,8 @@ const registerSchema = object({
 type AuthInput = TypeOf<typeof registerSchema>;
 
 const AuthPage = () => {
-  const [loading] = useState(false);
-
   const authService = DIContainer.get<IAuthService>(DI_TYPES.AuthService);
+
   const {
     register,
     formState: { errors },
@@ -32,7 +34,7 @@ const AuthPage = () => {
     resolver: zodResolver(registerSchema),
   });
 
-  const Auth = useSelector((state: RootState) => state[errorResponseSlice.name]);
+  const { variant: formVariant } = useSelector(selectState);
 
   const onSubmitHandler: SubmitHandler<AuthInput> = async (values) => {
     const result = await authService.authorize(values);
@@ -44,21 +46,8 @@ const AuthPage = () => {
   return (
     <Box sx={{ maxWidth: '30rem' }}>
       <Box component="form" noValidate autoComplete="off" onSubmit={handleSubmit(onSubmitHandler)}>
-        {Auth.isAuthSuccess ? (
-          <Alert sx={{ mb: 2 }} severity="success">
-            Вы успешно авторизовались
-          </Alert>
-        ) : (
-          ''
-        )}
-
-        {Auth.authErrorMessage ? (
-          <Alert sx={{ mb: 2 }} severity="error">
-            Ошибка: {Auth.authErrorMessage}
-          </Alert>
-        ) : (
-          ''
-        )}
+        { isSuccessVariant(formVariant) && <FormMessage message={formVariant.message} severity={'success'} />}
+        { isFailVariant(formVariant) && <FormMessage message={formVariant.message} severity={'error'} />}
 
         <TextField
           sx={{ mb: 2 }}
@@ -81,7 +70,7 @@ const AuthPage = () => {
           {...register('password')}
         />
 
-        <LoadingButton variant="contained" fullWidth type="submit" loading={loading} sx={{ py: '0.8rem', mt: '1rem' }}>
+        <LoadingButton variant="contained" fullWidth type="submit" loading={false} sx={{ py: '0.8rem', mt: '1rem' }}>
           Авторизоваться
         </LoadingButton>
       </Box>

@@ -1,8 +1,14 @@
 import * as React from 'react';
+
+import store from '../../model/store';
+import { slice as registrationFormSlice } from '../../model/feature/forms/registration';
+import { slice as loginFormSlice } from '../../model/feature/forms/login';
+
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
 import { Tab, Tabs } from '@mui/material';
+
 import Auth from './Auth';
 import Register from './Register';
 
@@ -43,11 +49,19 @@ const TabPanel = (props: ITabPanelProps) => {
 const AuthModal = () => {
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState(0);
+
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+
+  const handleClose = () => {
+    setOpen(false);
+    store.dispatch(loginFormSlice.actions.reset());
+    store.dispatch(registrationFormSlice.actions.reset());
+  }
+
   const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
+
   function tabProps(index: number) {
     return {
       id: `simple-tab-${index}`,
