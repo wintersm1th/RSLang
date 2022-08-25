@@ -1,9 +1,10 @@
 import { injectable } from 'inversify';
 import { langApi, User } from '../generated/services/langApi';
-import { setRegisterMessage, successRegister } from '../model/feature/auth';
+import { slice as registrationFormSlice } from '../model/feature/forms/registration';
 import store from '../model/store';
-import IRegisterCreateParams from './interfaces/IRegisterCreateParams';
-import IRegisterService from './interfaces/IRegisterService';
+
+import IRegisterService, { CreateUserParams } from './interfaces/IRegisterationService';
+
 import {
   isCustomError,
   isFetchError,
@@ -15,12 +16,15 @@ import {
 
 @injectable()
 export default class RegisterService implements IRegisterService {
-  async createUser(params: IRegisterCreateParams): Promise<boolean> {
+  async createUser(params: CreateUserParams): Promise<boolean> {
     const result = langApi.endpoints.postUsers.initiate({ body: params });
     const sub = store.dispatch(result);
+
     return sub.then((response) => {
       if (isSuccessResponse<User>(response)) {
-        store.dispatch(successRegister());
+        const { success } = registrationFormSlice.actions;
+        store.dispatch(success('Вы успешно зарегестрировались'));
+
         return true;
       }
 
@@ -40,7 +44,8 @@ export default class RegisterService implements IRegisterService {
         throw Error('Undefined behavior');
       }
 
-      store.dispatch(setRegisterMessage(message));
+      const { fail } = registrationFormSlice.actions;
+      store.dispatch(fail(message));
 
       return false;
     });
