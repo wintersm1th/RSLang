@@ -16,6 +16,7 @@ import Card from '@mui/material/Card';
 import CardMedia from '@mui/material/CardMedia';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
+import AudioPlayer from '../../components/AudioPlayer';
 
 import IAuth from '../../../core/IAuth';
 
@@ -61,6 +62,9 @@ const WordCard = ({ word }: WordCardProps) => {
           <li>Id: {word.id}</li>
           <li>Word:{word.word}</li>
           <li>Translation: {word.wordTranslate}</li>
+          <AudioPlayer
+            tracks={['https://www.audio-lingua.eu/IMG/mp3/torin.mp3', 'https://www.audio-lingua.eu/IMG/mp3/samuel.mp3']}
+          />
         </ul>
       </CardContent>
       <CardActions>
