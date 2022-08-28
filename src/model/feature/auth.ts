@@ -1,39 +1,35 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import IAuthManage from '../../services/interfaces/IAuthManage';
 
-const initialState: IAuthManage = {
-  registerErrorMessage: null,
-  authErrorMessage: null,
-  isRegisterSuccess: null,
-  isAuthSuccess: null,
+import IAuth from '../../core/IAuth';
+import { RootState } from '../store';
+
+type UserInfoState = {
+  user: IAuth | null;
+};
+
+const initialState: UserInfoState = {
+  user: null,
 };
 
 const slice = createSlice({
-  name: 'errorResponseSlice',
+  name: 'auth',
   initialState,
   reducers: {
-    setRegisterMessage(state, { payload }: PayloadAction<string>) {
-      state.registerErrorMessage = payload;
+    setAuth(state, { payload: { name, id, token, refreshToken } }: PayloadAction<IAuth>) {
+      state.user = { name, id, token, refreshToken };
     },
-    setAuthMessage(state, { payload }: PayloadAction<string>) {
-      state.authErrorMessage = payload;
-    },
-    clearMessage(state, _: PayloadAction<void>) {
-      state.registerErrorMessage = null;
-      state.authErrorMessage = null;
-      state.isRegisterSuccess = null;
-      state.isAuthSuccess = null;
-    },
-    successAuth(state) {
-      state.authErrorMessage = null;
-      state.isAuthSuccess = true;
-    },
-    successRegister(state) {
-      state.registerErrorMessage = null;
-      state.isRegisterSuccess = true;
+    
+    clearAuth(state) {
+      state.user = null;
     },
   },
 });
 
+export const {
+  setAuth,
+  clearAuth 
+} = slice.actions;
+
+export const selectState = (state: RootState): UserInfoState => state[slice.name];
+
 export default slice;
-export const { setRegisterMessage, setAuthMessage, clearMessage, successAuth, successRegister } = slice.actions;
