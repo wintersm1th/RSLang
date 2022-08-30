@@ -31,6 +31,16 @@ const Statistics = () => {
           <Typography margin="30px auto" variant="h4">
             Статистика за все время
           </Typography>
+          <Box>
+            <Typography margin="30px auto" variant="h5">
+              Количество новых слов за каждый день
+            </Typography>
+          </Box>
+          <Box>
+            <Typography margin="30px auto" variant="h5">
+              Увеличение количества изученных слов за весь период обучения
+            </Typography>
+          </Box>
         </Box>
       </Box>
     </Container>
