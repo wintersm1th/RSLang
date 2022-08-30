@@ -25,7 +25,7 @@ const imagePath = (img: string) => `https://react-learnwords-example.herokuapp.c
 type WordCardExtensionProps = {
   wordId: string;
   auth: IAuth;
-}
+};
 
 const WordCardExtension = ({ wordId, auth: { id: _userId } }: WordCardExtensionProps) => {
   const wordsService: IWordsService = DIContainer.get(DI_TYPES.WordsService);
@@ -37,15 +37,17 @@ const WordCardExtension = ({ wordId, auth: { id: _userId } }: WordCardExtensionP
   const handleAddToLearned = () => {
     wordsService.setWordLearnedMark(wordId);
   };
-  return (<>
-    <Button variant={'contained'} onClick={handleAddToLearned}>
-      Изученное
-    </Button>
-    <Button variant={'contained'} onClick={handleAddToDifficult}>
-      Сложное
-    </Button>
-  </>)
-}
+  return (
+    <>
+      <Button variant={'contained'} onClick={handleAddToLearned}>
+        Изученное
+      </Button>
+      <Button variant={'contained'} onClick={handleAddToDifficult}>
+        Сложное
+      </Button>
+    </>
+  );
+};
 
 type WordCardProps = {
   word: IWord;
@@ -53,7 +55,7 @@ type WordCardProps = {
 
 const WordCard = ({ word }: WordCardProps) => {
   const { user: auth } = useSelector(selectAuthParams);
-  
+
   return (
     <Card>
       {word.image && <CardMedia image={imagePath(word.image)} sx={{ height: 200 }} />}
@@ -67,9 +69,7 @@ const WordCard = ({ word }: WordCardProps) => {
           />
         </ul>
       </CardContent>
-      <CardActions>
-        {auth && <WordCardExtension auth={auth} wordId={word.id} />}
-      </CardActions>
+      <CardActions>{auth && <WordCardExtension auth={auth} wordId={word.id} />}</CardActions>
     </Card>
   );
 };

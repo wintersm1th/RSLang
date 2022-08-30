@@ -1,20 +1,15 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { RootState } from '../../store';
-import {
-  FormVariant,
-  createRegularVariant,
-  createFailVariant,
-  createSuccessVariant,
-} from '../../helpers/forms';
+import { FormVariant, createRegularVariant, createFailVariant, createSuccessVariant } from '../../helpers/forms';
 
 type LoginFormState = {
   variant: FormVariant;
 };
 
 const initialState: LoginFormState = {
-  variant: createRegularVariant()
-}
+  variant: createRegularVariant(),
+};
 
 export const slice = createSlice({
   name: 'form/login',
@@ -30,7 +25,7 @@ export const slice = createSlice({
 
     fail(state, { payload: errorMessage }: PayloadAction<string>) {
       state.variant = createFailVariant(errorMessage);
-    }
+    },
   },
 });
 

@@ -85,18 +85,18 @@ export type CreateUserArg = {
   name: string;
   email: string;
   password: string;
-}
+};
 
 export type CreateUserResponse = {
   name: string;
   email: string;
   password: string;
-}
+};
 
 export type SigninArg = {
   email: string;
   password: string;
-}
+};
 
 export type SigninResponse = {
   userId: string;
@@ -104,7 +104,7 @@ export type SigninResponse = {
   refreshToken: string;
   message: string;
   name: string;
-}
+};
 
 const enpointsWithAuthorization = [
   'createUserWord',
@@ -175,7 +175,7 @@ export const api = createApi({
         method: 'PUT',
         body: {
           difficulty,
-          optional
+          optional,
         },
       }),
     }),
@@ -195,8 +195,8 @@ export const api = createApi({
         body: {
           email,
           name,
-          password
-        }
+          password,
+        },
       }),
     }),
 
@@ -206,8 +206,8 @@ export const api = createApi({
         method: 'POST',
         body: {
           email,
-          password
-        }
+          password,
+        },
       }),
     }),
   }),
