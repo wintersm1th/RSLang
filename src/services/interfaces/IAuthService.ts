@@ -1,11 +1,15 @@
-import IAuthParams from './IAuthParams';
-import IUserInfo from './IUserInfo';
+import IAuth from "../../core/IAuth";
+
+export interface AuthorizeParams {
+  email: string;
+  password: string;
+}
 
 interface IAuthService {
-  authorize(params: IAuthParams): Promise<boolean>;
+  authorize(params: AuthorizeParams): Promise<boolean>;
   start(): void;
   logout(): void;
-  getAuthParams(): IUserInfo | null;
+  getAuth(): IAuth | null;
 }
 
 export default IAuthService;

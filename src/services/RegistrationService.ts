@@ -1,9 +1,11 @@
 import { injectable } from 'inversify';
-import { langApi, User } from '../generated/services/langApi';
-import { setRegisterMessage, successRegister } from '../model/feature/auth';
+
 import store from '../model/store';
-import IRegisterCreateParams from './interfaces/IRegisterCreateParams';
-import IRegisterService from './interfaces/IRegisterService';
+import { api } from '../model/service/api';
+import { slice as registrationFormSlice } from '../model/feature/forms/registration';
+
+import IRegisterService, { CreateUserParams } from './interfaces/IRegisterationService';
+
 import {
   isCustomError,
   isFetchError,
@@ -11,16 +13,19 @@ import {
   isSerializedError,
   isSuccessResponse,
   isUnknownError,
-} from './utils/ErrorResposne';
+} from './utils/ErrorResponse';
 
 @injectable()
 export default class RegisterService implements IRegisterService {
-  async createUser(params: IRegisterCreateParams): Promise<boolean> {
-    const result = langApi.endpoints.postUsers.initiate({ body: params });
+  async createUser({ name, email, password }: CreateUserParams): Promise<boolean> {
+    const result = api.endpoints.createUser.initiate({ name, email, password });
     const sub = store.dispatch(result);
+
     return sub.then((response) => {
-      if (isSuccessResponse<User>(response)) {
-        store.dispatch(successRegister());
+      if (isSuccessResponse(response)) {
+        const { success } = registrationFormSlice.actions;
+        store.dispatch(success('Вы успешно зарегестрировались'));
+
         return true;
       }
 
@@ -33,14 +38,15 @@ export default class RegisterService implements IRegisterService {
       } else if (isUnknownError(error)) {
         message = 'Неизвестная ошибка';
       } else if (isParsingError(error)) {
-        message = error.data ?? 'Неизвестная ошибка';
+        message = error.data;
       } else if (isFetchError(error) || isCustomError(error)) {
         message = error.error;
       } else {
         throw Error('Undefined behavior');
       }
 
-      store.dispatch(setRegisterMessage(message));
+      const { fail } = registrationFormSlice.actions;
+      store.dispatch(fail(message));
 
       return false;
     });

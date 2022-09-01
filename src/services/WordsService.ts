@@ -13,7 +13,7 @@ export default class WordsService implements IWordsService {
   constructor(@inject(DI_TYPES.AuthService) private authService: IAuthService) {}
 
   async setWordDifficultMark(wordId: string): Promise<boolean> {
-    const authParams = this.authService.getAuthParams();
+    const authParams = this.authService.getAuth();
 
     if (authParams === null) {
       return false;
@@ -26,11 +26,15 @@ export default class WordsService implements IWordsService {
       return this.createUserWord({ id: userId, wordId }, { isDifficult: true, isLearned: false });
     }
 
+    if (word.isLearned === true) {
+      return false;
+    }
+
     return this.unsafeUpdateWord({ id: authParams.id, wordId }, { ...word, isDifficult: true });
   }
 
   async setWordLearnedMark(wordId: string): Promise<boolean> {
-    const authParams = this.authService.getAuthParams();
+    const authParams = this.authService.getAuth();
 
     if (authParams === null) {
       return false;
@@ -42,11 +46,11 @@ export default class WordsService implements IWordsService {
       return this.createUserWord({ id: authParams.id, wordId }, { isDifficult: false, isLearned: true });
     }
 
-    return this.unsafeUpdateWord({ id: authParams.id, wordId }, { ...word, isLearned: true });
+    return this.unsafeUpdateWord({ id: authParams.id, wordId }, { ...word, isLearned: true, isDifficult: false });
   }
 
   async removeWordDifficultMark(wordId: string): Promise<boolean> {
-    const authParams = this.authService.getAuthParams();
+    const authParams = this.authService.getAuth();
 
     if (authParams === null) {
       return false;
@@ -62,7 +66,7 @@ export default class WordsService implements IWordsService {
   }
 
   async removeWordLearnedMark(wordId: string): Promise<boolean> {
-    const authParams = this.authService.getAuthParams();
+    const authParams = this.authService.getAuth();
 
     if (authParams === null) {
       return false;
@@ -91,7 +95,7 @@ export default class WordsService implements IWordsService {
   }
 
   private async getUserWord(wordId: string): Promise<UserWordParameters | null> {
-    const authParams = this.authService.getAuthParams();
+    const authParams = this.authService.getAuth();
 
     if (!authParams) {
       return null;
