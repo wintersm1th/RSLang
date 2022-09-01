@@ -56,7 +56,7 @@ const AuthModal = () => {
     setOpen(false);
     store.dispatch(loginFormSlice.actions.reset());
     store.dispatch(registrationFormSlice.actions.reset());
-  }
+  };
 
   const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);

@@ -46,8 +46,8 @@ const AuthPage = () => {
   return (
     <Box sx={{ maxWidth: '30rem' }}>
       <Box component="form" noValidate autoComplete="off" onSubmit={handleSubmit(onSubmitHandler)}>
-        { isSuccessVariant(formVariant) && <FormMessage message={formVariant.message} severity={'success'} />}
-        { isFailVariant(formVariant) && <FormMessage message={formVariant.message} severity={'error'} />}
+        {isSuccessVariant(formVariant) && <FormMessage message={formVariant.message} severity={'success'} />}
+        {isFailVariant(formVariant) && <FormMessage message={formVariant.message} severity={'error'} />}
 
         <TextField
           sx={{ mb: 2 }}

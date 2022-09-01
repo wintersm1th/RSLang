@@ -1,4 +1,4 @@
-import IAuth from "../../core/IAuth";
+import IAuth from '../../core/IAuth';
 
 export interface AuthorizeParams {
   email: string;
