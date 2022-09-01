@@ -18,17 +18,14 @@ const slice = createSlice({
     setAuth(state, { payload: { name, id, token, refreshToken } }: PayloadAction<IAuth>) {
       state.user = { name, id, token, refreshToken };
     },
-    
+
     clearAuth(state) {
       state.user = null;
     },
   },
 });
 
-export const {
-  setAuth,
-  clearAuth 
-} = slice.actions;
+export const { setAuth, clearAuth } = slice.actions;
 
 export const selectState = (state: RootState): UserInfoState => state[slice.name];
 

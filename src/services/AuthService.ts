@@ -39,7 +39,7 @@ export default class AuthService implements IAuthService {
         });
 
         const { success } = loginFormSlice.actions;
-        store.dispatch(success('Вы успешно авторизовались'));      
+        store.dispatch(success('Вы успешно авторизовались'));
 
         return true;
       }
