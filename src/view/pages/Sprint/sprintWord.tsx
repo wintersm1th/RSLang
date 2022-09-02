@@ -1,8 +1,8 @@
-import React, { FC } from 'react'
+import React, { FC } from 'react';
 
 interface SprintWordProps {
-  word: string
-  answer: string
+  word: string;
+  answer: string;
 }
 
 export const SprintWord: FC<SprintWordProps> = ({ word, answer }) => {
@@ -11,5 +11,5 @@ export const SprintWord: FC<SprintWordProps> = ({ word, answer }) => {
       <span className="word-english">{word}</span>
       <span className="answer">{answer}</span>
     </div>
-  )
-}
+  );
+};
