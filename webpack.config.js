@@ -37,10 +37,16 @@ const baseConfig = {
     new CopyWebpackPlugin({
       patterns: [{ from: './assets', to: './assets' }],
     }),
-    new HtmlWebpackPlugin({
-      template: path.resolve(__dirname, './templates/index.html'),
-      filename: 'index.html',
-    }),
+    new HtmlWebpackPlugin(
+{
+          template: path.resolve(__dirname, './templates/index.html'),
+          filename: 'index.html',
+        },
+      {
+        template: path.resolve(__dirname, './templates/404.html'),
+        filename: '404.html',
+      }
+    ),
     new CleanWebpackPlugin(),
   ],
 };
