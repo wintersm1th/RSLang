@@ -15,6 +15,9 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 
 import WordCard from './WordCard';
+
+import { Button } from '@mui/material';
+import { Link } from 'react-router-dom';
 import DIContainer from "../../../DI/DIContainer";
 import DI_TYPES from "../../../DI/DITypes";
 import IDictionaryService from "../../../services/interfaces/IDictionaryService";
@@ -51,6 +54,14 @@ const Main = () => {
     <Container>
       <Paper component={'div'} sx={{ padding: 5 }}>
         <Typography marginBottom="30px">Page: {page}</Typography>
+        <Box display="flex" gap="20px">
+          <Button component={Link} to={'/games/sprint'} variant="outlined">
+            Спринт
+          </Button>
+          <Button component={Link} to={'/games/audiocall'} variant="outlined">
+            Аудиовызов
+          </Button>
+        </Box>
         <RadioGroup row value={group} onChange={(_e, value) => setDifficult(value)}>
           <FormControlLabel value="0" control={<Radio />} label="1" />
           <FormControlLabel value="1" control={<Radio />} label="2" />

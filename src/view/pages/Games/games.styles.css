@@ -4,6 +4,7 @@
 }
 
 .games-page {
+  display: flex;
   width: 100%;
   color:white;
   background: linear-gradient(to bottom, #a2cfe9, #265887)
