@@ -45,6 +45,6 @@
 .team-card__github {
   width: 30px;
   height: 30px;
-  background: url("../../../assets/svg/github-black.svg");
+  background: url("../assets/svg/github-black.svg");
   background-size: contain;   
 }
