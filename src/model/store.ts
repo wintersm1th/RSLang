@@ -4,7 +4,7 @@ import { api } from './service/api';
 
 import { slice as loginFormSlice } from './feature/forms/login';
 import { slice as registrationFormSlice } from './feature/forms/registration';
-
+import pageSlice from './feature/dictionary';
 import userSlice from './feature/auth';
 
 const store = configureStore({
@@ -14,6 +14,7 @@ const store = configureStore({
     [registrationFormSlice.name]: registrationFormSlice.reducer,
     [langApiBase.reducerPath]: langApiBase.reducer,
     [api.reducerPath]: api.reducer,
+    [pageSlice.name]: pageSlice.reducer,
   },
   middleware: (gDM) => gDM().concat(langApiBase.middleware).concat(api.middleware),
 });
