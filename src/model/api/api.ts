@@ -4,11 +4,72 @@ import { IWord } from '../../core/IWord';
 
 import { RootState } from '../store';
 import { selectState as selectUserAuthParams } from '../feature/auth';
+import { UserWordParameters } from '../../services/interfaces/IWordsService';
 
 export type User = {
   name: string;
   email: string;
   password: string;
+};
+
+export type ArgUserId = {
+  id: string;
+};
+
+export type UserWordPayload = UserWordParameters;
+
+export type UserWord = {
+  difficulty: string;
+  optional: UserWordPayload;
+};
+
+export type GetUserWordArg = {
+  id: string;
+  wordId: string;
+};
+
+export type GetUserWordResponse = {
+  id: string;
+  wordId: string;
+  difficulty: string;
+  optional: UserWordPayload;
+};
+
+export type UpdateUserWordArg = {
+  id: string;
+  wordId: string;
+  difficulty: string;
+  optional: UserWordPayload;
+};
+
+export type UpdateUserWordResponse = {
+  id: string;
+  wordId: string;
+  difficulty: string;
+  optional: UserWordPayload;
+};
+
+export type GetUserWordsArg = {
+  id: string;
+};
+
+export type GetUserWordsResponse = GetUserWordResponse[];
+
+export type CreateUserWordArg = {
+  id: string;
+  wordId: string;
+  difficulty: string;
+  payload: UserWordPayload;
+};
+
+export type CreateUserWordResponse = {
+  id: string;
+  wordId: UserWordPayload;
+};
+
+export type DeleteUserWordsArg = {
+  id: string;
+  wordId: string;
 };
 
 export type ReadWordsArg = {
@@ -70,8 +131,7 @@ export const api = createApi({
       return headers;
     },
   }),
-  endpoints: (build) => ({
-    readWords: build.query<ReadWordsResponse, ReadWordsArg>({
+
       query: ({ group, page }) => ({
         url: `/words`,
         params: {
@@ -81,7 +141,53 @@ export const api = createApi({
       }),
     }),
 
-    createUser: build.mutation<CreateUserResponse, CreateUserArg>({
+    createUserWord: builder.mutation<CreateUserWordResponse, CreateUserWordArg>({
+      invalidatesTags: ['UserWord'],
+      query: ({ id, wordId, difficulty, payload }) => ({
+        url: `/users/${id}/words/${wordId}`,
+        method: 'POST',
+        body: {
+          difficulty,
+          optional: payload,
+        },
+      }),
+    }),
+
+    readUserWords: builder.query<GetUserWordsResponse, ArgUserId>({
+      providesTags: ['UserWord'],
+      query: ({ id }) => ({
+        url: `/users/${id}/words`,
+      }),
+    }),
+
+    readUserWord: builder.query<GetUserWordResponse, GetUserWordArg>({
+      providesTags: ['UserWord'],
+      query: ({ id, wordId }) => ({
+        url: `/users/${id}/words/${wordId}`,
+      }),
+    }),
+
+    updateUserWord: builder.mutation<UpdateUserWordResponse, UpdateUserWordArg>({
+      invalidatesTags: ['UserWord'],
+      query: ({ id, wordId, difficulty, optional }) => ({
+        url: `users/${id}/words/${wordId}`,
+        method: 'PUT',
+        body: {
+          difficulty,
+          optional
+        },
+      }),
+    }),
+
+    deleteUserWord: builder.mutation<void, DeleteUserWordsArg>({
+      invalidatesTags: ['UserWord'],
+      query: ({ id, wordId }) => ({
+        url: `/users/${id}/words/${wordId}`,
+        method: 'DELETE',
+      }),
+    }),
+
+    createUser: builder.mutation<CreateUserResponse, CreateUserArg>({
       query: ({ email, name, password }) => ({
         url: `/users`,
         method: 'POST',
@@ -93,7 +199,7 @@ export const api = createApi({
       }),
     }),
 
-    signin: build.mutation<SigninResponse, SigninArg>({
+
       query: ({ email, password }) => ({
         url: `/signin`,
         method: 'POST',
