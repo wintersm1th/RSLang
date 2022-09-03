@@ -131,7 +131,8 @@ export const api = createApi({
       return headers;
     },
   }),
-
+  endpoints: (build) => ({
+    readWords: build.query<ReadWordsResponse, ReadWordsArg>({
       query: ({ group, page }) => ({
         url: `/words`,
         params: {
@@ -141,53 +142,7 @@ export const api = createApi({
       }),
     }),
 
-    createUserWord: builder.mutation<CreateUserWordResponse, CreateUserWordArg>({
-      invalidatesTags: ['UserWord'],
-      query: ({ id, wordId, difficulty, payload }) => ({
-        url: `/users/${id}/words/${wordId}`,
-        method: 'POST',
-        body: {
-          difficulty,
-          optional: payload,
-        },
-      }),
-    }),
-
-    readUserWords: builder.query<GetUserWordsResponse, ArgUserId>({
-      providesTags: ['UserWord'],
-      query: ({ id }) => ({
-        url: `/users/${id}/words`,
-      }),
-    }),
-
-    readUserWord: builder.query<GetUserWordResponse, GetUserWordArg>({
-      providesTags: ['UserWord'],
-      query: ({ id, wordId }) => ({
-        url: `/users/${id}/words/${wordId}`,
-      }),
-    }),
-
-    updateUserWord: builder.mutation<UpdateUserWordResponse, UpdateUserWordArg>({
-      invalidatesTags: ['UserWord'],
-      query: ({ id, wordId, difficulty, optional }) => ({
-        url: `users/${id}/words/${wordId}`,
-        method: 'PUT',
-        body: {
-          difficulty,
-          optional
-        },
-      }),
-    }),
-
-    deleteUserWord: builder.mutation<void, DeleteUserWordsArg>({
-      invalidatesTags: ['UserWord'],
-      query: ({ id, wordId }) => ({
-        url: `/users/${id}/words/${wordId}`,
-        method: 'DELETE',
-      }),
-    }),
-
-    createUser: builder.mutation<CreateUserResponse, CreateUserArg>({
+    createUser: build.mutation<CreateUserResponse, CreateUserArg>({
       query: ({ email, name, password }) => ({
         url: `/users`,
         method: 'POST',
@@ -199,7 +154,7 @@ export const api = createApi({
       }),
     }),
 
-
+    signin: build.mutation<SigninResponse, SigninArg>({
       query: ({ email, password }) => ({
         url: `/signin`,
         method: 'POST',
