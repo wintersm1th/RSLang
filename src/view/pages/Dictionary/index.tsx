@@ -6,7 +6,6 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Pagination from '@mui/material/Pagination';
-import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 
 import Radio from '@mui/material/Radio';
@@ -26,6 +25,7 @@ import { words as wordsApi } from '../../../model/api/public';
 import { userWords as userWordsApi } from '../../../model/api/private';
 import { selectState as selectAuthState } from '../../../model/feature/auth';
 import { GetUserWordResponse } from '../../../model/api/private/userWords';
+
 import IWord from '../../../core/IWord';
 
 type WordMapping = {
@@ -39,9 +39,6 @@ const Main = () => {
   const dictionaryService = DIContainer.get<IDictionaryService>(DI_TYPES.DictionaryService);
 
   const { difficulty, pageNumber } = useSelector(selectDictionaryState);
-
-  console.log('PageNumber', pageNumber);
-  console.log('Difficulty', difficulty);
 
   const { data: words } = wordsApi.useGetWordsQuery({ group: difficulty, page: pageNumber });
 
@@ -85,7 +82,6 @@ const Main = () => {
   return (
     <Container>
       <Paper component={'div'} sx={{ padding: 5 }}>
-        <Typography marginBottom="30px">Page: {pageNumber}</Typography>
         <Box display="flex" gap="20px">
           <Button component={Link} to={'/games/sprint'} variant="outlined">
             Спринт

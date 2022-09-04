@@ -5,68 +5,32 @@ import DI_TYPES from '../DI/DITypes';
 import store from '../model/store';
 import { userWords } from '../model/api/private';
 
-import IWordsService, { UserWordParameters } from './interfaces/IWordsService';
+import IWordsService from './interfaces/IWordsService';
 import IAuthService from './interfaces/IAuthService';
 import { WordDifficulty } from '../core/WordDifficulty';
+import { GetUserWordResponse } from '../model/api/private/userWords';
 
 @injectable()
 export default class WordsService implements IWordsService {
   constructor(@inject(DI_TYPES.AuthService) private authService: IAuthService) {}
 
   async setWordDifficultMark(wordId: string): Promise<boolean> {
-    const authParams = this.authService.getAuth();
-
-    if (authParams === null) {
-      return false;
-    }
-
-    const { id: userId } = authParams;
-    const word = await this.getUserWord(wordId);
-
-    if (word === null) {
-      return this.createUserWord({ id: userId, wordId, difficulty: WordDifficulty.HARD });
-    }
-
-    if (word.isLearned === true) {
-      return false;
-    }
-
-    return this.unsafeUpdateWord({ id: authParams.id, wordId, difficulty: WordDifficulty.HARD });
+    return this.setWordDifficulty(wordId, WordDifficulty.HARD);
   }
 
   async setWordLearnedMark(wordId: string): Promise<boolean> {
-    const authParams = this.authService.getAuth();
-
-    if (authParams === null) {
-      return false;
-    }
-
-    const word = await this.getUserWord(wordId);
-
-    if (word === null) {
-      return this.createUserWord({ id: authParams.id, wordId, difficulty: WordDifficulty.LEARNED });
-    }
-
-    return this.unsafeUpdateWord({ id: authParams.id, wordId, difficulty: WordDifficulty.LEARNED });
+    return this.setWordDifficulty(wordId, WordDifficulty.LEARNED);
   }
 
   async removeWordDifficultMark(wordId: string): Promise<boolean> {
-    const authParams = this.authService.getAuth();
-
-    if (authParams === null) {
-      return false;
-    }
-
-    const word = await this.getUserWord(wordId);
-
-    if (word === null) {
-      throw Error('Undefined behavior');
-    }
-
-    return this.unsafeUpdateWord({ id: authParams.id, wordId, difficulty: WordDifficulty.NONE });
+    return this.setWordDifficulty(wordId, WordDifficulty.NONE);
   }
 
   async removeWordLearnedMark(wordId: string): Promise<boolean> {
+    return this.setWordDifficulty(wordId, WordDifficulty.NONE);
+  }
+
+  private async setWordDifficulty(wordId: string, difficulty: WordDifficulty): Promise<boolean> {
     const authParams = this.authService.getAuth();
 
     if (authParams === null) {
@@ -76,10 +40,14 @@ export default class WordsService implements IWordsService {
     const word = await this.getUserWord(wordId);
 
     if (word === null) {
-      throw Error('Undefined behavior');
+      return this.createUserWord({
+        id: authParams.id,
+        wordId,
+        difficulty
+      });
+    } else {
+      return this.unsafeUpdateWord({ id: authParams.id, wordId, difficulty });
     }
-
-    return this.unsafeUpdateWord({ id: authParams.id, wordId, difficulty: WordDifficulty.NONE });
   }
 
   private async unsafeUpdateWord({ id, wordId, difficulty }: { id: string; wordId: string, difficulty: WordDifficulty }) {
@@ -94,7 +62,7 @@ export default class WordsService implements IWordsService {
     });
   }
 
-  private async getUserWord(wordId: string): Promise<UserWordParameters | null> {
+  private async getUserWord(wordId: string): Promise<GetUserWordResponse | null> {
     const authParams = this.authService.getAuth();
 
     if (!authParams) {
@@ -108,7 +76,7 @@ export default class WordsService implements IWordsService {
 
     try {
       const { data } = await getUserWordSub;
-      return data?.optional ?? null;
+      return data ?? null;
     } catch {
       return null;
     }
