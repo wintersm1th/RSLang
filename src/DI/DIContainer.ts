@@ -11,8 +11,8 @@ import IAuthService from '../services/interfaces/IAuthService';
 import AuthService from '../services/AuthService';
 import IWordsService from '../services/interfaces/IWordsService';
 import WordsService from '../services/WordsService';
-import IDictionaryService from "../services/interfaces/IDictionaryService";
-import DictionaryService from "../services/DictionaryService";
+import IDictionaryService from '../services/interfaces/IDictionaryService';
+import DictionaryService from '../services/DictionaryService';
 
 const DIContainer = new Container();
 

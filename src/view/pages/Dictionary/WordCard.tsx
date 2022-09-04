@@ -19,7 +19,7 @@ import CardActions from '@mui/material/CardActions';
 import AudioPlayer from '../../components/AudioPlayer';
 
 import IAuth from '../../../core/IAuth';
-import { Box, Typography } from "@mui/material";
+import { Box, Typography } from '@mui/material';
 
 const imagePath = (img: string) => `https://react-learnwords-example.herokuapp.com/${img}`;
 
@@ -63,36 +63,34 @@ const WordCard = ({ word }: WordCardProps) => {
       <CardContent>
         <Box display="flex" justifyContent="space-between" alignItems="center">
           <Box>
-            <Typography variant='h5' color={"red"}>
-              {word.word} 
-            </Typography> 
-            <Typography>
-              {word.transcription}
-            </Typography>            
+            <Typography variant="h5" color={'red'}>
+              {word.word}
+            </Typography>
+            <Typography>{word.transcription}</Typography>
           </Box>
           <AudioPlayer
             tracks={['https://www.audio-lingua.eu/IMG/mp3/torin.mp3', 'https://www.audio-lingua.eu/IMG/mp3/samuel.mp3']}
           />
         </Box>
-        <Typography variant='h5' color={"#808080"}>
-          {word.wordTranslate} 
+        <Typography variant="h5" color={'#808080'}>
+          {word.wordTranslate}
         </Typography>
         <Box>
           <Box>
-            <Typography variant='h6' mt={2}>
-              Значение 
-            </Typography>             
-            <Typography variant='body1' dangerouslySetInnerHTML={{ __html: word.textMeaning }}></Typography> 
-            <Typography variant='body2' dangerouslySetInnerHTML={{ __html: word.textMeaningTranslate }}></Typography>           
+            <Typography variant="h6" mt={2}>
+              Значение
+            </Typography>
+            <Typography variant="body1" dangerouslySetInnerHTML={{ __html: word.textMeaning }}></Typography>
+            <Typography variant="body2" dangerouslySetInnerHTML={{ __html: word.textMeaningTranslate }}></Typography>
           </Box>
         </Box>
         <Box>
           <Box>
-            <Typography variant='h6' mt={2}>
+            <Typography variant="h6" mt={2}>
               Пример
-            </Typography>             
-            <Typography variant='body1' dangerouslySetInnerHTML={{ __html: word.textExample }}></Typography> 
-            <Typography variant='body2' dangerouslySetInnerHTML={{ __html: word.textExampleTranslate }}></Typography>           
+            </Typography>
+            <Typography variant="body1" dangerouslySetInnerHTML={{ __html: word.textExample }}></Typography>
+            <Typography variant="body2" dangerouslySetInnerHTML={{ __html: word.textExampleTranslate }}></Typography>
           </Box>
         </Box>
       </CardContent>

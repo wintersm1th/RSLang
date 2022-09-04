@@ -18,14 +18,13 @@ import WordCard from './WordCard';
 
 import { Button } from '@mui/material';
 import { Link } from 'react-router-dom';
-import DIContainer from "../../../DI/DIContainer";
-import DI_TYPES from "../../../DI/DITypes";
-import IDictionaryService from "../../../services/interfaces/IDictionaryService";
-import { useSelector } from "react-redux";
-import { selectState } from "../../../model/feature/dictionary";
+import DIContainer from '../../../DI/DIContainer';
+import DI_TYPES from '../../../DI/DITypes';
+import IDictionaryService from '../../../services/interfaces/IDictionaryService';
+import { useSelector } from 'react-redux';
+import { selectState } from '../../../model/feature/dictionary';
 
 const Main = () => {
-
   const { difficult, pageNumber } = useSelector(selectState);
 
   const [page, setPage] = useState(pageNumber);
@@ -36,13 +35,12 @@ const Main = () => {
   const setPageNumber = (pageNumber: string) => {
     dictionaryService.setPage(pageNumber);
     setPage(pageNumber);
-  }
+  };
 
   const setDifficult = (difficult: string) => {
     dictionaryService.setDifficult(difficult);
     setGroup(difficult);
-  }
-
+  };
 
   const { data: words } = api.useReadWordsQuery({ group, page: page });
 

@@ -1,12 +1,9 @@
 import { injectable } from 'inversify';
 
 import store from '../model/store';
-import IDictionaryService from "./interfaces/IDictionaryService";
-import {
-  LOCAL_STORAGE_DICTIONARY_DIFFICULT_KEY,
-  LOCAL_STORAGE_DICTIONARY_PAGENUMBER_KEY,
-} from "../core/constants";
-import { setDifficult, setPage } from "../model/feature/dictionary";
+import IDictionaryService from './interfaces/IDictionaryService';
+import { LOCAL_STORAGE_DICTIONARY_DIFFICULT_KEY, LOCAL_STORAGE_DICTIONARY_PAGENUMBER_KEY } from '../core/constants';
+import { setDifficult, setPage } from '../model/feature/dictionary';
 
 @injectable()
 export default class DictionaryService implements IDictionaryService {
@@ -26,5 +23,4 @@ export default class DictionaryService implements IDictionaryService {
     localStorage.setItem(LOCAL_STORAGE_DICTIONARY_DIFFICULT_KEY, difficult);
     store.dispatch(setPage(difficult));
   }
-
 }
