@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 
 import { slice as loginFormSlice } from './feature/forms/login';
 import { slice as registrationFormSlice } from './feature/forms/registration';
+import pageSlice from './feature/dictionary';
 import userSlice from './feature/auth';
 
 import { baseApi as publicApi } from './api/public';

@@ -13,9 +13,7 @@ import DI_TYPES from '../../DI/DITypes';
 
 import IRegisterService from '../../services/interfaces/IRegisterationService';
 
-import {
-  selectState as selectRegistrationFormState
-} from '../../model/feature/forms/registration';
+import { selectState as selectRegistrationFormState } from '../../model/feature/forms/registration';
 
 import { isFailVariant, isSuccessVariant } from '../../model/helpers/forms';
 import { FormMessage } from './FormMessage';
@@ -57,8 +55,8 @@ const RegisterPage = () => {
   return (
     <Box sx={{ maxWidth: '30rem' }}>
       <Box component="form" noValidate autoComplete="off" onSubmit={handleSubmit(onSubmitHandler)}>
-        { isSuccessVariant(formVariant) && <FormMessage message={formVariant.message} severity={'success'} />}
-        { isFailVariant(formVariant) && <FormMessage message={formVariant.message} severity={'error'} />}
+        {isSuccessVariant(formVariant) && <FormMessage message={formVariant.message} severity={'success'} />}
+        {isFailVariant(formVariant) && <FormMessage message={formVariant.message} severity={'error'} />}
 
         <TextField
           sx={{ mb: 2 }}

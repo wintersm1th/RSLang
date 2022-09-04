@@ -8,6 +8,7 @@ import AppView from './view/App';
 import DIContainer from './DI/DIContainer';
 import IAuthService from './services/interfaces/IAuthService';
 import DI_TYPES from './DI/DITypes';
+import IDictionaryService from "./services/interfaces/IDictionaryService";
 
 @injectable()
 export default class App implements IApp {
@@ -16,6 +17,7 @@ export default class App implements IApp {
   run(root: HTMLDivElement) {
     this.reactRoot = ReactDOM.createRoot(root);
     DIContainer.get<IAuthService>(DI_TYPES.AuthService).start();
+    DIContainer.get<IDictionaryService>(DI_TYPES.DictionaryService).start();
     this.render();
   }
 

@@ -16,9 +16,33 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 
 import WordCard from './WordCard';
 
+import { Button } from '@mui/material';
+import { Link } from 'react-router-dom';
+import DIContainer from "../../../DI/DIContainer";
+import DI_TYPES from "../../../DI/DITypes";
+import IDictionaryService from "../../../services/interfaces/IDictionaryService";
+import { useSelector } from "react-redux";
+import { selectState } from "../../../model/feature/dictionary";
+
 const Main = () => {
-  const [page, setPage] = useState(1);
-  const [group, setGroup] = useState(0);
+
+  const { difficult, pageNumber } = useSelector(selectState);
+
+  const [page, setPage] = useState(pageNumber);
+  const [group, setGroup] = useState(difficult);
+
+  const dictionaryService = DIContainer.get<IDictionaryService>(DI_TYPES.DictionaryService);
+
+  const setPageNumber = (pageNumber: string) => {
+    dictionaryService.setPage(pageNumber);
+    setPage(pageNumber);
+  }
+
+  const setDifficult = (difficult: string) => {
+    dictionaryService.setDifficult(difficult);
+    setGroup(difficult);
+  }
+
 
   const { data: words } = wordsApi.useGetWordsQuery({ group, page: page });
 
@@ -30,7 +54,15 @@ const Main = () => {
     <Container>
       <Paper component={'div'} sx={{ padding: 5 }}>
         <Typography marginBottom="30px">Page: {page}</Typography>
-        <RadioGroup row value={group} onChange={(_e, value) => setGroup(+value)}>
+        <Box display="flex" gap="20px">
+          <Button component={Link} to={'/games/sprint'} variant="outlined">
+            Спринт
+          </Button>
+          <Button component={Link} to={'/games/audiocall'} variant="outlined">
+            Аудиовызов
+          </Button>
+        </Box>
+        <RadioGroup row value={group} onChange={(_e, value) => setDifficult(value)}>
           <FormControlLabel value="0" control={<Radio />} label="1" />
           <FormControlLabel value="1" control={<Radio />} label="2" />
           <FormControlLabel value="2" control={<Radio />} label="3" />
