@@ -15,14 +15,12 @@ const store = configureStore({
     [registrationFormSlice.name]: registrationFormSlice.reducer,
     [pageSlice.name]: pageSlice.reducer,
     [publicApi.reducerPath]: publicApi.reducer,
-    [privateApi.reducerPath]: privateApi.reducer
+    [privateApi.reducerPath]: privateApi.reducer,
   },
 
   middleware: (gDM) => {
-    return gDM()
-      .concat(privateApi.middleware)
-      .concat(publicApi.middleware);
-  }
+    return gDM().concat(privateApi.middleware).concat(publicApi.middleware);
+  },
 });
 
 export type RootState = ReturnType<typeof store.getState>;

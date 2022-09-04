@@ -1,6 +1,6 @@
 import React from 'react';
-import { Box, Button, Container, Typography } from "@mui/material";
-import AudioPlayer from "../../components/AudioPlayer";
+import { Box, Button, Container, Typography } from '@mui/material';
+import AudioPlayer from '../../components/AudioPlayer';
 import '/src/styles/css/game.css';
 import SentimentNeutralIcon from '@mui/icons-material/SentimentNeutral';
 import MoodIcon from '@mui/icons-material/Mood';
@@ -32,9 +32,7 @@ const Audiocall = () => {
                 </Box>
               </Box>
               <Box display="flex" justifyContent="center" alignItems="center">
-                <AudioPlayer
-                  tracks={['https://www.audio-lingua.eu/IMG/mp3/torin.mp3']}
-                />
+                <AudioPlayer tracks={['https://www.audio-lingua.eu/IMG/mp3/torin.mp3']} />
               </Box>
               <Box className="answers-btn">
                 <Button variant="contained" color="error">
@@ -43,12 +41,8 @@ const Audiocall = () => {
                 <Button variant="contained" color="success">
                   Слово 2
                 </Button>
-                <Button variant="contained">
-                  Слово 3
-                </Button>
-                <Button variant="contained">
-                  Слово 4
-                </Button>
+                <Button variant="contained">Слово 3</Button>
+                <Button variant="contained">Слово 4</Button>
               </Box>
             </Box>
           </Box>

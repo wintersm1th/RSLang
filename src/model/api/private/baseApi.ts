@@ -24,5 +24,5 @@ export const baseApi = createApi({
     },
   }),
 
-  endpoints: () => ({})
+  endpoints: () => ({}),
 });

@@ -2,9 +2,9 @@ import React from 'react';
 import { Box, Button, Container, Typography } from '@mui/material';
 import '/src/styles/css/game.css';
 import { SprintWord } from './sprintWord';
-import MoodBadIcon from "@mui/icons-material/MoodBad";
-import MoodIcon from "@mui/icons-material/Mood";
-import SentimentNeutralIcon from "@mui/icons-material/SentimentNeutral";
+import MoodBadIcon from '@mui/icons-material/MoodBad';
+import MoodIcon from '@mui/icons-material/Mood';
+import SentimentNeutralIcon from '@mui/icons-material/SentimentNeutral';
 
 const Sprint = () => {
   return (

@@ -18,27 +18,24 @@ import WordCard from './WordCard';
 
 import { Button } from '@mui/material';
 import { Link } from 'react-router-dom';
-import DIContainer from "../../../DI/DIContainer";
-import DI_TYPES from "../../../DI/DITypes";
-import IDictionaryService from "../../../services/interfaces/IDictionaryService";
-import { useSelector } from "react-redux";
-import { selectState } from "../../../model/feature/dictionary";
+import DIContainer from '../../../DI/DIContainer';
+import DI_TYPES from '../../../DI/DITypes';
+import IDictionaryService from '../../../services/interfaces/IDictionaryService';
+import { useSelector } from 'react-redux';
+import { selectState } from '../../../model/feature/dictionary';
 
 const Main = () => {
-
   const { difficult, pageNumber } = useSelector(selectState);
 
   const dictionaryService = DIContainer.get<IDictionaryService>(DI_TYPES.DictionaryService);
 
-  const setPageNumber = (pageNumber: number) => {
-    dictionaryService.setPage(pageNumber);
-  }
+  const setPageNumber = (newPageNumber: number) => {
+    dictionaryService.setPage(newPageNumber);
+  };
 
-  const setDifficult = (difficult: number) => {
-    dictionaryService.setDifficult(difficult);
-
-  }
-
+  const setDifficult = (newDifficult: number) => {
+    dictionaryService.setDifficult(newDifficult);
+  };
 
   const { data: words } = wordsApi.useGetWordsQuery({ group: difficult, page: pageNumber });
 

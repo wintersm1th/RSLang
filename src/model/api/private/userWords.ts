@@ -97,7 +97,7 @@ export const userWords = baseApi.injectEndpoints({
         method: 'PUT',
         body: {
           difficulty,
-          optional
+          optional,
         },
       }),
     }),
@@ -109,5 +109,5 @@ export const userWords = baseApi.injectEndpoints({
         method: 'DELETE',
       }),
     }),
-  })
+  }),
 });

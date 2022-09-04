@@ -13,34 +13,40 @@ export type Word = {
   wordTranslate: string;
   textMeaningTranslate: string;
   textExampleTranslate: string;
-}
+};
 
-export type UserWordPayload = {}
+export type UserWordPayload = {
+  value: number;
+};
 
 export type UserWord = {
   difficulty: string;
-  optional?: UserWordPayload;
-}
+  optional?: Partial<UserWordPayload>;
+};
 
-export type StatisticPayload = {}
+export type StatisticPayload = {
+  value: number;
+};
 
 export type Statistic = {
   learnedWord: number;
   optional?: Partial<StatisticPayload>;
-}
+};
 
-export type SettingPayload = {}
+export type SettingPayload = {
+  value: number;
+};
 
 export type Setting = {
   wordsPerDay: number;
   optional?: Partial<SettingPayload>;
-}
+};
 
 export type User = {
   name: string;
   email: string;
   password: string;
-}
+};
 
 export type Auth = {
   name: string;
@@ -48,4 +54,4 @@ export type Auth = {
   message: string;
   token: string;
   refreshToken: string;
-}
+};

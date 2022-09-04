@@ -4,18 +4,18 @@ type CreateUserArg = {
   name: string;
   email: string;
   password: string;
-}
+};
 
 type CreateUserResponse = {
   name: string;
   email: string;
   password: string;
-}
+};
 
 type SigninArg = {
   email: string;
   password: string;
-}
+};
 
 type SigninResponse = {
   message: string;
@@ -23,7 +23,7 @@ type SigninResponse = {
   userId: string;
   token: string;
   refreshToken: string;
-}
+};
 
 export const auth = baseApi.injectEndpoints({
   endpoints: (build) => ({
@@ -34,8 +34,8 @@ export const auth = baseApi.injectEndpoints({
         body: {
           email,
           name,
-          password
-        }
+          password,
+        },
       }),
     }),
     signin: build.mutation<SigninResponse, SigninArg>({
@@ -44,9 +44,9 @@ export const auth = baseApi.injectEndpoints({
         method: 'POST',
         body: {
           email,
-          password
-        }
+          password,
+        },
       }),
     }),
-  })
+  }),
 });

@@ -19,7 +19,7 @@ import CardActions from '@mui/material/CardActions';
 import AudioPlayer from '../../components/AudioPlayer';
 
 import IAuth from '../../../core/IAuth';
-import { Box } from "@mui/material";
+import { Box } from '@mui/material';
 
 const imagePath = (img: string) => `https://react-learnwords-example.herokuapp.com/${img}`;
 

@@ -7,8 +7,8 @@ export const baseApi = createApi({
   tagTypes: ['User', 'Word'],
 
   baseQuery: fetchBaseQuery({
-    baseUrl: API_ADDRESS
+    baseUrl: API_ADDRESS,
   }),
 
-  endpoints: () => ({})
+  endpoints: () => ({}),
 });
