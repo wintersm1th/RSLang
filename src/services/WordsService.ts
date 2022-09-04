@@ -14,7 +14,7 @@ import { GetUserWordResponse } from '../model/api/private/userWords';
 export default class WordsService implements IWordsService {
   constructor(@inject(DI_TYPES.AuthService) private authService: IAuthService) {}
 
-  async setWordDifficultMark(wordId: string): Promise<boolean> {
+  async setWordHardMark(wordId: string): Promise<boolean> {
     return this.setWordDifficulty(wordId, WordDifficulty.HARD);
   }
 

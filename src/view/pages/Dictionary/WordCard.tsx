@@ -39,7 +39,7 @@ const WordCardExtension = ({ wordId, auth: { id: _userId }, wordParams }: WordCa
   const isAddToLearnedEnabled = wordParams?.difficulty !== WordDifficulty.LEARNED;
 
   const handleAddToDifficult = () => {
-    wordsService.setWordDifficultMark(wordId);
+    wordsService.setWordHardMark(wordId);
   };
 
   const handleAddToLearned = () => {

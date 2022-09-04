@@ -58,14 +58,13 @@ const Main = () => {
 
   if (wordsParams) {
     wordsParams.forEach((params) => {
-      if (params.id in wordsMap) {
-        wordsMap[params.id].params = params;
+      if (params.wordId in wordsMap) {
+        wordsMap[params.wordId].params = params;
       }
     });
   }
-
-  console.log('Words', words);
-  console.log('WordsParams', wordsParams);
+  console.log('Params:', wordsParams);
+  console.log('Map:', wordsMap);
 
   const setPageNumber = (newPageNumber: number) => {
     dictionaryService.setPage(newPageNumber);
