@@ -11,19 +11,19 @@ import { setDifficult, setPage } from "../model/feature/dictionary";
 @injectable()
 export default class DictionaryService implements IDictionaryService {
   start(): void {
-    const difficult = localStorage.getItem(LOCAL_STORAGE_DICTIONARY_DIFFICULT_KEY) ?? '1';
-    const pageNumber = localStorage.getItem(LOCAL_STORAGE_DICTIONARY_PAGENUMBER_KEY) ?? '0';
+    const difficult = +(localStorage.getItem(LOCAL_STORAGE_DICTIONARY_DIFFICULT_KEY) ?? '1');
+    const pageNumber = +(localStorage.getItem(LOCAL_STORAGE_DICTIONARY_PAGENUMBER_KEY) ?? '0');
     store.dispatch(setPage(pageNumber));
     store.dispatch(setDifficult(difficult));
   }
 
-  setPage(pageNumber: string): void {
-    localStorage.setItem(LOCAL_STORAGE_DICTIONARY_PAGENUMBER_KEY, pageNumber);
+  setPage(pageNumber: number): void {
+    localStorage.setItem(LOCAL_STORAGE_DICTIONARY_PAGENUMBER_KEY, String(pageNumber));
     store.dispatch(setPage(pageNumber));
   }
 
-  setDifficult(difficult: string): void {
-    localStorage.setItem(LOCAL_STORAGE_DICTIONARY_DIFFICULT_KEY, difficult);
+  setDifficult(difficult: number): void {
+    localStorage.setItem(LOCAL_STORAGE_DICTIONARY_DIFFICULT_KEY, String(difficult));
     store.dispatch(setPage(difficult));
   }
 

@@ -1,7 +1,7 @@
 interface IDictionaryService {
   start: () => void;
-  setPage: (pageNumber: string) => void;
-  setDifficult: (difficult: string) => void;
+  setPage: (pageNumber: number) => void;
+  setDifficult: (difficult: number) => void;
 }
 
 export default IDictionaryService;

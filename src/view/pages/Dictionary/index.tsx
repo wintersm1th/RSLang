@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 
 import { words as wordsApi } from '../../../model/api/public';
 
@@ -28,23 +28,19 @@ const Main = () => {
 
   const { difficult, pageNumber } = useSelector(selectState);
 
-  const [page, setPage] = useState(pageNumber);
-  const [group, setGroup] = useState(difficult);
-
   const dictionaryService = DIContainer.get<IDictionaryService>(DI_TYPES.DictionaryService);
 
-  const setPageNumber = (pageNumber: string) => {
+  const setPageNumber = (pageNumber: number) => {
     dictionaryService.setPage(pageNumber);
-    setPage(pageNumber);
   }
 
-  const setDifficult = (difficult: string) => {
+  const setDifficult = (difficult: number) => {
     dictionaryService.setDifficult(difficult);
-    setGroup(difficult);
+
   }
 
 
-  const { data: words } = wordsApi.useGetWordsQuery({ group, page: page });
+  const { data: words } = wordsApi.useGetWordsQuery({ group: difficult, page: pageNumber });
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -53,7 +49,7 @@ const Main = () => {
   return (
     <Container>
       <Paper component={'div'} sx={{ padding: 5 }}>
-        <Typography marginBottom="30px">Page: {page}</Typography>
+        <Typography marginBottom="30px">Page: {pageNumber}</Typography>
         <Box display="flex" gap="20px">
           <Button component={Link} to={'/games/sprint'} variant="outlined">
             Спринт
@@ -62,7 +58,7 @@ const Main = () => {
             Аудиовызов
           </Button>
         </Box>
-        <RadioGroup row value={group} onChange={(_e, value) => setDifficult(value)}>
+        <RadioGroup row value={difficult} onChange={(_e, value) => setDifficult(+value)}>
           <FormControlLabel value="0" control={<Radio />} label="1" />
           <FormControlLabel value="1" control={<Radio />} label="2" />
           <FormControlLabel value="2" control={<Radio />} label="3" />
@@ -79,7 +75,7 @@ const Main = () => {
             ))}
         </Grid>
         <Box display="flex" justifyContent="center">
-          <Pagination count={29} page={+page} onChange={(_e, newPage) => setPage(+newPage)} />
+          <Pagination count={29} page={pageNumber} onChange={(_e, newPage) => setPageNumber(newPage)} />
         </Box>
       </Paper>
     </Container>

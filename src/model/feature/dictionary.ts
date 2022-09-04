@@ -3,24 +3,24 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../store';
 
 type DictionaryInfoState = {
-  difficult: string;
-  pageNumber: string;
+  difficult: number;
+  pageNumber: number;
 };
 
 const initialState: DictionaryInfoState = {
-  difficult: '1',
-  pageNumber: '0',
+  difficult: 1,
+  pageNumber: 0,
 };
 
 const slice = createSlice({
   name: 'page',
   initialState,
   reducers: {
-    setPage(state, { payload: pageNumber }: PayloadAction<string>) {
+    setPage(state, { payload: pageNumber }: PayloadAction<number>) {
       state.pageNumber = pageNumber;
     },
 
-    setDifficult(state, { payload: difficult }: PayloadAction<string>) {
+    setDifficult(state, { payload: difficult }: PayloadAction<number>) {
       state.difficult = difficult;
     },
   },
