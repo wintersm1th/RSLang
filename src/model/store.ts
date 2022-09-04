@@ -13,6 +13,7 @@ const store = configureStore({
     [userSlice.name]: userSlice.reducer,
     [loginFormSlice.name]: loginFormSlice.reducer,
     [registrationFormSlice.name]: registrationFormSlice.reducer,
+    [pageSlice.name]: pageSlice.reducer,
     [publicApi.reducerPath]: publicApi.reducer,
     [privateApi.reducerPath]: privateApi.reducer
   },
