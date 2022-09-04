@@ -6,7 +6,7 @@ import { selectState as selectAuth } from '../../feature/auth';
 import { API_ADDRESS } from '../apiConfig';
 
 export const baseApi = createApi({
-  reducerPath: 'api',
+  reducerPath: 'privateApi',
   tagTypes: ['User', 'Word', 'UserWord', 'Setting', 'Statistic'],
 
   baseQuery: fetchBaseQuery({
