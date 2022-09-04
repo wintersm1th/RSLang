@@ -12,21 +12,21 @@ const Team = () => {
         </Typography>
         <Box className="team-members">
           <TeamCard
-            imgSrc="/assets/img/team-page/sergei.jpg"
+            imgSrc="../assets/img/team-page/sergei.jpg"
             name="Сергей"
             role="Team Lead. Developer"
             description="Большой молодец"
             git="StraightToJaneStreet"
           ></TeamCard>
           <TeamCard
-            imgSrc="/assets/img/team-page/ruslan.jpg"
+            imgSrc="../assets/img/team-page/ruslan.jpg"
             name="Руслан"
             role="Developer"
             description="Большой молодец"
             git="laiker"
           ></TeamCard>
           <TeamCard
-            imgSrc="/assets/img/team-page/alexei.jpg"
+            imgSrc="../assets/img/team-page/alexei.jpg"
             name="Алексей"
             role="Developer"
             description="Большой молодец"

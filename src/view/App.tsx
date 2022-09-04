@@ -1,6 +1,6 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Routes, Route, HashRouter } from 'react-router-dom';
 
 import store from '../model/store';
 
@@ -17,7 +17,7 @@ import Statistics from './pages/Statistics';
 export default function WrappedMain() {
   return (
     <Provider store={store}>
-      <BrowserRouter>
+      <HashRouter>
         <Header />
         <Routes>
           <Route path="/" element={<Main />} />
@@ -29,7 +29,7 @@ export default function WrappedMain() {
           <Route path="team" element={<Team />} />
         </Routes>
         <Footer />
-      </BrowserRouter>
+      </HashRouter>
     </Provider>
   );
 }
