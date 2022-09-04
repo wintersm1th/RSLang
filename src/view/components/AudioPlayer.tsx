@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { PlayArrow as PlayArrowIcon } from '@mui/icons-material';
 import { useState } from 'react';
-import { LoadingButton } from '@mui/lab';
+import Fab from '@mui/material/Fab';
+import SyncIcon from '@mui/icons-material/Sync';
 
 interface IAudiPlayerProps {
   tracks: string[];
@@ -27,13 +28,25 @@ const AudioPlayer = (props: IAudiPlayerProps) => {
   };
 
   return (
-    <LoadingButton
-      variant="contained"
-      size="medium"
-      loading={isPlaying}
-      onClick={handleClick}
-      startIcon={<PlayArrowIcon />}
-    />
+    <Fab onClick={handleClick} disabled={isPlaying}>
+      {
+        !isPlaying ?
+        <PlayArrowIcon /> :
+        <SyncIcon
+          sx={{
+            animation: "spin 2s linear infinite",
+            "@keyframes spin": {
+              "0%": {
+                transform: "rotate(360deg)",
+              },
+              "100%": {
+                transform: "rotate(0deg)",
+              },
+            },
+          }}
+        />
+      }
+    </Fab>
   );
 };
 
