@@ -19,6 +19,7 @@ import CardActions from '@mui/material/CardActions';
 import AudioPlayer from '../../components/AudioPlayer';
 
 import IAuth from '../../../core/IAuth';
+import { Box } from "@mui/material";
 
 const imagePath = (img: string) => `https://react-learnwords-example.herokuapp.com/${img}`;
 
@@ -60,13 +61,15 @@ const WordCard = ({ word }: WordCardProps) => {
     <Card>
       {word.image && <CardMedia image={imagePath(word.image)} sx={{ height: 200 }} />}
       <CardContent>
+        <Box display="flex" justifyContent="center" alignItems="center">
+          <AudioPlayer
+            tracks={['https://www.audio-lingua.eu/IMG/mp3/torin.mp3', 'https://www.audio-lingua.eu/IMG/mp3/samuel.mp3']}
+          />
+        </Box>
         <ul>
           <li>Id: {word.id}</li>
           <li>Word:{word.word}</li>
           <li>Translation: {word.wordTranslate}</li>
-          <AudioPlayer
-            tracks={['https://www.audio-lingua.eu/IMG/mp3/torin.mp3', 'https://www.audio-lingua.eu/IMG/mp3/samuel.mp3']}
-          />
         </ul>
       </CardContent>
       <CardActions>{auth && <WordCardExtension auth={auth} wordId={word.id} />}</CardActions>
