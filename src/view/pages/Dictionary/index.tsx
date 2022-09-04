@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 
-import { api } from '../../../model/service/api';
+import { words as wordsApi } from '../../../model/api/public';
 
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
@@ -17,10 +17,10 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import WordCard from './WordCard';
 
 const Main = () => {
-  const [page, setPage] = useState('1');
-  const [group, setGroup] = useState('0');
+  const [page, setPage] = useState(1);
+  const [group, setGroup] = useState(0);
 
-  const { data: words } = api.useReadWordsQuery({ group, page: page });
+  const { data: words } = wordsApi.useGetWordsQuery({ group, page: page });
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -30,7 +30,7 @@ const Main = () => {
     <Container>
       <Paper component={'div'} sx={{ padding: 5 }}>
         <Typography marginBottom="30px">Page: {page}</Typography>
-        <RadioGroup row value={group} onChange={(_e, value) => setGroup(value)}>
+        <RadioGroup row value={group} onChange={(_e, value) => setGroup(+value)}>
           <FormControlLabel value="0" control={<Radio />} label="1" />
           <FormControlLabel value="1" control={<Radio />} label="2" />
           <FormControlLabel value="2" control={<Radio />} label="3" />
@@ -47,7 +47,7 @@ const Main = () => {
             ))}
         </Grid>
         <Box display="flex" justifyContent="center">
-          <Pagination count={29} page={+page} onChange={(_e, newPage) => setPage(String(newPage))} />
+          <Pagination count={29} page={+page} onChange={(_e, newPage) => setPage(+newPage)} />
         </Box>
       </Paper>
     </Container>

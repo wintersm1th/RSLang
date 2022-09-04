@@ -1,7 +1,7 @@
 export type Word = {
   id: string;
-  group: string;
-  page: string;
+  group: number;
+  page: number;
   word: string;
   image: string;
   audio: string;

@@ -1,6 +1,6 @@
-import { api } from './privateApi';
+import { baseApi } from './baseApi';
 
-import { UserWordParameters } from '../../services/interfaces/IWordsService';
+import { UserWordParameters } from '../../../services/interfaces/IWordsService';
 
 export type ArgUserId = {
   id: string;
@@ -62,7 +62,7 @@ export type GetUserWordArg = {
 
 export type GetUserWordsResponse = GetUserWordResponse[];
 
-export const userWordsApi = api.injectEndpoints({
+export const userWords = baseApi.injectEndpoints({
   endpoints: (build) => ({
     createUserWord: build.mutation<CreateUserWordResponse, CreateUserWordArg>({
       invalidatesTags: ['UserWord'],

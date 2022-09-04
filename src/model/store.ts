@@ -1,20 +1,28 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { api } from './service/api';
 
 import { slice as loginFormSlice } from './feature/forms/login';
 import { slice as registrationFormSlice } from './feature/forms/registration';
-
 import userSlice from './feature/auth';
+
+import { baseApi as publicApi } from './api/public';
+import { baseApi as privateApi } from './api/private';
 
 const store = configureStore({
   reducer: {
     [userSlice.name]: userSlice.reducer,
     [loginFormSlice.name]: loginFormSlice.reducer,
     [registrationFormSlice.name]: registrationFormSlice.reducer,
-    [api.reducerPath]: api.reducer,
+    [publicApi.reducerPath]: publicApi.reducer,
+    [privateApi.reducerPath]: privateApi.reducer
   },
-  middleware: (gDM) => gDM().concat(api.middleware),
+
+  middleware: (gDM) => {
+    return gDM()
+      .concat(privateApi.middleware)
+      .concat(publicApi.middleware);
+  }
 });
 
 export type RootState = ReturnType<typeof store.getState>;
+
 export default store;

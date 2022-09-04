@@ -1,11 +1,11 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/dist/query/react';
 
-import { RootState } from '../store';
-import { selectState as selectAuth } from '../feature/auth';
+import { RootState } from '../../store';
+import { selectState as selectAuth } from '../../feature/auth';
 
-import { API_ADDRESS } from './apiConfig';
+import { API_ADDRESS } from '../apiConfig';
 
-export const api = createApi({
+export const baseApi = createApi({
   reducerPath: 'api',
   tagTypes: ['User', 'Word', 'UserWord', 'Setting', 'Statistic'],
 

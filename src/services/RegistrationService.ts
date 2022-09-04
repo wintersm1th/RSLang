@@ -1,7 +1,7 @@
 import { injectable } from 'inversify';
 
 import store from '../model/store';
-import { api } from '../model/service/api';
+import { auth } from '../model/api/public';
 import { slice as registrationFormSlice } from '../model/feature/forms/registration';
 
 import IRegisterService, { CreateUserParams } from './interfaces/IRegisterationService';
@@ -18,7 +18,7 @@ import {
 @injectable()
 export default class RegisterService implements IRegisterService {
   async createUser({ name, email, password }: CreateUserParams): Promise<boolean> {
-    const result = api.endpoints.createUser.initiate({ name, email, password });
+    const result = auth.endpoints.createUser.initiate({ name, email, password });
     const sub = store.dispatch(result);
 
     return sub.then((response) => {
