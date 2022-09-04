@@ -43,18 +43,26 @@ export default class WordsService implements IWordsService {
       return this.createUserWord({
         id: authParams.id,
         wordId,
-        difficulty
+        difficulty,
       });
     } else {
       return this.unsafeUpdateWord({ id: authParams.id, wordId, difficulty });
     }
   }
 
-  private async unsafeUpdateWord({ id, wordId, difficulty }: { id: string; wordId: string, difficulty: WordDifficulty }) {
+  private async unsafeUpdateWord({
+    id,
+    wordId,
+    difficulty,
+  }: {
+    id: string;
+    wordId: string;
+    difficulty: WordDifficulty;
+  }) {
     const wordUpdateThunk = userWords.endpoints.updateUserWord.initiate({
       id,
       wordId,
-      difficulty
+      difficulty,
     });
 
     return store.dispatch(wordUpdateThunk).then((response) => {
@@ -82,9 +90,7 @@ export default class WordsService implements IWordsService {
     }
   }
 
-  private async createUserWord(
-    { id, wordId, difficulty }: { id: string; wordId: string, difficulty: WordDifficulty }
-  ) {
+  private async createUserWord({ id, wordId, difficulty }: { id: string; wordId: string; difficulty: WordDifficulty }) {
     const createUserWordThunk = userWords.endpoints.createUserWord.initiate({
       id,
       wordId,

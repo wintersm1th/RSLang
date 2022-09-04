@@ -32,8 +32,8 @@ type WordMapping = {
   [wordId: string]: {
     word: IWord;
     params?: GetUserWordResponse;
-  }
-}
+  };
+};
 
 const Main = () => {
   const dictionaryService = DIContainer.get<IDictionaryService>(DI_TYPES.DictionaryService);
@@ -44,14 +44,17 @@ const Main = () => {
 
   const { user } = useSelector(selectAuthState);
 
-  const { data: wordsParams } = userWordsApi.useReadUserWordsQuery({ id: user?.id ?? ''}, { skip: user?.id ? false : true });
+  const { data: wordsParams } = userWordsApi.useReadUserWordsQuery(
+    { id: user?.id ?? '' },
+    { skip: user?.id ? false : true }
+  );
 
-  let wordsMap: WordMapping = {};
+  const wordsMap: WordMapping = {};
 
   if (words) {
     words.forEach((word) => {
       wordsMap[word.id] = {
-        word
+        word,
       };
     });
   }
@@ -99,9 +102,9 @@ const Main = () => {
         </RadioGroup>
         <Grid container spacing={5} marginBottom="30px">
           {Object.entries(wordsMap).map(([wordId, { word, params }]) => (
-              <Grid item xs={4} key={wordId}>
-                <WordCard word={word} params={params}/>
-              </Grid>
+            <Grid item xs={4} key={wordId}>
+              <WordCard word={word} params={params} />
+            </Grid>
           ))}
         </Grid>
         <Box display="flex" justifyContent="center">

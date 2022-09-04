@@ -48,17 +48,11 @@ const WordCardExtension = ({ wordId, auth: { id: _userId }, wordParams }: WordCa
 
   return (
     <>
-      <Button
-        variant={'contained'}
-        onClick={handleAddToLearned}
-        disabled={!isAddToLearnedEnabled} >
+      <Button variant={'contained'} onClick={handleAddToLearned} disabled={!isAddToLearnedEnabled}>
         Изученное
       </Button>
 
-      <Button
-        variant={'contained'}
-        onClick={handleAddToDifficult}
-        disabled={!isAddToDifficultEnabled} >
+      <Button variant={'contained'} onClick={handleAddToDifficult} disabled={!isAddToDifficultEnabled}>
         Сложное
       </Button>
     </>
@@ -89,7 +83,7 @@ const WordCard = ({ word, params }: WordCardProps) => {
         </ul>
       </CardContent>
 
-      <CardActions>{auth && <WordCardExtension auth={auth} wordId={word.id} wordParams={params}/>}</CardActions>
+      <CardActions>{auth && <WordCardExtension auth={auth} wordId={word.id} wordParams={params} />}</CardActions>
     </Card>
   );
 };
