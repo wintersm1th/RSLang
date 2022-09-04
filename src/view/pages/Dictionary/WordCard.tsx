@@ -19,7 +19,7 @@ import CardActions from '@mui/material/CardActions';
 import AudioPlayer from '../../components/AudioPlayer';
 
 import IAuth from '../../../core/IAuth';
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 
 const imagePath = (img: string) => `https://react-learnwords-example.herokuapp.com/${img}`;
 
@@ -61,16 +61,40 @@ const WordCard = ({ word }: WordCardProps) => {
     <Card>
       {word.image && <CardMedia image={imagePath(word.image)} sx={{ height: 200 }} />}
       <CardContent>
-        <Box display="flex" justifyContent="center" alignItems="center">
+        <Box display="flex" justifyContent="space-between" alignItems="center">
+          <Box>
+            <Typography variant='h5' color={"red"}>
+              {word.word} 
+            </Typography> 
+            <Typography>
+              {word.transcription}
+            </Typography>            
+          </Box>
           <AudioPlayer
             tracks={['https://www.audio-lingua.eu/IMG/mp3/torin.mp3', 'https://www.audio-lingua.eu/IMG/mp3/samuel.mp3']}
           />
         </Box>
-        <ul>
-          <li>Id: {word.id}</li>
-          <li>Word:{word.word}</li>
-          <li>Translation: {word.wordTranslate}</li>
-        </ul>
+        <Typography variant='h5' color={"#808080"}>
+          {word.wordTranslate} 
+        </Typography>
+        <Box>
+          <Box>
+            <Typography variant='h6' mt={2}>
+              Значение 
+            </Typography>             
+            <Typography variant='body1' dangerouslySetInnerHTML={{ __html: word.textMeaning }}></Typography> 
+            <Typography variant='body2' dangerouslySetInnerHTML={{ __html: word.textMeaningTranslate }}></Typography>           
+          </Box>
+        </Box>
+        <Box>
+          <Box>
+            <Typography variant='h6' mt={2}>
+              Пример
+            </Typography>             
+            <Typography variant='body1' dangerouslySetInnerHTML={{ __html: word.textExample }}></Typography> 
+            <Typography variant='body2' dangerouslySetInnerHTML={{ __html: word.textExampleTranslate }}></Typography>           
+          </Box>
+        </Box>
       </CardContent>
       <CardActions>{auth && <WordCardExtension auth={auth} wordId={word.id} />}</CardActions>
     </Card>

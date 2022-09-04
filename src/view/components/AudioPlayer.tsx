@@ -28,7 +28,7 @@ const AudioPlayer = (props: IAudiPlayerProps) => {
   };
 
   return (
-    <Fab onClick={handleClick} disabled={isPlaying}>
+    <Fab size="small" onClick={handleClick} disabled={isPlaying}>
       {
         !isPlaying ?
         <PlayArrowIcon /> :
