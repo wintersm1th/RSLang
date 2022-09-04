@@ -4,7 +4,7 @@ export type UserWordParameters = {
 };
 
 interface IWordsService {
-  setWordDifficultMark(wordId: string): Promise<boolean>;
+  setWordHardMark(wordId: string): Promise<boolean>;
   removeWordDifficultMark(wordId: string): Promise<boolean>;
 
   setWordLearnedMark(wordId: string): Promise<boolean>;
