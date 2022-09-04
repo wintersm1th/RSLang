@@ -1,13 +1,11 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
-
-import { api } from '../../../model/service/api';
+import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Pagination from '@mui/material/Pagination';
-import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 
 import Radio from '@mui/material/Radio';
@@ -18,33 +16,66 @@ import WordCard from './WordCard';
 
 import { Button } from '@mui/material';
 import { Link } from 'react-router-dom';
-import DIContainer from "../../../DI/DIContainer";
-import DI_TYPES from "../../../DI/DITypes";
-import IDictionaryService from "../../../services/interfaces/IDictionaryService";
-import { useSelector } from "react-redux";
-import { selectState } from "../../../model/feature/dictionary";
+import DIContainer from '../../../DI/DIContainer';
+import DI_TYPES from '../../../DI/DITypes';
+import IDictionaryService from '../../../services/interfaces/IDictionaryService';
+import { selectState as selectDictionaryState } from '../../../model/feature/dictionary';
+
+import { words as wordsApi } from '../../../model/api/public';
+import { userWords as userWordsApi } from '../../../model/api/private';
+import { selectState as selectAuthState } from '../../../model/feature/auth';
+import { GetUserWordResponse } from '../../../model/api/private/userWords';
+
+import IWord from '../../../core/IWord';
+
+type WordMapping = {
+  [wordId: string]: {
+    word: IWord;
+    params?: GetUserWordResponse;
+  };
+};
 
 const Main = () => {
-
-  const { difficult, pageNumber } = useSelector(selectState);
-
-  const [page, setPage] = useState(pageNumber);
-  const [group, setGroup] = useState(difficult);
-
   const dictionaryService = DIContainer.get<IDictionaryService>(DI_TYPES.DictionaryService);
 
-  const setPageNumber = (pageNumber: string) => {
-    dictionaryService.setPage(pageNumber);
-    setPage(pageNumber);
+  const { difficulty, pageNumber } = useSelector(selectDictionaryState);
+
+  const { data: words } = wordsApi.useGetWordsQuery({ group: difficulty, page: pageNumber });
+
+  const { user } = useSelector(selectAuthState);
+
+  const { data: wordsParams } = userWordsApi.useReadUserWordsQuery(
+    { id: user?.id ?? '' },
+    { skip: user?.id ? false : true }
+  );
+
+  const wordsMap: WordMapping = {};
+
+  if (words) {
+    words.forEach((word) => {
+      wordsMap[word.id] = {
+        word,
+      };
+    });
   }
 
-  const setDifficult = (difficult: string) => {
-    dictionaryService.setDifficult(difficult);
-    setGroup(difficult);
+  if (wordsParams) {
+    wordsParams.forEach((params) => {
+      if (params.wordId in wordsMap) {
+        wordsMap[params.wordId].params = params;
+      }
+    });
   }
+  console.log('Params:', wordsParams);
+  console.log('Map:', wordsMap);
 
+  const setPageNumber = (newPageNumber: number) => {
+    dictionaryService.setPage(newPageNumber);
+  };
 
-  const { data: words } = api.useReadWordsQuery({ group, page: page });
+  const setDifficulty = (newDifficult: number) => {
+    dictionaryService.setDifficulty(newDifficult);
+  };
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -53,7 +84,6 @@ const Main = () => {
   return (
     <Container>
       <Paper component={'div'} sx={{ padding: 5 }}>
-        <Typography marginBottom="30px">Page: {page}</Typography>
         <Box display="flex" gap="20px">
           <Button component={Link} to={'/games/sprint'} variant="outlined">
             Спринт
@@ -62,7 +92,7 @@ const Main = () => {
             Аудиовызов
           </Button>
         </Box>
-        <RadioGroup row value={group} onChange={(_e, value) => setDifficult(value)}>
+        <RadioGroup row value={difficulty} onChange={(_e, value) => setDifficulty(+value)}>
           <FormControlLabel value="0" control={<Radio />} label="1" />
           <FormControlLabel value="1" control={<Radio />} label="2" />
           <FormControlLabel value="2" control={<Radio />} label="3" />
@@ -71,15 +101,14 @@ const Main = () => {
           <FormControlLabel value="5" control={<Radio />} label="6" />
         </RadioGroup>
         <Grid container spacing={5} marginBottom="30px">
-          {words &&
-            words.map((word) => (
-              <Grid item xs={4} key={word.id}>
-                <WordCard word={word} />
-              </Grid>
-            ))}
+          {Object.entries(wordsMap).map(([wordId, { word, params }]) => (
+            <Grid item xs={4} key={wordId}>
+              <WordCard word={word} params={params} />
+            </Grid>
+          ))}
         </Grid>
         <Box display="flex" justifyContent="center">
-          <Pagination count={29} page={+page} onChange={(_e, newPage) => setPageNumber(String(newPage))} />
+          <Pagination count={29} page={pageNumber} onChange={(_e, newPage) => setPageNumber(newPage)} />
         </Box>
       </Paper>
     </Container>

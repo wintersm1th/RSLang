@@ -8,7 +8,7 @@ import AppView from './view/App';
 import DIContainer from './DI/DIContainer';
 import IAuthService from './services/interfaces/IAuthService';
 import DI_TYPES from './DI/DITypes';
-import IDictionaryService from "./services/interfaces/IDictionaryService";
+import IDictionaryService from './services/interfaces/IDictionaryService';
 
 @injectable()
 export default class App implements IApp {

@@ -3,30 +3,30 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../store';
 
 type DictionaryInfoState = {
-  difficult: string;
-  pageNumber: string;
+  difficulty: number;
+  pageNumber: number;
 };
 
 const initialState: DictionaryInfoState = {
-  difficult: '1',
-  pageNumber: '0',
+  difficulty: 0,
+  pageNumber: 0,
 };
 
 const slice = createSlice({
   name: 'page',
   initialState,
   reducers: {
-    setPage(state, { payload: pageNumber }: PayloadAction<string>) {
+    setPage(state, { payload: pageNumber }: PayloadAction<number>) {
       state.pageNumber = pageNumber;
     },
 
-    setDifficult(state, { payload: difficult }: PayloadAction<string>) {
-      state.difficult = difficult;
+    setDifficulty(state, { payload: difficulty }: PayloadAction<number>) {
+      state.difficulty = difficulty;
     },
   },
 });
 
-export const { setPage, setDifficult } = slice.actions;
+export const { setPage, setDifficulty } = slice.actions;
 
 export const selectState = (state: RootState): DictionaryInfoState => state[slice.name];
 

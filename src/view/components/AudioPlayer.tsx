@@ -29,23 +29,23 @@ const AudioPlayer = (props: IAudiPlayerProps) => {
 
   return (
     <Fab onClick={handleClick} disabled={isPlaying}>
-      {
-        !isPlaying ?
-        <PlayArrowIcon /> :
+      {!isPlaying ? (
+        <PlayArrowIcon />
+      ) : (
         <SyncIcon
           sx={{
-            animation: "spin 2s linear infinite",
-            "@keyframes spin": {
-              "0%": {
-                transform: "rotate(360deg)",
+            animation: 'spin 2s linear infinite',
+            '@keyframes spin': {
+              '0%': {
+                transform: 'rotate(360deg)',
               },
-              "100%": {
-                transform: "rotate(0deg)",
+              '100%': {
+                transform: 'rotate(0deg)',
               },
             },
           }}
         />
-      }
+      )}
     </Fab>
   );
 };
