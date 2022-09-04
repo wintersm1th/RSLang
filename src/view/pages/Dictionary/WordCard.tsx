@@ -19,17 +19,24 @@ import CardActions from '@mui/material/CardActions';
 import AudioPlayer from '../../components/AudioPlayer';
 
 import IAuth from '../../../core/IAuth';
+import { GetUserWordResponse } from '../../../model/api/private/userWords';
+
 import { Box } from '@mui/material';
+import { WordDifficulty } from '../../../core/WordDifficulty';
 
 const imagePath = (img: string) => `https://react-learnwords-example.herokuapp.com/${img}`;
 
 type WordCardExtensionProps = {
   wordId: string;
+  wordParams?: GetUserWordResponse;
   auth: IAuth;
 };
 
-const WordCardExtension = ({ wordId, auth: { id: _userId } }: WordCardExtensionProps) => {
+const WordCardExtension = ({ wordId, auth: { id: _userId }, wordParams }: WordCardExtensionProps) => {
   const wordsService: IWordsService = DIContainer.get(DI_TYPES.WordsService);
+
+  const isAddToDifficultEnabled = wordParams?.difficulty !== WordDifficulty.HARD;
+  const isAddToLearnedEnabled = wordParams?.difficulty !== WordDifficulty.LEARNED;
 
   const handleAddToDifficult = () => {
     wordsService.setWordDifficultMark(wordId);
@@ -38,12 +45,20 @@ const WordCardExtension = ({ wordId, auth: { id: _userId } }: WordCardExtensionP
   const handleAddToLearned = () => {
     wordsService.setWordLearnedMark(wordId);
   };
+
   return (
     <>
-      <Button variant={'contained'} onClick={handleAddToLearned}>
+      <Button
+        variant={'contained'}
+        onClick={handleAddToLearned}
+        disabled={!isAddToLearnedEnabled} >
         Изученное
       </Button>
-      <Button variant={'contained'} onClick={handleAddToDifficult}>
+
+      <Button
+        variant={'contained'}
+        onClick={handleAddToDifficult}
+        disabled={!isAddToDifficultEnabled} >
         Сложное
       </Button>
     </>
@@ -52,9 +67,10 @@ const WordCardExtension = ({ wordId, auth: { id: _userId } }: WordCardExtensionP
 
 type WordCardProps = {
   word: IWord;
+  params?: GetUserWordResponse;
 };
 
-const WordCard = ({ word }: WordCardProps) => {
+const WordCard = ({ word, params }: WordCardProps) => {
   const { user: auth } = useSelector(selectAuthParams);
 
   return (
@@ -72,7 +88,8 @@ const WordCard = ({ word }: WordCardProps) => {
           <li>Translation: {word.wordTranslate}</li>
         </ul>
       </CardContent>
-      <CardActions>{auth && <WordCardExtension auth={auth} wordId={word.id} />}</CardActions>
+
+      <CardActions>{auth && <WordCardExtension auth={auth} wordId={word.id} wordParams={params}/>}</CardActions>
     </Card>
   );
 };

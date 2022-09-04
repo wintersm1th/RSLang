@@ -1,7 +1,6 @@
 import React from 'react';
 import { useEffect } from 'react';
-
-import { words as wordsApi } from '../../../model/api/public';
+import { useSelector } from 'react-redux';
 
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
@@ -21,23 +20,63 @@ import { Link } from 'react-router-dom';
 import DIContainer from '../../../DI/DIContainer';
 import DI_TYPES from '../../../DI/DITypes';
 import IDictionaryService from '../../../services/interfaces/IDictionaryService';
-import { useSelector } from 'react-redux';
-import { selectState } from '../../../model/feature/dictionary';
+import { selectState as selectDictionaryState } from '../../../model/feature/dictionary';
+
+import { words as wordsApi } from '../../../model/api/public';
+import { userWords as userWordsApi } from '../../../model/api/private';
+import { selectState as selectAuthState } from '../../../model/feature/auth';
+import { GetUserWordResponse } from '../../../model/api/private/userWords';
+import IWord from '../../../core/IWord';
+
+type WordMapping = {
+  [wordId: string]: {
+    word: IWord;
+    params?: GetUserWordResponse;
+  }
+}
 
 const Main = () => {
-  const { difficult, pageNumber } = useSelector(selectState);
-
   const dictionaryService = DIContainer.get<IDictionaryService>(DI_TYPES.DictionaryService);
+
+  const { difficulty, pageNumber } = useSelector(selectDictionaryState);
+
+  console.log('PageNumber', pageNumber);
+  console.log('Difficulty', difficulty);
+
+  const { data: words } = wordsApi.useGetWordsQuery({ group: difficulty, page: pageNumber });
+
+  const { user } = useSelector(selectAuthState);
+
+  const { data: wordsParams } = userWordsApi.useReadUserWordsQuery({ id: user?.id ?? ''}, { skip: user?.id ? false : true });
+
+  let wordsMap: WordMapping = {};
+
+  if (words) {
+    words.forEach((word) => {
+      wordsMap[word.id] = {
+        word
+      };
+    });
+  }
+
+  if (wordsParams) {
+    wordsParams.forEach((params) => {
+      if (params.id in wordsMap) {
+        wordsMap[params.id].params = params;
+      }
+    });
+  }
+
+  console.log('Words', words);
+  console.log('WordsParams', wordsParams);
 
   const setPageNumber = (newPageNumber: number) => {
     dictionaryService.setPage(newPageNumber);
   };
 
-  const setDifficult = (newDifficult: number) => {
-    dictionaryService.setDifficult(newDifficult);
+  const setDifficulty = (newDifficult: number) => {
+    dictionaryService.setDifficulty(newDifficult);
   };
-
-  const { data: words } = wordsApi.useGetWordsQuery({ group: difficult, page: pageNumber });
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -55,7 +94,7 @@ const Main = () => {
             Аудиовызов
           </Button>
         </Box>
-        <RadioGroup row value={difficult} onChange={(_e, value) => setDifficult(+value)}>
+        <RadioGroup row value={difficulty} onChange={(_e, value) => setDifficulty(+value)}>
           <FormControlLabel value="0" control={<Radio />} label="1" />
           <FormControlLabel value="1" control={<Radio />} label="2" />
           <FormControlLabel value="2" control={<Radio />} label="3" />
@@ -64,12 +103,11 @@ const Main = () => {
           <FormControlLabel value="5" control={<Radio />} label="6" />
         </RadioGroup>
         <Grid container spacing={5} marginBottom="30px">
-          {words &&
-            words.map((word) => (
-              <Grid item xs={4} key={word.id}>
-                <WordCard word={word} />
+          {Object.entries(wordsMap).map(([wordId, { word, params }]) => (
+              <Grid item xs={4} key={wordId}>
+                <WordCard word={word} params={params}/>
               </Grid>
-            ))}
+          ))}
         </Grid>
         <Box display="flex" justifyContent="center">
           <Pagination count={29} page={pageNumber} onChange={(_e, newPage) => setPageNumber(newPage)} />

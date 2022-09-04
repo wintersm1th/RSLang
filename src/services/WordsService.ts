@@ -7,6 +7,7 @@ import { userWords } from '../model/api/private';
 
 import IWordsService, { UserWordParameters } from './interfaces/IWordsService';
 import IAuthService from './interfaces/IAuthService';
+import { WordDifficulty } from '../core/WordDifficulty';
 
 @injectable()
 export default class WordsService implements IWordsService {
@@ -23,14 +24,14 @@ export default class WordsService implements IWordsService {
     const word = await this.getUserWord(wordId);
 
     if (word === null) {
-      return this.createUserWord({ id: userId, wordId }, { isDifficult: true, isLearned: false });
+      return this.createUserWord({ id: userId, wordId, difficulty: WordDifficulty.HARD });
     }
 
     if (word.isLearned === true) {
       return false;
     }
 
-    return this.unsafeUpdateWord({ id: authParams.id, wordId }, { ...word, isDifficult: true });
+    return this.unsafeUpdateWord({ id: authParams.id, wordId, difficulty: WordDifficulty.HARD });
   }
 
   async setWordLearnedMark(wordId: string): Promise<boolean> {
@@ -43,10 +44,10 @@ export default class WordsService implements IWordsService {
     const word = await this.getUserWord(wordId);
 
     if (word === null) {
-      return this.createUserWord({ id: authParams.id, wordId }, { isDifficult: false, isLearned: true });
+      return this.createUserWord({ id: authParams.id, wordId, difficulty: WordDifficulty.LEARNED });
     }
 
-    return this.unsafeUpdateWord({ id: authParams.id, wordId }, { ...word, isLearned: true, isDifficult: false });
+    return this.unsafeUpdateWord({ id: authParams.id, wordId, difficulty: WordDifficulty.LEARNED });
   }
 
   async removeWordDifficultMark(wordId: string): Promise<boolean> {
@@ -62,7 +63,7 @@ export default class WordsService implements IWordsService {
       throw Error('Undefined behavior');
     }
 
-    return this.unsafeUpdateWord({ id: authParams.id, wordId }, { ...word, isLearned: true });
+    return this.unsafeUpdateWord({ id: authParams.id, wordId, difficulty: WordDifficulty.NONE });
   }
 
   async removeWordLearnedMark(wordId: string): Promise<boolean> {
@@ -78,15 +79,14 @@ export default class WordsService implements IWordsService {
       throw Error('Undefined behavior');
     }
 
-    return this.unsafeUpdateWord({ id: authParams.id, wordId }, { ...word, isLearned: true });
+    return this.unsafeUpdateWord({ id: authParams.id, wordId, difficulty: WordDifficulty.NONE });
   }
 
-  private async unsafeUpdateWord({ id, wordId }: { id: string; wordId: string }, payload: UserWordParameters) {
+  private async unsafeUpdateWord({ id, wordId, difficulty }: { id: string; wordId: string, difficulty: WordDifficulty }) {
     const wordUpdateThunk = userWords.endpoints.updateUserWord.initiate({
       id,
       wordId,
-      difficulty: 'blank',
-      optional: payload,
+      difficulty
     });
 
     return store.dispatch(wordUpdateThunk).then((response) => {
@@ -115,17 +115,12 @@ export default class WordsService implements IWordsService {
   }
 
   private async createUserWord(
-    { id, wordId }: { id: string; wordId: string },
-    { isDifficult, isLearned: isFavorite }: UserWordParameters
+    { id, wordId, difficulty }: { id: string; wordId: string, difficulty: WordDifficulty }
   ) {
     const createUserWordThunk = userWords.endpoints.createUserWord.initiate({
       id,
       wordId,
-      difficulty: 'blank',
-      payload: {
-        isDifficult,
-        isLearned: isFavorite,
-      },
+      difficulty,
     });
 
     return store.dispatch(createUserWordThunk).then((response) => {

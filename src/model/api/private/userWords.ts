@@ -1,6 +1,7 @@
 import { baseApi } from './baseApi';
 
 import { UserWordParameters } from '../../../services/interfaces/IWordsService';
+import { WordDifficulty } from '../../../core/WordDifficulty';
 
 export type ArgUserId = {
   id: string;
@@ -17,7 +18,7 @@ export type UpdateUserWordArg = {
   id: string;
   wordId: string;
   difficulty: string;
-  optional: UserWordPayload;
+  optional?: UserWordPayload;
 };
 
 export type UpdateUserWordResponse = {
@@ -39,19 +40,21 @@ export type DeleteUserWordsArg = {
 export type CreateUserWordArg = {
   id: string;
   wordId: string;
-  difficulty: string;
-  payload: UserWordPayload;
+  difficulty: WordDifficulty;
+  payload?: UserWordPayload;
 };
 
 export type CreateUserWordResponse = {
   id: string;
-  wordId: UserWordPayload;
+  wordId: string;
+  difficulty: WordDifficulty;
+  payload?: UserWordPayload;
 };
 
 export type UserWordPayload = UserWordParameters;
 
 export type UserWord = {
-  difficulty: string;
+  difficulty: WordDifficulty;
   optional: UserWordPayload;
 };
 
