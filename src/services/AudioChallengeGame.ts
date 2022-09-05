@@ -21,7 +21,7 @@ import IAuthService from './interfaces/IAuthService';
 import { IStatisticsService } from './interfaces/IStatisticService';
 import IAuth from '../core/IAuth';
 
-import { IAudioChallengeGame } from './interfaces/IAudioChallengeGame';
+import { IAudioChallengeGame, StartingParams } from './interfaces/IAudioChallengeGame';
 
 @injectable()
 export default class AudioChallengeGame implements IAudioChallengeGame {
@@ -41,8 +41,13 @@ export default class AudioChallengeGame implements IAudioChallengeGame {
     this.userParams = auth;
   }
 
-  start() {
-    this.startFromStartScreen();
+  startWithParams({ group, page }: StartingParams): void {
+    console.log('Group:', group);
+    console.log('Page:', page);
+  }
+
+  startWithSettingsScreen(): void {
+
   }
 
   async selectGroup(value: number) {

@@ -15,15 +15,25 @@ import {
   isGameInRunningStage,
 } from '../../../model/feature/audiochallenge';
 import StartScreen from './StartScreen';
+import { useParams } from 'react-router';
 
 const Audiocall = () => {
   const gameService: IAudioChallengeGame = DIContainer.get(DI_TYPES.AudioChallengeGame);
+
+  const { group, page } = useParams();
+
   useEffect(() => {
-    gameService.start();
+    if (group !== undefined && page !== undefined) {
+      gameService.startWithParams({ group: +group, page: +page });
+    } else {
+      gameService.startWithSettingsScreen();
+    }
+
     return gameService.destroy.bind(gameService);
   }, []);
 
   const gameState = useSelector(selectGameState);
+
 
   return (
     <>

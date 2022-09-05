@@ -38,9 +38,9 @@ type WordMapping = {
 const Main = () => {
   const dictionaryService = DIContainer.get<IDictionaryService>(DI_TYPES.DictionaryService);
 
-  const { difficulty, pageNumber } = useSelector(selectDictionaryState);
+  const { group: group, pageNumber: page } = useSelector(selectDictionaryState);
 
-  const { data: words } = wordsApi.useGetWordsQuery({ group: difficulty, page: pageNumber });
+  const { data: words } = wordsApi.useGetWordsQuery({ group, page });
 
   const { user } = useSelector(selectAuthState);
 
@@ -90,7 +90,7 @@ const Main = () => {
             Аудиовызов
           </Button>
         </Box>
-        <RadioGroup row value={difficulty} onChange={(_e, value) => setDifficulty(+value)}>
+        <RadioGroup row value={group} onChange={(_e, value) => setDifficulty(+value)}>
           <FormControlLabel value="0" control={<Radio />} label="1" />
           <FormControlLabel value="1" control={<Radio />} label="2" />
           <FormControlLabel value="2" control={<Radio />} label="3" />
@@ -106,7 +106,7 @@ const Main = () => {
           ))}
         </Grid>
         <Box display="flex" justifyContent="center">
-          <Pagination count={29} page={pageNumber} onChange={(_e, newPage) => setPageNumber(newPage)} />
+          <Pagination count={29} page={page} onChange={(_e, newPage) => setPageNumber(newPage)} />
         </Box>
       </Paper>
     </Container>
