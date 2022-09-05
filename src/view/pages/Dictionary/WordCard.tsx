@@ -24,7 +24,7 @@ import { GetUserWordResponse } from '../../../model/api/private/userWords';
 import { WordDifficulty } from '../../../core/WordDifficulty';
 import { groups } from '.';
 
-const imagePath = (img: string) => `https://react-learnwords-example.herokuapp.com/${img}`;
+const getPath = (entity: string) => `https://react-learnwords-example.herokuapp.com/${entity}`;
 
 type WordCardExtensionProps = {
   wordId: string;
@@ -62,14 +62,14 @@ const WordCardExtension = ({ wordId, auth: { id: userId }, wordParams }: WordCar
 type WordCardProps = {
   word: IWord;
   params?: GetUserWordResponse;
+  hideButtons: boolean
 };
 
-const WordCard = ({ word, params }: WordCardProps) => {
-  const { user: auth } = useSelector(selectAuthParams);  
-
+const WordCard = ({ word, params, hideButtons }: WordCardProps) => {
+  const { user: auth } = useSelector(selectAuthParams);
   return (
     <Card>
-      {word.image && <CardMedia image={imagePath(word.image)} sx={{ height: 200 }} />}
+      {word.image && <CardMedia image={getPath(word.image)} sx={{ height: 200 }} />}
       <CardContent>
         <Box display="flex" justifyContent="space-between" alignItems="center">
           <Box>
@@ -79,7 +79,7 @@ const WordCard = ({ word, params }: WordCardProps) => {
             <Typography>{word.transcription}</Typography>
           </Box>
           <AudioPlayer
-            tracks={['https://www.audio-lingua.eu/IMG/mp3/torin.mp3', 'https://www.audio-lingua.eu/IMG/mp3/samuel.mp3']}
+            tracks={[getPath(word.audio), getPath(word.audioMeaning), getPath(word.audioExample)]}
           />
         </Box>
         <Typography variant="h5" color={'#808080'}>
@@ -104,8 +104,7 @@ const WordCard = ({ word, params }: WordCardProps) => {
           </Box>
         </Box>
       </CardContent>
-
-      <CardActions>{auth && <WordCardExtension auth={auth} wordId={word.id} wordParams={params} />}</CardActions>
+      <CardActions>{auth && !hideButtons && <WordCardExtension auth={auth} wordId={word.id} wordParams={params} />}</CardActions>
     </Card>
   );
 };
