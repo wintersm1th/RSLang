@@ -1,4 +1,4 @@
-import { injectable } from 'inversify';
+import { inject, injectable } from 'inversify';
 
 import IAuth from '../core/IAuth';
 
@@ -20,9 +20,15 @@ import {
 } from './utils/ErrorResponse';
 
 import { LOCAL_STORAGE_AUTH_KEY } from '../core/constants';
+import DI_TYPES from '../DI/DITypes';
+import { IStatisticsService } from './interfaces/IStatisticService';
 
 @injectable()
 export default class AuthService implements IAuthService {
+  constructor(
+    @inject(DI_TYPES.StatisticsService) private statisticsService: IStatisticsService
+  ) {}
+
   async authorize({ email, password }: AuthorizeParams): Promise<boolean> {
     const result = authApi.endpoints.signin.initiate({ email, password });
     const sub = store.dispatch(result);
@@ -78,6 +84,7 @@ export default class AuthService implements IAuthService {
 
   login(auth: IAuth) {
     store.dispatch(setAuth(auth));
+    this.statisticsService.initializeStatistics(auth.id);
     localStorage.setItem(LOCAL_STORAGE_AUTH_KEY, JSON.stringify(auth));
   }
 

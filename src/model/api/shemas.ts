@@ -29,7 +29,7 @@ export type StatisticPayload = {
 };
 
 export type Statistic = {
-  learnedWord: number;
+  learnedWords: number;
   optional?: Partial<StatisticPayload>;
 };
 
