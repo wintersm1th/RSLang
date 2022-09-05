@@ -20,7 +20,7 @@ interface CompletedStep extends Step {
 
 export type StartScreenStage = {
   code: GameStageVariant.StartScreen;
-  difficulty: number;
+  group: number;
   page: number;
 };
 
@@ -69,18 +69,18 @@ export const slice = createSlice({
       const startStage: StartScreenStage = {
         code: GameStageVariant.StartScreen,
         page,
-        difficulty,
+        group: difficulty,
       };
 
       state.stage = startStage;
     },
 
-    setDifficulty(state, { payload }: PayloadAction<number>) {
+    setGroup(state, { payload }: PayloadAction<number>) {
       if (!isGameInStartScreenStage(state)) {
         throw Error('Invalid dispatch');
       }
 
-      state.stage.difficulty = payload;
+      state.stage.group = payload;
     },
 
     setPage(state, { payload }: PayloadAction<number>) {
@@ -147,6 +147,6 @@ export const slice = createSlice({
   },
 });
 
-export const { startFromStartScreen, setDifficulty, setPage, selectWord, startGame, destroyGame } = slice.actions;
+export const { startFromStartScreen, setGroup, setPage, selectWord, startGame, destroyGame } = slice.actions;
 
 export const selectState = (state: RootState): AudioChallengeState => state[slice.name];

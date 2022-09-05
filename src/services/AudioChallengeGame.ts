@@ -1,13 +1,27 @@
-import { IAudioChallengeGame } from './interfaces/IAudioChallengeGame';
-
-import { destroyGame, startFromStartScreen, setPage, setDifficulty } from '../model/feature/audiochallenge';
 import { inject, injectable } from 'inversify';
+
+
+import store from '../model/store';
+
+import { userWords as userWordsApi } from '../model/api/private';
+
+import {
+  destroyGame,
+  startFromStartScreen,
+  setPage,
+  setGroup,
+  //startGame,
+  selectState as selectGameState,
+  StartScreenStage
+} from '../model/feature/audiochallenge';
+
 import DI_TYPES from '../DI/DITypes';
 import IWordsService from './interfaces/IWordsService';
 import IAuthService from './interfaces/IAuthService';
 import { IStatisticsService } from './interfaces/IStatisticService';
 import IAuth from '../core/IAuth';
-import store from '../model/store';
+
+import { IAudioChallengeGame } from './interfaces/IAudioChallengeGame';
 
 @injectable()
 export default class AudioChallengeGame implements IAudioChallengeGame {
@@ -31,12 +45,29 @@ export default class AudioChallengeGame implements IAudioChallengeGame {
     this.startFromStartScreen();
   }
 
-  selectGroup(value: number) {
-    store.dispatch(setDifficulty(value));
+  async selectGroup(value: number) {
+    store.dispatch(setGroup(value));
+    const { stage } = selectGameState(store.getState());
+    const { page, group } = stage as StartScreenStage;
+
+    const thunk = userWordsApi.endpoints.getUnlearnedWordsForPage.initiate({
+      userId: this.userParams.id,
+      page, group
+    });
+
+    const sub = store.dispatch(thunk);
+
+    sub.then((response) => {
+      console.log(response?.data ?? []);
+    })
   }
 
   selectPage(value: number) {
     store.dispatch(setPage(value));
+  }
+
+  startGame() {
+
   }
 
   destroy() {
