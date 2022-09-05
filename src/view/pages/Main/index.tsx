@@ -22,7 +22,7 @@ const Main = () => {
             </Button>
           </section>
           <div className="main__intro-picture">
-            <img src="../assets/img/home-page_img.jpg" alt="home-page" />
+            <img src="./assets/img/home-page_img.jpg" alt="home-page" />
           </div>
         </div>
 
@@ -34,28 +34,28 @@ const Main = () => {
           </p>
 
           <div className="main-features__cards">
-            <MainCard imgSrc="../assets/img/main-page/textbook.jpg" imgAlt="textbook" title="Учебник">
+            <MainCard imgSrc="./assets/img/main-page/textbook.jpg" imgAlt="textbook" title="Учебник">
               <div>
                 В нашем учебнике более 3500 слов, они поделены на 6 категорий сложности. Зарегистрировавшись, вы сможете
                 хранить самые сложные слова в своём личном словаре. И они всегда будут под рукой.
               </div>
             </MainCard>
 
-            <MainCard imgSrc="../assets/img/main-page/dictionary.jpg" imgAlt="dictionary" title="Словарь">
+            <MainCard imgSrc="./assets/img/main-page/dictionary.jpg" imgAlt="dictionary" title="Словарь">
               <div>
                 Можно помечать сложные слова, чтобы уделить им больше внимания при изучении. А также можно отмечать уже
                 изученные слова, чтобы больше к ним не возвращаться.
               </div>
             </MainCard>
 
-            <MainCard imgSrc="../assets/img/main-page/statistics.jpg" imgAlt="statistics" title="Статистика">
+            <MainCard imgSrc="./assets/img/main-page/statistics.jpg" imgAlt="statistics" title="Статистика">
               <div>
                 Удобная статистика будет показывать твой ежедневный прогресс, и поможет поддерживать твою мотивацию
                 продолжать учёбу.
               </div>
             </MainCard>
 
-            <MainCard imgSrc="../assets/img/main-page/games.jpg" imgAlt="games" title="Игры">
+            <MainCard imgSrc="./assets/img/main-page/games.jpg" imgAlt="games" title="Игры">
               <div>
                 Изучение слов ещё никогда не было столь увлекательным! С помощью мини-игр “Спринт” и “Аудиовызов” мы
                 сделали процесс обучения еще более интересным.

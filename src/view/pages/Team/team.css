@@ -32,7 +32,7 @@
 }
 
 .team-card img{
-  width: 100%;  
+  width: 100%;
 }
 
 .team-card__github-wrap {
@@ -45,6 +45,6 @@
 .team-card__github {
   width: 30px;
   height: 30px;
-  background: url("../assets/svg/github-black.svg");
-  background-size: contain;   
+  background: url("./assets/svg/github-black.svg");
+  background-size: contain;
 }
