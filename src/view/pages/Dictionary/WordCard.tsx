@@ -22,6 +22,7 @@ import IAuth from '../../../core/IAuth';
 import { Box, Typography } from '@mui/material';
 import { GetUserWordResponse } from '../../../model/api/private/userWords';
 import { WordDifficulty } from '../../../core/WordDifficulty';
+import { groups } from '.';
 
 const imagePath = (img: string) => `https://react-learnwords-example.herokuapp.com/${img}`;
 
@@ -64,7 +65,7 @@ type WordCardProps = {
 };
 
 const WordCard = ({ word, params }: WordCardProps) => {
-  const { user: auth } = useSelector(selectAuthParams);
+  const { user: auth } = useSelector(selectAuthParams);  
 
   return (
     <Card>
@@ -72,7 +73,7 @@ const WordCard = ({ word, params }: WordCardProps) => {
       <CardContent>
         <Box display="flex" justifyContent="space-between" alignItems="center">
           <Box>
-            <Typography variant="h5" color={'red'}>
+            <Typography variant="h5" color={`${groups[word.group]}`}>
               {word.word}
             </Typography>
             <Typography>{word.transcription}</Typography>
