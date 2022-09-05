@@ -40,13 +40,13 @@ export default class WordsService implements IWordsService {
   }
 
   async getUnlearnedWordsForPage({ userId, group, page }: GetUnlearnedWordsForPage): Promise<AggregatedWord[]> {
-    const thunk = userWords.endpoints.getAggregatedWords.initiate({ userId, group: group, page });
+    const thunk = userWords.endpoints.getAggregatedWordsForPage.initiate({ userId, group: group, page });
     const sub = store.dispatch(thunk);
     return sub.then((response) => response?.data ?? []);
   }
 
   async getUnlearnedWordsUpToPage({ userId, group, page }: GetUnlearnedWordsUpToPage): Promise<AggregatedWord[]> {
-    const thunk = userWords.endpoints.getAggregatedWords.initiate({ userId, group, page });
+    const thunk = userWords.endpoints.getAggregatedWordsForPage.initiate({ userId, group, page });
     const sub = store.dispatch(thunk);
     return sub.then((response) => response?.data ?? []);
   }
