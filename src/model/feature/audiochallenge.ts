@@ -1,15 +1,15 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { RootState } from "../store";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { RootState } from '../store';
 
 type WordId = string;
 
 enum GameStageVariant {
   StartScreen = 'start_screen',
   Running = 'running',
-  Finished = 'finished'
+  Finished = 'finished',
 }
 
-interface Step  {  
+interface Step {
   answer: WordId;
   variants: WordId[];
 }
@@ -18,47 +18,44 @@ interface CompletedStep extends Step {
   result: boolean;
 }
 
-type StartScreenStage = {
+export type StartScreenStage = {
   code: GameStageVariant.StartScreen;
   difficulty: number;
   page: number;
-}
+};
 
-type RunningStage = {
+export type RunningStage = {
   code: GameStageVariant.Running;
   currentStep: number;
   steps: (Step | CompletedStep)[];
-}
+};
 
-type FinishedStage = {
+export type FinishedStage = {
   code: GameStageVariant.Finished;
   steps: CompletedStep[];
-}
+};
 
 type AudioChallengeState = {
   stage: null | StartScreenStage | RunningStage | FinishedStage;
-}
+};
 
 const initialState: AudioChallengeState = {
   stage: null,
-}
+};
 
-export const isGameInStartScreenStage =
-  (state: AudioChallengeState): state is { stage: StartScreenStage } =>
-    state.stage?.code === GameStageVariant.StartScreen;
+export const isGameInStartScreenStage = (state: AudioChallengeState): state is { stage: StartScreenStage } =>
+  state.stage?.code === GameStageVariant.StartScreen;
 
-export const isGameInRunningStage =
-  (state: AudioChallengeState): state is { stage: RunningStage } =>
-    state.stage?.code === GameStageVariant.Running;
+export const isGameInRunningStage = (state: AudioChallengeState): state is { stage: RunningStage } =>
+  state.stage?.code === GameStageVariant.Running;
 
-export const isGameInFinishedStage =
-  (state: AudioChallengeState): state is { stage: FinishedStage } =>
-    state.stage?.code === GameStageVariant.Finished;
+export const isGameInFinishedStage = (state: AudioChallengeState): state is { stage: FinishedStage } =>
+  state.stage?.code === GameStageVariant.Finished;
 
 type InitialScreenParams = {
   page: number;
   difficulty: number;
-}
+};
 
 export const slice = createSlice({
   name: 'audiochallenge',
@@ -72,8 +69,8 @@ export const slice = createSlice({
       const startStage: StartScreenStage = {
         code: GameStageVariant.StartScreen,
         page,
-        difficulty
-      }
+        difficulty,
+      };
 
       state.stage = startStage;
     },
@@ -82,7 +79,7 @@ export const slice = createSlice({
       if (!isGameInStartScreenStage(state)) {
         throw Error('Invalid dispatch');
       }
-      
+
       state.stage.difficulty = payload;
     },
 
@@ -90,7 +87,7 @@ export const slice = createSlice({
       if (!isGameInStartScreenStage(state)) {
         throw Error('Invalid dispatch');
       }
-      
+
       state.stage.page = payload;
     },
 
@@ -102,10 +99,10 @@ export const slice = createSlice({
       const stage: RunningStage = {
         code: GameStageVariant.Running,
         currentStep: 0,
-        steps: payload
+        steps: payload,
       };
 
-      return { stage }
+      return { stage };
     },
 
     selectWord(state, { payload: variant }: PayloadAction<WordId>) {
@@ -125,9 +122,9 @@ export const slice = createSlice({
       const completedStep: CompletedStep = {
         answer,
         variants,
-        result: isSuccess
-      }
-      
+        result: isSuccess,
+      };
+
       state.stage.steps[currentStep] = completedStep;
 
       state.stage.currentStep++;
@@ -135,28 +132,21 @@ export const slice = createSlice({
       if (state.stage.currentStep === state.stage.steps.length) {
         const finishedStage: FinishedStage = {
           code: GameStageVariant.Finished,
-          steps: state.stage.steps as CompletedStep[]
-        }
+          steps: state.stage.steps as CompletedStep[],
+        };
 
         return {
-          stage: finishedStage
-        }
+          stage: finishedStage,
+        };
       }
     },
-    
+
     destroyGame(state) {
       state.stage = null;
-    }
-  }
+    },
+  },
 });
 
-export const {
-  startFromStartScreen,
-  setDifficulty,
-  setPage,
-  selectWord,
-  startGame,
-  destroyGame,
-} = slice.actions;
+export const { startFromStartScreen, setDifficulty, setPage, selectWord, startGame, destroyGame } = slice.actions;
 
 export const selectState = (state: RootState): AudioChallengeState => state[slice.name];

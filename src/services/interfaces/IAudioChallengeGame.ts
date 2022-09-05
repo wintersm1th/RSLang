@@ -1,5 +1,7 @@
 export interface IAudioChallengeGame {
-  startFromStartScreen(): void;
-  startForDifficulty(): void;
-  selectAnswerVariant(wordId: string);
+  start(): void;
+  destroy(): void;
+  selectGroup(value: number): void;
+  selectPage(value: number): void;
+  selectAnswerVariant(wordId: string): void;
 }

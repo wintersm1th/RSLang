@@ -1,21 +1,21 @@
-import { IAudioChallengeGame } from "./interfaces/IAudioChallengeGame";
+import { IAudioChallengeGame } from './interfaces/IAudioChallengeGame';
 
-import store from "../model/store";
+import { destroyGame, startFromStartScreen, setPage, setDifficulty } from '../model/feature/audiochallenge';
+import { inject, injectable } from 'inversify';
+import DI_TYPES from '../DI/DITypes';
+import IWordsService from './interfaces/IWordsService';
+import IAuthService from './interfaces/IAuthService';
+import { IStatisticsService } from './interfaces/IStatisticService';
+import IAuth from '../core/IAuth';
+import store from '../model/store';
 
-import { startGame } from '../model/feature/audiochallenge';
-import { inject } from "inversify";
-import DI_TYPES from "../DI/DITypes";
-import IWordsService from "./interfaces/IWordsService";
-import IAuthService from "./interfaces/IAuthService";
-import { IStatisticsService } from "./interfaces/IStatisticService";
-import IAuth from "../core/IAuth";
-
+@injectable()
 export default class AudioChallengeGame implements IAudioChallengeGame {
   private userParams: IAuth;
 
   constructor(
     @inject(DI_TYPES.WordsService) private wordsService: IWordsService,
-    @inject(DI_TYPES.AuthService) private authService: IAuthService,
+    @inject(DI_TYPES.AuthService) authService: IAuthService,
     @inject(DI_TYPES.StatisticsService) private statisticsService: IStatisticsService
   ) {
     const auth = authService.getAuth();
@@ -27,15 +27,33 @@ export default class AudioChallengeGame implements IAudioChallengeGame {
     this.userParams = auth;
   }
 
+  start() {
+    this.startFromStartScreen();
+  }
+
+  selectGroup(value: number) {
+    store.dispatch(setDifficulty(value));
+  }
+
+  selectPage(value: number) {
+    store.dispatch(setPage(value));
+  }
+
+  destroy() {
+    store.dispatch(destroyGame());
+  }
+
   startFromStartScreen(): void {
-    this.wordsService
+    console.log(this.statisticsService);
+    this.wordsService.getUnlearnedWordsForPage({
+      group: 0,
+      page: 0,
+      userId: this.userParams.id,
+    });
+    store.dispatch(startFromStartScreen({ difficulty: 0, page: 0 }));
   }
 
-  startForDifficulty(): void {
-    
-  }
+  startForDifficulty(): void {}
 
-  selectAnswerVariant(wordId: string) {
-    
-  }
+  selectAnswerVariant(_wordId: string) {}
 }

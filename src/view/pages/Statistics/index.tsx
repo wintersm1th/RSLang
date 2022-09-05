@@ -9,11 +9,11 @@ import { useSelector } from 'react-redux';
 
 type StatisticsProps = {
   userId: string;
-}
+};
 
 const Statistics = ({ userId }: StatisticsProps) => {
   const { data } = statisticsApi.useGetStatisticQuery({ userId });
-  
+
   return (
     <Container className="container-stat">
       <Box className="stat-wrapper">
@@ -55,19 +55,22 @@ const Statistics = ({ userId }: StatisticsProps) => {
       </Box>
     </Container>
   );
-}
+};
 
 const StatisticsWrapper = () => {
   const { user } = useSelector(selectAuth);
 
   const isPageForbidden = user === null;
-  
-  return (<>
-    { isPageForbidden
-      ? <Typography>Вы должны быть авторизированы для просмотра этой страницы</Typography>
-      : <Statistics userId={user.id}/>
-    }
-  </>);
+
+  return (
+    <>
+      {isPageForbidden ? (
+        <Typography>Вы должны быть авторизированы для просмотра этой страницы</Typography>
+      ) : (
+        <Statistics userId={user.id} />
+      )}
+    </>
+  );
 };
 
 export default StatisticsWrapper;
