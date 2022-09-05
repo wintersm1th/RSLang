@@ -4,7 +4,7 @@ import { slice as loginFormSlice } from './feature/forms/login';
 import { slice as registrationFormSlice } from './feature/forms/registration';
 import pageSlice from './feature/dictionary';
 import userSlice from './feature/auth';
-
+import { slice as audioChallengeSlice } from './feature/audiochallenge';
 import { baseApi as publicApi } from './api/public';
 import { baseApi as privateApi } from './api/private';
 
@@ -14,6 +14,7 @@ const store = configureStore({
     [loginFormSlice.name]: loginFormSlice.reducer,
     [registrationFormSlice.name]: registrationFormSlice.reducer,
     [pageSlice.name]: pageSlice.reducer,
+    [audioChallengeSlice.name]: audioChallengeSlice.reducer,
     [publicApi.reducerPath]: publicApi.reducer,
     [privateApi.reducerPath]: privateApi.reducer,
   },

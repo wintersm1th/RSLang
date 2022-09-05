@@ -5,10 +5,10 @@ import DI_TYPES from '../DI/DITypes';
 import store from '../model/store';
 import { userWords } from '../model/api/private';
 
-import IWordsService from './interfaces/IWordsService';
+import IWordsService, { GetUnlearnedWordsForPage, GetUnlearnedWordsUpToPage } from './interfaces/IWordsService';
 
 import { WordDifficulty } from '../core/WordDifficulty';
-import { GetUserWordResponse } from '../model/api/private/userWords';
+import { AggregatedWord, GetUserWordResponse } from '../model/api/private/userWords';
 import { IStatisticsService } from './interfaces/IStatisticService';
 
 @injectable()
@@ -39,6 +39,18 @@ export default class WordsService implements IWordsService {
 
   async removeWordLearnedMark(userId: string, wordId: string): Promise<boolean> {
     return this.setWordDifficulty(userId, wordId, WordDifficulty.NONE);
+  }
+
+  async getUnlearnedWordsForPage({ userId, group, page }: GetUnlearnedWordsForPage): Promise<AggregatedWord[]> {
+    const thunk = userWords.endpoints.getAggregatedWords.initiate({ userId, group: group, page });
+    const sub = store.dispatch(thunk);
+    return sub.then((response) => response?.data ?? []);
+  }
+
+  async getUnlearnedWordsUpToPage({ userId, group, page }: GetUnlearnedWordsUpToPage): Promise<AggregatedWord[]> {
+    const thunk = userWords.endpoints.getAggregatedWords.initiate({ userId, group, page });
+    const sub = store.dispatch(thunk);
+    return sub.then((response) => response?.data ?? []);
   }
 
   private async setWordDifficulty(userId: string, wordId: string, difficulty: WordDifficulty): Promise<boolean> {
