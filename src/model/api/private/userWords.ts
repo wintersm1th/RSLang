@@ -65,6 +65,31 @@ export type GetUserWordArg = {
 
 export type GetUserWordsResponse = GetUserWordResponse[];
 
+export type GetUnlearnedWordsArg = {
+  userId: string;
+  group: number;
+  page: number;
+};
+
+export type AggregatedWord = {
+  group: number;
+  page: number;
+  word: string;
+  image: string;
+  audio: string;
+  audioMeaning: string;
+  audioExample: string;
+  textMeaning: string;
+  textExample: string;
+  transcription: string;
+  textExampleTranslate: string;
+  textMeaningTranslate: string;
+  wordTranslate: string;
+  userWord?: {
+    difficulty: WordDifficulty;
+  };
+};
+
 export const userWords = baseApi.injectEndpoints({
   endpoints: (build) => ({
     createUserWord: build.mutation<CreateUserWordResponse, CreateUserWordArg>({
@@ -110,6 +135,21 @@ export const userWords = baseApi.injectEndpoints({
       query: ({ id, wordId }) => ({
         url: `/users/${id}/words/${wordId}`,
         method: 'DELETE',
+      }),
+    }),
+
+    getAggregatedWords: build.query<AggregatedWord[], GetUnlearnedWordsArg>({
+      transformResponse(baseResult: [{ paginatedResults: AggregatedWord[] }], _meta, _arg) {
+        return baseResult[0].paginatedResults;
+      },
+      query: ({ userId, group, page }) => ({
+        url: `/users/${userId}/aggregatedWords`,
+        params: {
+          group,
+          page: 0,
+          wordsPerPage: 60000,
+          filter: JSON.stringify({ page: { $eq: page } }),
+        },
       }),
     }),
   }),

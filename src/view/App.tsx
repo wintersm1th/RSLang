@@ -8,7 +8,7 @@ import Main from './pages/Main';
 import Games from './pages/Games';
 import Dictionary from './pages/Dictionary';
 import Sprint from './pages/Sprint';
-import Audiocall from './pages/Audiocall';
+import Audiocall from './pages/AudioChallenge';
 import Footer from './components/footer/footer';
 import Header from './components/header/Header';
 import Team from './pages/Team';

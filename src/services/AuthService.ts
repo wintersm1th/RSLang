@@ -25,9 +25,7 @@ import { IStatisticsService } from './interfaces/IStatisticService';
 
 @injectable()
 export default class AuthService implements IAuthService {
-  constructor(
-    @inject(DI_TYPES.StatisticsService) private statisticsService: IStatisticsService
-  ) {}
+  constructor(@inject(DI_TYPES.StatisticsService) private statisticsService: IStatisticsService) {}
 
   async authorize({ email, password }: AuthorizeParams): Promise<boolean> {
     const result = authApi.endpoints.signin.initiate({ email, password });

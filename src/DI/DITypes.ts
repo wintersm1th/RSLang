@@ -4,7 +4,8 @@ const DI_TYPES = {
   WordsService: Symbol.for('WordsService'),
   AuthService: Symbol.for('Auth'),
   DictionaryService: Symbol.for('DictionaryService'),
-  StatisticsService: Symbol.for('StatisticsService')
+  StatisticsService: Symbol.for('StatisticsService'),
+  AudioChallengeGame: Symbol.for('AudioChallengeGame'),
 };
 
 export default DI_TYPES;

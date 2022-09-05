@@ -20,6 +20,8 @@ import DictionaryService from '../services/DictionaryService';
 
 import { IStatisticsService } from '../services/interfaces/IStatisticService';
 import StatisticService from '../services/StatisticService';
+import { IAudioChallengeGame } from '../services/interfaces/IAudioChallengeGame';
+import AudioChallengeGame from '../services/AudioChallengeGame';
 
 const DIContainer = new Container();
 
@@ -29,5 +31,6 @@ DIContainer.bind<IAuthService>(DI_TYPES.AuthService).to(AuthService).inSingleton
 DIContainer.bind<IWordsService>(DI_TYPES.WordsService).to(WordsService).inSingletonScope();
 DIContainer.bind<IDictionaryService>(DI_TYPES.DictionaryService).to(DictionaryService).inSingletonScope();
 DIContainer.bind<IStatisticsService>(DI_TYPES.StatisticsService).to(StatisticService).inSingletonScope();
+DIContainer.bind<IAudioChallengeGame>(DI_TYPES.AudioChallengeGame).to(AudioChallengeGame);
 
 export default DIContainer;

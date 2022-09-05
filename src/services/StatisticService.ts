@@ -1,8 +1,8 @@
 import { injectable } from 'inversify';
-import { IStatisticsService } from "./interfaces/IStatisticService";
+import { IStatisticsService } from './interfaces/IStatisticService';
 import { statistic as statisticApi } from '../model/api/private';
-import store from "../model/store";
-import { Statistic } from "../model/api/shemas";
+import store from '../model/store';
+import { Statistic } from '../model/api/shemas';
 
 @injectable()
 export default class StatisticService implements IStatisticsService {
@@ -18,23 +18,23 @@ export default class StatisticService implements IStatisticsService {
   }
 
   async incrementLearnedWordsCount(userId: string): Promise<boolean> {
-    const {  learnedWords, ...rest } = await this.getStatistics(userId);
+    const { learnedWords, ...rest } = await this.getStatistics(userId);
     const updatedBody = {
       learnedWords: learnedWords + 1,
-      ...rest
+      ...rest,
     };
 
     return this.updateStatistics(userId, updatedBody);
   }
 
   async decrementLearnedWordsCount(userId: string): Promise<boolean> {
-    const {  learnedWords, ...rest } = await this.getStatistics(userId);
+    const { learnedWords, ...rest } = await this.getStatistics(userId);
     const updatedBody = {
       learnedWords: learnedWords - 1,
-      ...rest
+      ...rest,
     };
 
-    return this.updateStatistics(userId, updatedBody);    
+    return this.updateStatistics(userId, updatedBody);
   }
 
   private async getStatistics(userId: string): Promise<Statistic> {
@@ -52,10 +52,9 @@ export default class StatisticService implements IStatisticsService {
   private async updateStatistics(userId: string, newBody: Statistic): Promise<boolean> {
     const mutationThunk = statisticApi.endpoints.updateStatistic.initiate({
       userId,
-      payload: newBody
+      payload: newBody,
     });
 
-    return store.dispatch(mutationThunk)
-      .then((response) => !('error' in response));
+    return store.dispatch(mutationThunk).then((response) => !('error' in response));
   }
 }
