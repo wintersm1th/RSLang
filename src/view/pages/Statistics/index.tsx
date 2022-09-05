@@ -3,7 +3,17 @@ import { Box, Container, Typography } from '@mui/material';
 import { StatWordCard } from '../../components/statistics/StatWordCard';
 import { StatGamesCard } from '../../components/statistics/StatGamesCard';
 
-const Statistics = () => {
+import { selectState as selectAuth } from '../../../model/feature/auth';
+import { statistic as statisticsApi } from '../../../model/api/private';
+import { useSelector } from 'react-redux';
+
+type StatisticsProps = {
+  userId: string;
+}
+
+const Statistics = ({ userId }: StatisticsProps) => {
+  const { data } = statisticsApi.useGetStatisticQuery({ userId });
+  
   return (
     <Container className="container-stat">
       <Box className="stat-wrapper">
@@ -16,7 +26,7 @@ const Statistics = () => {
           </Typography>
           <Box className="stat-word" sx={{ display: 'flex', flexWrap: 'wrap' }}>
             <StatWordCard value={0} title="новых слов"></StatWordCard>
-            <StatWordCard value={0} title="изученных слов"></StatWordCard>
+            <StatWordCard value={data?.learnedWords ?? 0} title="изученных слов"></StatWordCard>
             <StatWordCard value={0} title="% правильных ответов"></StatWordCard>
           </Box>
           <Typography margin="10px auto 5px" variant="h5">
@@ -45,6 +55,19 @@ const Statistics = () => {
       </Box>
     </Container>
   );
+}
+
+const StatisticsWrapper = () => {
+  const { user } = useSelector(selectAuth);
+
+  const isPageForbidden = user === null;
+  
+  return (<>
+    { isPageForbidden
+      ? <Typography>Вы должны быть авторизированы для просмотра этой страницы</Typography>
+      : <Statistics userId={user.id}/>
+    }
+  </>);
 };
 
-export default Statistics;
+export default StatisticsWrapper;

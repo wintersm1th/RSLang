@@ -7,7 +7,7 @@ import { API_ADDRESS } from '../apiConfig';
 
 export const baseApi = createApi({
   reducerPath: 'privateApi',
-  tagTypes: ['User', 'Word', 'UserWord', 'Setting', 'Statistic'],
+  tagTypes: ['User', 'Word', 'UserWord', 'Setting', 'Statistics'],
 
   baseQuery: fetchBaseQuery({
     baseUrl: API_ADDRESS,

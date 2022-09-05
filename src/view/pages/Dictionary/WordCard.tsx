@@ -31,18 +31,18 @@ type WordCardExtensionProps = {
   auth: IAuth;
 };
 
-const WordCardExtension = ({ wordId, auth: { id: _userId }, wordParams }: WordCardExtensionProps) => {
+const WordCardExtension = ({ wordId, auth: { id: userId }, wordParams }: WordCardExtensionProps) => {
   const wordsService: IWordsService = DIContainer.get(DI_TYPES.WordsService);
 
   const isAddToDifficultEnabled = wordParams?.difficulty !== WordDifficulty.HARD;
   const isAddToLearnedEnabled = wordParams?.difficulty !== WordDifficulty.LEARNED;
 
   const handleAddToDifficult = () => {
-    wordsService.setWordHardMark(wordId);
+    wordsService.setWordHardMark(userId, wordId);
   };
 
   const handleAddToLearned = () => {
-    wordsService.setWordLearnedMark(wordId);
+    wordsService.setWordLearnedMark(userId, wordId);
   };
 
   return (

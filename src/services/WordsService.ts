@@ -6,82 +6,69 @@ import store from '../model/store';
 import { userWords } from '../model/api/private';
 
 import IWordsService from './interfaces/IWordsService';
-import IAuthService from './interfaces/IAuthService';
+
 import { WordDifficulty } from '../core/WordDifficulty';
 import { GetUserWordResponse } from '../model/api/private/userWords';
+import { IStatisticsService } from './interfaces/IStatisticService';
 
 @injectable()
 export default class WordsService implements IWordsService {
-  constructor(@inject(DI_TYPES.AuthService) private authService: IAuthService) {}
+  constructor(
+    @inject(DI_TYPES.StatisticsService) private statisticService: IStatisticsService
+  ) {}
 
-  async setWordHardMark(wordId: string): Promise<boolean> {
-    return this.setWordDifficulty(wordId, WordDifficulty.HARD);
+  async setWordHardMark(userId: string, wordId: string): Promise<boolean> {
+    return this.setWordDifficulty(userId, wordId, WordDifficulty.HARD);
   }
 
-  async setWordLearnedMark(wordId: string): Promise<boolean> {
-    return this.setWordDifficulty(wordId, WordDifficulty.LEARNED);
+  async setWordLearnedMark(userId: string, wordId: string): Promise<boolean> {
+    const promise = this.setWordDifficulty(userId, wordId, WordDifficulty.LEARNED);
+
+    promise.then((result) => {
+      if (result === true) {
+        this.statisticService.incrementLearnedWordsCount(userId);
+      }
+    });
+
+    return promise;
   }
 
-  async removeWordDifficultMark(wordId: string): Promise<boolean> {
-    return this.setWordDifficulty(wordId, WordDifficulty.NONE);
+  async removeWordDifficultMark(userId: string, wordId: string): Promise<boolean> {
+    return this.setWordDifficulty(userId, wordId, WordDifficulty.NONE);
   }
 
-  async removeWordLearnedMark(wordId: string): Promise<boolean> {
-    return this.setWordDifficulty(wordId, WordDifficulty.NONE);
+  async removeWordLearnedMark(userId: string, wordId: string): Promise<boolean> {
+    return this.setWordDifficulty(userId, wordId, WordDifficulty.NONE);
   }
 
-  private async setWordDifficulty(wordId: string, difficulty: WordDifficulty): Promise<boolean> {
-    const authParams = this.authService.getAuth();
-
-    if (authParams === null) {
-      return false;
-    }
-
-    const word = await this.getUserWord(wordId);
+  private async setWordDifficulty(userId: string, wordId: string, difficulty: WordDifficulty): Promise<boolean> {
+    const word = await this.getUserWord(userId, wordId);
 
     if (word === null) {
-      return this.createUserWord({
-        id: authParams.id,
-        wordId,
-        difficulty,
-      });
+      return this.createUserWord(
+        userId,
+        {
+          id: userId,
+          wordId,
+          difficulty,
+        }
+      );
+    } else if (word.difficulty !== difficulty) {
+      if (word.difficulty === WordDifficulty.HARD) {
+      } else if (word.difficulty === WordDifficulty.LEARNED) {
+        this.statisticService.decrementLearnedWordsCount(userId);
+      }
+
+      return this.unsafeUpdateWord(userId, { id: userId, wordId, difficulty });
     } else {
-      return this.unsafeUpdateWord({ id: authParams.id, wordId, difficulty });
+      return false;
     }
   }
-
-  private async unsafeUpdateWord({
-    id,
-    wordId,
-    difficulty,
-  }: {
-    id: string;
-    wordId: string;
-    difficulty: WordDifficulty;
-  }) {
-    const wordUpdateThunk = userWords.endpoints.updateUserWord.initiate({
-      id,
-      wordId,
-      difficulty,
-    });
-
-    return store.dispatch(wordUpdateThunk).then((response) => {
-      return !('error' in response);
-    });
-  }
-
-  private async getUserWord(wordId: string): Promise<GetUserWordResponse | null> {
-    const authParams = this.authService.getAuth();
-
-    if (!authParams) {
-      return null;
-    }
-
-    const { id: userId } = authParams;
-
+  
+  private async getUserWord(userId: string, wordId: string): Promise<GetUserWordResponse | null> {
     const getUserWordThunk = userWords.endpoints.readUserWord.initiate({ id: userId, wordId });
     const getUserWordSub = store.dispatch(getUserWordThunk);
-
+    
     try {
       const { data } = await getUserWordSub;
       return data ?? null;
@@ -89,13 +76,45 @@ export default class WordsService implements IWordsService {
       return null;
     }
   }
+  
+  private async unsafeUpdateWord(
+    userId: string,
+    {
+      id,
+      wordId,
+      difficulty,
+    }: {
+      id: string;
+      wordId: string;
+      difficulty: WordDifficulty;
+    }
+  ) {
 
-  private async createUserWord({ id, wordId, difficulty }: { id: string; wordId: string; difficulty: WordDifficulty }) {
+    const wordUpdateThunk = userWords.endpoints.updateUserWord.initiate({
+      id,
+      wordId,
+      difficulty,
+    });
+
+    if (difficulty === WordDifficulty.LEARNED) {
+      this.statisticService.incrementLearnedWordsCount(userId);
+    }
+
+    return store.dispatch(wordUpdateThunk).then((response) => {
+      return !('error' in response);
+    });
+  }
+
+  private async createUserWord(userId: string, { id, wordId, difficulty }: { id: string; wordId: string; difficulty: WordDifficulty }) {
     const createUserWordThunk = userWords.endpoints.createUserWord.initiate({
       id,
       wordId,
       difficulty,
     });
+
+    if (difficulty === WordDifficulty.LEARNED) {
+      this.statisticService.incrementLearnedWordsCount(userId);
+    }
 
     return store.dispatch(createUserWordThunk).then((response) => {
       return !('error' in response);

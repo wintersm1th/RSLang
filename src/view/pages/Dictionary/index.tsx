@@ -66,8 +66,6 @@ const Main = () => {
       }
     });
   }
-  console.log('Params:', wordsParams);
-  console.log('Map:', wordsMap);
 
   const setPageNumber = (newPageNumber: number) => {
     dictionaryService.setPage(newPageNumber);
