@@ -71,7 +71,14 @@ export type GetUnlearnedWordsArg = {
   page: number;
 };
 
+export type GetHardWordsArg = {
+  userId: string;
+  group: number;
+};
+
+
 export type AggregatedWord = {
+  id: string,
   group: number;
   page: number;
   word: string;
@@ -149,6 +156,21 @@ export const userWords = baseApi.injectEndpoints({
           page: 0,
           wordsPerPage: 60000,
           filter: JSON.stringify({ page: { $eq: page } }),
+        },
+      }),
+    }),
+
+    getAggregatedHardWords: build.query<AggregatedWord[], GetHardWordsArg>({
+      transformResponse(baseResult: [{ paginatedResults: AggregatedWord[] }], _meta, _arg) {
+        return baseResult[0].paginatedResults;
+      },
+      query: ({ userId, group }) => ({
+        url: `/users/${userId}/aggregatedWords`,
+        params: {
+          group,
+          page: 0,
+          wordsPerPage: 60000,
+          filter: JSON.stringify({ 'userWord.difficulty': { $eq: WordDifficulty.HARD } }),
         },
       }),
     }),
