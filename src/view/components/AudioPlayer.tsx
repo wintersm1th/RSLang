@@ -10,7 +10,7 @@ interface IAudiPlayerProps {
 
 const AudioPlayer = (props: IAudiPlayerProps) => {
   const [isPlaying, setPlay] = useState(false);
-  const [sources] = useState(props.tracks.map((url) => new Audio(url)));
+  const sources = props.tracks.map((url) => new Audio(url));
 
   const playAudio = async (audio: HTMLAudioElement) => {
     return new Promise((res) => {
