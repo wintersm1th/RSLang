@@ -40,9 +40,9 @@ type WordMapping = {
 const Main = () => {
   const dictionaryService = DIContainer.get<IDictionaryService>(DI_TYPES.DictionaryService);
 
-  const { difficulty, pageNumber } = useSelector(selectDictionaryState);
+  const { group: group, pageNumber: page } = useSelector(selectDictionaryState);
 
-  const { data: words } = wordsApi.useGetWordsQuery({ group: difficulty, page: pageNumber });
+  const { data: words } = wordsApi.useGetWordsQuery({ group, page });
 
   const { user } = useSelector(selectAuthState);
 
@@ -85,10 +85,10 @@ const Main = () => {
     <Container>
       <Paper component={'div'} sx={{ padding: 5 }}>
         <Box display="flex" gap="20px">
-          <Button component={Link} to={'/games/sprint'} variant="outlined">
+          <Button component={Link} to={`/games/sprint/${group}/${page}`} variant="outlined">
             Спринт
           </Button>
-          <Button component={Link} to={'/games/audiocall'} variant="outlined">
+          <Button component={Link} to={`/games/audiocall/${group}/${page}`} variant="outlined">
             Аудиовызов
           </Button>
           { user?.id ?
@@ -96,9 +96,10 @@ const Main = () => {
             Сложные слова
           </Button> : ''}
         </Box>
-        <RadioGroup row value={difficulty} onChange={(_e, value) => setDifficulty(+value)}>
+        <RadioGroup row value={group} onChange={(_e, value) => setDifficulty(+value)}>
           {groups.map((color, ind) => (
             <FormControlLabel
+              key={ind}
               value={ind}
               label={ind + 1}
               control={
@@ -122,7 +123,7 @@ const Main = () => {
         </Grid>
 
         <Box display="flex" justifyContent="center">
-          <Pagination count={29} page={pageNumber} onChange={(_e, newPage) => setPageNumber(newPage)} />
+          <Pagination count={29} page={page} onChange={(_e, newPage) => setPageNumber(newPage)} />
         </Box>
       </Paper>
     </Container>

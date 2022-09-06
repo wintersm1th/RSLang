@@ -145,7 +145,7 @@ export const userWords = baseApi.injectEndpoints({
       }),
     }),
 
-    getAggregatedWords: build.query<AggregatedWord[], GetUnlearnedWordsArg>({
+    getAggregatedWordsForPage: build.query<AggregatedWord[], GetUnlearnedWordsArg>({
       transformResponse(baseResult: [{ paginatedResults: AggregatedWord[] }], _meta, _arg) {
         return baseResult[0].paginatedResults;
       },
@@ -160,9 +160,24 @@ export const userWords = baseApi.injectEndpoints({
       }),
     }),
 
+    getAggregatedWordsUpToPage: build.query<AggregatedWord[], GetUnlearnedWordsArg>({
+      transformResponse(baseResult: [{ paginatedResults: (AggregatedWord & { _id: string})[] } ], _meta, _arg) {
+        return baseResult[0].paginatedResults.map(({ _id: id, ...rest}) => ({...rest, id}));
+      },
+      query: ({ userId, group, page }) => ({
+        url: `/users/${userId}/aggregatedWords`,
+        params: {
+          group,
+          page: 0,
+          wordsPerPage: 60000,
+          filter: JSON.stringify({ page: { $lte: page } }),
+        },
+      }),
+    }),
+
     getAggregatedHardWords: build.query<AggregatedWord[], GetHardWordsArg>({
-      transformResponse(baseResult: [{ paginatedResults: AggregatedWord[] }], _meta, _arg) {
-        return baseResult[0].paginatedResults;
+      transformResponse(baseResult: [{ paginatedResults: (AggregatedWord & { _id: string})[] } ], _meta, _arg) {
+        return baseResult[0].paginatedResults.map(({ _id: id, ...rest}) => ({...rest, id}));
       },
       query: ({ userId, group }) => ({
         url: `/users/${userId}/aggregatedWords`,
@@ -171,6 +186,21 @@ export const userWords = baseApi.injectEndpoints({
           page: 0,
           wordsPerPage: 60000,
           filter: JSON.stringify({ 'userWord.difficulty': { $eq: WordDifficulty.HARD } }),
+        },
+      }),
+    }),
+
+    getUnlearnedWordsForPage: build.query<AggregatedWord[], GetUnlearnedWordsArg>({
+      transformResponse(baseResult: [{ paginatedResults: (AggregatedWord & { _id: string})[] } ], _meta, _arg) {
+        return baseResult[0].paginatedResults.map(({ _id: id, ...rest}) => ({...rest, id}));
+      },
+      query: ({ userId, group, page }) => ({
+        url: `/users/${userId}/aggregatedWords`,
+        params: {
+          group,
+          page: 0,
+          wordsPerPage: 60000,
+          filter: JSON.stringify({ $and: [{ page: { $eq: page } }, { 'userWord.difficult': { $ne: 'LEARNED' }}]}),
         },
       }),
     }),

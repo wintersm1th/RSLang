@@ -24,8 +24,13 @@ export default function WrappedMain() {
           <Route path="/" element={<Main />} />
           <Route path="dictionary" element={<Dictionary />} />
           <Route path="games" element={<Games />} />
-          <Route path="games/sprint" element={<Sprint />} />
-          <Route path="games/audiocall" element={<Audiocall />} />
+
+          <Route path="games/sprint/" element={<Sprint />} />
+          <Route path="games/sprint/:group/:page" element={<Sprint />} />
+
+          <Route path="games/audiocall/" element={<Audiocall />} />
+          <Route path="games/audiocall/:group/:page" element={<Audiocall />} />
+
           <Route path="stats" element={<Statistics />} />
           <Route path="team" element={<Team />} />
           <Route path="dictionary/hardwords" element={<HardWords />} />

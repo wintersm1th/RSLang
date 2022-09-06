@@ -26,7 +26,7 @@ const StartScreen = ({ screenState }: StartScreenProps) => {
       <InputLabel id="audio-challenge-start-group">Сложность</InputLabel>
       <Select
         labelId="audio-challenge-start-group"
-        value={screenState.difficulty}
+        value={screenState.group}
         onChange={(e) => gameService.selectGroup(+e.target.value)}
       >
         <MenuItem value={0}>1</MenuItem>
@@ -48,7 +48,7 @@ const StartScreen = ({ screenState }: StartScreenProps) => {
         ))}
       </Select>
 
-      <Button variant={'contained'}>Start</Button>
+      <Button variant={'contained'} onClick={() => gameService.startGame()}>Start</Button>
     </>
   );
 };

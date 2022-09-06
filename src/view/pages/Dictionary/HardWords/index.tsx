@@ -26,10 +26,10 @@ type HardWordsProps = {
 
 const HardWords = ({ userId }: HardWordsProps) => {
   const dictionaryService = DIContainer.get<IDictionaryService>(DI_TYPES.DictionaryService);
-  const { difficulty } = useSelector(selectDictionaryState);
+  const { group } = useSelector(selectDictionaryState);
 
   const { data: words } = userWords.useGetAggregatedHardWordsQuery(
-    { userId: userId, group: difficulty },
+    { userId: userId, group: group },
   );
 
   useEffect(() => {
@@ -44,7 +44,7 @@ const HardWords = ({ userId }: HardWordsProps) => {
     <Container>
       <Paper component={'div'} sx={{ padding: 5 }}>
         <h1>Сложные слова</h1>
-        <RadioGroup row value={difficulty} onChange={(_e, value) => setDifficulty(+value)}>
+        <RadioGroup row value={group} onChange={(_e, value) => setDifficulty(+value)}>
           <FormControlLabel value="0" control={<Radio />} label="1" />
           <FormControlLabel value="1" control={<Radio />} label="2" />
           <FormControlLabel value="2" control={<Radio />} label="3" />
