@@ -24,7 +24,7 @@ const VariantButton = ({ word, clickHandler }: VariantButtonProps) => {
 }
 type StepProps = {
   rightAnswer: string;
-  variantsIds: string[4];
+  variantsIds: [string, string, string, string];
 }
 
 const Step = ({ rightAnswer, variantsIds }: StepProps) => {

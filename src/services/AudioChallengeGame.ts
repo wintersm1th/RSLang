@@ -10,9 +10,11 @@ import {
   startFromStartScreen,
   setPage,
   setGroup,
-  //startGame,
+  startGame,
   selectState as selectGameState,
-  StartScreenStage
+  StartScreenStage,
+  createIncompletedStep,
+  IncompletedStep
 } from '../model/feature/audiochallenge';
 
 import DI_TYPES from '../DI/DITypes';
@@ -22,6 +24,7 @@ import { IStatisticsService } from './interfaces/IStatisticService';
 import IAuth from '../core/IAuth';
 
 import { IAudioChallengeGame, StartingParams } from './interfaces/IAudioChallengeGame';
+import { AggregatedWord } from '../model/api/private/userWords';
 
 @injectable()
 export default class AudioChallengeGame implements IAudioChallengeGame {
@@ -41,13 +44,16 @@ export default class AudioChallengeGame implements IAudioChallengeGame {
     this.userParams = auth;
   }
 
-  startWithParams({ group, page }: StartingParams): void {
-    console.log('Group:', group);
-    console.log('Page:', page);
+  async startWithParams({ group, page }: StartingParams) {
+    const steps = await this.createStepsForParams({ group, page });
+    store.dispatch(startGame(steps));
   }
 
   startWithSettingsScreen(): void {
+    console.log(this.statisticsService);
+    console.log(this.wordsService);
 
+    store.dispatch(startFromStartScreen({ difficulty: 0, page: 0 }));
   }
 
   async selectGroup(value: number) {
@@ -71,25 +77,116 @@ export default class AudioChallengeGame implements IAudioChallengeGame {
     store.dispatch(setPage(value));
   }
 
-  startGame() {
+  async startGame() {
+    const { stage } =  selectGameState(store.getState());
+    const { group, page } = stage as StartScreenStage;
 
+    const steps = await this.createStepsForParams({ group, page });
+
+    store.dispatch(startGame(steps));
   }
 
   destroy() {
     store.dispatch(destroyGame());
   }
 
-  startFromStartScreen(): void {
-    console.log(this.statisticsService);
-    this.wordsService.getUnlearnedWordsForPage({
-      group: 0,
-      page: 0,
-      userId: this.userParams.id,
-    });
-    store.dispatch(startFromStartScreen({ difficulty: 0, page: 0 }));
-  }
-
   startForDifficulty(): void {}
 
   selectAnswerVariant(_wordId: string) {}
+
+  async createStepsForParams({ group, page }: { group: number, page: number}): Promise<IncompletedStep[]> {
+    const availableUnlearnedWordsThunk = userWordsApi.endpoints.getUnlearnedWordsForPage.initiate({
+      userId: this.userParams.id,
+      group,
+      page
+    });
+
+    const availableAsVariantWordsThunk = userWordsApi.endpoints.getAggregatedWordsUpToPage.initiate({
+      userId: this.userParams.id,
+      group,
+      page
+    });
+
+    const [
+      { data: availableUnlearnedWords },
+      { data: availableAsVariantWords }
+    ] = await Promise.all([
+      store.dispatch(availableUnlearnedWordsThunk),
+      store.dispatch(availableAsVariantWordsThunk)
+    ]);
+
+    if (availableUnlearnedWords === undefined || availableAsVariantWords === undefined) {
+      throw Error('Cant fetch words for game');
+    }
+    
+    const answerWrods = pickWords(availableUnlearnedWords, 10);    
+
+    const steps = answerWrods.map((answer) => {
+      const answerId = answer.id;
+      const variantValidator = (variant: AggregatedWord) => variant.id !== answerId;
+      const variants: [string, string, string, string] = pickWordsWithValidation(availableAsVariantWords, 3, variantValidator)
+        .map((variant) => variant.id)
+        .concat(answerId) as [string, string, string, string];
+      
+      shuffle(variants);
+      console.log(variants);
+
+      return createIncompletedStep({
+        answer: answerId,
+        variants: variants
+      });
+    });
+
+    return steps;
+  }
+}
+
+function shuffle<T>(target: T[]): void {
+  for (let i = 0; i < target.length; i++) {
+    const randomPosition = Math.floor((Math.random() * target.length));
+    [target[i], target[randomPosition]] = [target[randomPosition], target[i]];
+  }  
+}
+
+function pickWords<T>(sourceWords: T[], count: number): T[] {
+  if (count > sourceWords.length) {
+    throw Error('Insufficient amount of source items');
+  }
+
+  const indicies = Array(sourceWords.length).fill(0).map((_, ind) => ind);
+  shuffle(indicies);
+  
+  const result: T[] = [];
+
+  for (let i = 0; i < count; i++) {
+    result.push(sourceWords[indicies[i]]);
+  }
+
+  return result;
+}
+
+function pickWordsWithValidation<T>(sourceWords: T[], count: number, isValid: (word: T) => boolean): T[] {
+  const indicies = Array(sourceWords.length).fill(0).map((_, ind) => ind);
+  shuffle(indicies);
+  
+  let position = 0;
+  let pickedCount = 0;
+
+  const result: T[] = [];
+
+  while (pickedCount < count && position < indicies.length) {
+    const pickedItem = sourceWords[indicies[position]];
+    if (isValid(pickedItem)) {
+      result.push(pickedItem);
+      pickedCount++;
+    }
+
+    position++;
+  }
+
+  if (pickedCount !== count) {
+    throw Error('Insufficient amount of source items');
+  }
+
+  return result;
 }

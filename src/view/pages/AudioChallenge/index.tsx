@@ -44,7 +44,7 @@ const Audiocall = () => {
         <Container sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           <Box className="game-wrapper">
             {isGameInStartScreenStage(gameState) && <StartScreen screenState={gameState.stage} />}
-            {isGameInRunningStage(gameState) && <Game steps={gameState.stage.steps} currentStep={gameState.stage.currentStep}/>}
+            {isGameInRunningStage(gameState) && <Game steps={gameState.stage.steps} currentStep={gameState.stage.currentStep} />}
           </Box>
         </Container>
       </Box>

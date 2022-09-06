@@ -12,7 +12,7 @@ enum GameStageVariant {
 interface StepBase {
   code?: string;
   answer: WordId;
-  variants: WordId[4];
+  variants: [WordId, WordId, WordId, WordId];
 }
 
 const STEP_CODE_COMPLETED = 'COMPLETED';
@@ -120,7 +120,7 @@ export const slice = createSlice({
     },
 
     startGame(state, { payload }: PayloadAction<Step[]>) {
-      if (!isGameInStartScreenStage(state)) {
+      if (!isGameInStartScreenStage(state) && state.stage !== null) {
         throw Error('Invalid dispatch');
       }
 

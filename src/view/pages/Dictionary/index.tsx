@@ -83,10 +83,10 @@ const Main = () => {
     <Container>
       <Paper component={'div'} sx={{ padding: 5 }}>
         <Box display="flex" gap="20px">
-          <Button component={Link} to={'/games/sprint'} variant="outlined">
+          <Button component={Link} to={`/games/sprint/${group}/${page}`} variant="outlined">
             Спринт
           </Button>
-          <Button component={Link} to={'/games/audiocall'} variant="outlined">
+          <Button component={Link} to={`/games/audiocall/${group}/${page}`} variant="outlined">
             Аудиовызов
           </Button>
           { user?.id ?
