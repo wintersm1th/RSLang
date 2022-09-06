@@ -28,6 +28,8 @@ import { GetUserWordResponse } from '../../../model/api/private/userWords';
 
 import IWord from '../../../core/IWord';
 
+export const groups = ['#ff0000', '#FFA500', '#FFD700', '#008000', '#66CDAA', '#0000FF'];
+
 type WordMapping = {
   [wordId: string]: {
     word: IWord;
@@ -77,7 +79,7 @@ const Main = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, [words]);
+  }, [words]);  
 
   return (
     <Container>
@@ -95,12 +97,21 @@ const Main = () => {
           </Button> : ''}
         </Box>
         <RadioGroup row value={difficulty} onChange={(_e, value) => setDifficulty(+value)}>
-          <FormControlLabel value="0" control={<Radio />} label="1" />
-          <FormControlLabel value="1" control={<Radio />} label="2" />
-          <FormControlLabel value="2" control={<Radio />} label="3" />
-          <FormControlLabel value="3" control={<Radio />} label="4" />
-          <FormControlLabel value="4" control={<Radio />} label="5" />
-          <FormControlLabel value="5" control={<Radio />} label="6" />
+          {groups.map((color, ind) => (
+            <FormControlLabel
+              value={ind}
+              label={ind + 1}
+              control={
+                <Radio
+                  sx={{
+                    '&.Mui-checked': {
+                      color,
+                    },
+                  }}
+                />
+              }
+            />
+          ))}
         </RadioGroup>
         <Grid container spacing={5} marginBottom="30px">
           {Object.entries(wordsMap).map(([wordId, { word, params }]) => (
