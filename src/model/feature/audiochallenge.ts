@@ -9,14 +9,38 @@ enum GameStageVariant {
   Finished = 'finished',
 }
 
-interface Step {
+interface StepBase {
+  code?: string;
   answer: WordId;
-  variants: WordId[];
+  variants: WordId[4];
 }
 
-interface CompletedStep extends Step {
+const STEP_CODE_COMPLETED = 'COMPLETED';
+const STEP_CODE_INCOMPLETED = 'INCOMPLETED';
+
+export interface IncompletedStep extends StepBase {
+  code: typeof STEP_CODE_INCOMPLETED,
+}
+
+export interface CompletedStep extends StepBase {
+  code: typeof STEP_CODE_COMPLETED,
   result: boolean;
 }
+
+export const createCompletedStep = ({ answer, variants, result }: StepBase & { result: boolean }): CompletedStep => ({
+  code: STEP_CODE_COMPLETED,
+  answer,
+  variants,
+  result
+});
+
+export const createIncompletedStep = ({ answer, variants }: StepBase): IncompletedStep => ({
+  code: STEP_CODE_INCOMPLETED,
+  answer,
+  variants
+});
+
+export type Step = IncompletedStep | CompletedStep;
 
 export type StartScreenStage = {
   code: GameStageVariant.StartScreen;
@@ -27,7 +51,7 @@ export type StartScreenStage = {
 export type RunningStage = {
   code: GameStageVariant.Running;
   currentStep: number;
-  steps: (Step | CompletedStep)[];
+  steps: Step[];
 };
 
 export type FinishedStage = {
@@ -42,6 +66,10 @@ type AudioChallengeState = {
 const initialState: AudioChallengeState = {
   stage: null,
 };
+
+export const isIncompletedStep = (step: Step): step is IncompletedStep => step.code === STEP_CODE_INCOMPLETED;
+
+export const isCompletedStep = (step: Step): step is CompletedStep => step.code === STEP_CODE_COMPLETED;
 
 export const isGameInStartScreenStage = (state: AudioChallengeState): state is { stage: StartScreenStage } =>
   state.stage?.code === GameStageVariant.StartScreen;
@@ -119,11 +147,11 @@ export const slice = createSlice({
 
       const isSuccess = variant === answer;
 
-      const completedStep: CompletedStep = {
+      const completedStep = createCompletedStep({
         answer,
         variants,
         result: isSuccess,
-      };
+      });
 
       state.stage.steps[currentStep] = completedStep;
 
