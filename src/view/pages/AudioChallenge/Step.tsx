@@ -9,6 +9,10 @@ import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 
 import AudioPlayer from '../../components/AudioPlayer';
+import { FILES_STORAGE_HOST } from '../../../core/constants';
+import { IAudioChallengeGame } from '../../../services/interfaces/IAudioChallengeGame';
+import DIContainer from '../../../DI/DIContainer';
+import DI_TYPES from '../../../DI/DITypes';
 
 type VariantButtonProps = {
   word: IWord;
@@ -29,7 +33,7 @@ type StepProps = {
 
 const Step = ({ rightAnswer, variantsIds }: StepProps) => {
   const { data: word } =  wordsApi.useReadWordQuery({ wordId: rightAnswer });
-
+  console.log('Answer word:', word)
   const [
     { data: wordVariant0 },
     { data: wordVariant1 },
@@ -42,8 +46,10 @@ const Step = ({ rightAnswer, variantsIds }: StepProps) => {
     wordsApi.useReadWordQuery({ wordId: variantsIds[3] })
   ];
 
-  const variantSelectionHandler = (_wordId: string) => {
+  const gameService: IAudioChallengeGame = DIContainer.get(DI_TYPES.AudioChallengeGame);
 
+  const variantSelectionHandler = (wordId: string) => {
+    gameService.selectAnswerVariant(wordId);
   }
 
   return (
@@ -52,7 +58,7 @@ const Step = ({ rightAnswer, variantsIds }: StepProps) => {
         ? <CircularProgress />
         :<>
           <Box display="flex" justifyContent="center" alignItems="center">
-            <AudioPlayer tracks={[word.audioExample]} />
+            <AudioPlayer tracks={[`${FILES_STORAGE_HOST}/${word.audio}`]} />
           </Box>
 
           <Box className="answers-btn">

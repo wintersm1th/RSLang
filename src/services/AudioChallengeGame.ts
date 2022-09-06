@@ -10,6 +10,7 @@ import {
   startFromStartScreen,
   setPage,
   setGroup,
+  selectWord,
   startGame,
   selectState as selectGameState,
   StartScreenStage,
@@ -92,7 +93,9 @@ export default class AudioChallengeGame implements IAudioChallengeGame {
 
   startForDifficulty(): void {}
 
-  selectAnswerVariant(_wordId: string) {}
+  selectAnswerVariant(wordId: string) {
+    store.dispatch(selectWord(wordId));
+  }
 
   async createStepsForParams({ group, page }: { group: number, page: number}): Promise<IncompletedStep[]> {
     const availableUnlearnedWordsThunk = userWordsApi.endpoints.getUnlearnedWordsForPage.initiate({
