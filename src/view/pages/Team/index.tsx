@@ -15,21 +15,21 @@ const Team = () => {
             imgSrc="./assets/img/team-page/sergei.jpg"
             name="Сергей"
             role="Team Lead. Developer"
-            description="Большой молодец"
+            description="Отвечал за архитектуру приложения. Координировал работу команды. Разработка бекенда и всей работы с ним. Игра Аудиовызов."
             git="StraightToJaneStreet"
           ></TeamCard>
           <TeamCard
             imgSrc="./assets/img/team-page/ruslan.jpg"
             name="Руслан"
             role="Developer"
-            description="Большой молодец"
+            description="Настроил регистрацию и авторизацию пользователя. Страница статистики. Игра Спринт."
             git="laiker"
           ></TeamCard>
           <TeamCard
             imgSrc="./assets/img/team-page/alexei.jpg"
             name="Алексей"
             role="Developer"
-            description="Большой молодец"
+            description="Разработал дизайн проекта. Страница статистики. Оформление главной страницы, страницы о команде, карточек в словаре."
             git="AlexeiKozovski"
           ></TeamCard>
         </Box>
