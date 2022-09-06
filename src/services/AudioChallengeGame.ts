@@ -132,7 +132,6 @@ export default class AudioChallengeGame implements IAudioChallengeGame {
         .concat(answerId) as [string, string, string, string];
       
       shuffle(variants);
-      console.log(variants);
 
       return createIncompletedStep({
         answer: answerId,

@@ -33,7 +33,7 @@ type StepProps = {
 
 const Step = ({ rightAnswer, variantsIds }: StepProps) => {
   const { data: word } =  wordsApi.useReadWordQuery({ wordId: rightAnswer });
-  console.log('Answer word:', word)
+  
   const [
     { data: wordVariant0 },
     { data: wordVariant1 },
