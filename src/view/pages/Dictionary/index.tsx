@@ -89,6 +89,10 @@ const Main = () => {
           <Button component={Link} to={'/games/audiocall'} variant="outlined">
             Аудиовызов
           </Button>
+          { user?.id ?
+          <Button component={Link} to={'/dictionary/hardwords'} variant="contained">
+            Сложные слова
+          </Button> : ''}
         </Box>
         <RadioGroup row value={group} onChange={(_e, value) => setDifficulty(+value)}>
           <FormControlLabel value="0" control={<Radio />} label="1" />
@@ -101,10 +105,11 @@ const Main = () => {
         <Grid container spacing={5} marginBottom="30px">
           {Object.entries(wordsMap).map(([wordId, { word, params }]) => (
             <Grid item xs={4} key={wordId}>
-              <WordCard word={word} params={params} />
+              <WordCard word={word} params={params} hideButtons={false} />
             </Grid>
           ))}
         </Grid>
+
         <Box display="flex" justifyContent="center">
           <Pagination count={29} page={page} onChange={(_e, newPage) => setPageNumber(newPage)} />
         </Box>

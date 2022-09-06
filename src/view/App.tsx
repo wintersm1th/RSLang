@@ -13,6 +13,7 @@ import Footer from './components/footer/footer';
 import Header from './components/header/Header';
 import Team from './pages/Team';
 import Statistics from './pages/Statistics';
+import HardWords from "./pages/Dictionary/HardWords";
 
 export default function WrappedMain() {
   return (
@@ -32,6 +33,7 @@ export default function WrappedMain() {
 
           <Route path="stats" element={<Statistics />} />
           <Route path="team" element={<Team />} />
+          <Route path="dictionary/hardwords" element={<HardWords />} />
         </Routes>
         <Footer />
       </HashRouter>

@@ -5,11 +5,13 @@ import { RootState } from '../store';
 type DictionaryInfoState = {
   group: number;
   pageNumber: number;
+  difficultyFilter: boolean;
 };
 
 const initialState: DictionaryInfoState = {
   group: 0,
   pageNumber: 0,
+  difficultyFilter: false,
 };
 
 const slice = createSlice({
