@@ -156,9 +156,7 @@ export const slice = createSlice({
       const updatedSteps = [...state.stage.steps];
       updatedSteps.splice(currentStep, 1, completedStep);
 
-
-
-      if (state.stage.currentStep < state.stage.steps.length) {
+      if (state.stage.currentStep + 1 < state.stage.steps.length) {
         return {
           stage: {
             ...state.stage,

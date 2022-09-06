@@ -15,10 +15,12 @@ import {
   selectState as selectGameState,
   isGameInStartScreenStage,
   isGameInRunningStage,
+  isGameInFinishedStage,
 } from '../../../model/feature/audiochallenge';
 
 import StartScreen from './StartScreen';
 import { Game } from './Game';
+import { GameResults } from './GameResults';
 
 const Audiocall = () => {
   const gameService: IAudioChallengeGame = DIContainer.get(DI_TYPES.AudioChallengeGame);
@@ -45,6 +47,7 @@ const Audiocall = () => {
           <Box className="game-wrapper">
             {isGameInStartScreenStage(gameState) && <StartScreen screenState={gameState.stage} />}
             {isGameInRunningStage(gameState) && <Game steps={gameState.stage.steps} currentStep={gameState.stage.currentStep} />}
+            {isGameInFinishedStage(gameState) && <GameResults results={gameState.stage} />}
           </Box>
         </Container>
       </Box>

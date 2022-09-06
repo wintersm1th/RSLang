@@ -13,7 +13,7 @@ type StepsStatusBarProps = {
 const StepsStatusBar = ({ steps } : StepsStatusBarProps) => {
   return (
     <Box className={'series-answers series--' + 1}>
-      { steps.map((step) => <StepStatusIcon step={step}/>) }
+      { steps.map((step, index) => <StepStatusIcon key={index} step={step}/>) }
     </Box>
   );
 }
