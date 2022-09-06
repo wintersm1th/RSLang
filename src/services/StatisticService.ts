@@ -10,43 +10,81 @@ export default class StatisticService implements IStatisticsService {
     try {
       await this.getStatistics(userId);
     } catch {
-      const body: Statistic = { learnedWords: 0 };
-      this.updateStatistics(userId, body);
+      const body: Statistic = {
+        optional: {
+          daysWords: {},
+          sprintGame: {
+            learnedWordsCount: 0,
+            newWordsCount: 0,
+            bestSession: 0,
+          },
+          audioGame: {
+            learnedWordsCount: 0,
+            newWordsCount: 0,
+            bestSession: 0,
+          },
+        }
+      };
+      await this.updateStatistics(userId, body);
     }
 
     return true;
   }
 
   async incrementLearnedWordsCount(userId: string): Promise<boolean> {
-    const { learnedWords, ...rest } = await this.getStatistics(userId);
+    const { optional } = await this.getStatistics(userId);
+
+    const currentDay = new Date().toLocaleDateString()
+    if (currentDay in optional.daysWords) {
+      optional.daysWords[currentDay]['learnedWordsCount']++
+    } else {
+      optional.daysWords[currentDay]['learnedWordsCount'] = 0
+    }
+
     const updatedBody = {
-      learnedWords: learnedWords + 1,
-      ...rest,
+      optional,
     };
 
     return this.updateStatistics(userId, updatedBody);
   }
 
   async decrementLearnedWordsCount(userId: string): Promise<boolean> {
-    const { learnedWords, ...rest } = await this.getStatistics(userId);
+    const { optional } = await this.getStatistics(userId);
+
+    const currentDay = new Date().toLocaleDateString()
+    if (currentDay in optional.daysWords) {
+      optional.daysWords[currentDay]['learnedWordsCount']--
+    } else {
+      optional.daysWords[currentDay]['learnedWordsCount'] = 0
+    }
+
     const updatedBody = {
-      learnedWords: learnedWords - 1,
-      ...rest,
+      optional,
     };
 
     return this.updateStatistics(userId, updatedBody);
   }
 
-  private async getStatistics(userId: string): Promise<Statistic> {
+  getTotalNewWords(): number
+  {
+    return 0;
+  }
+
+  getTotalLearnedWords(): number
+  {
+    return 0;
+  }
+
+  public async getStatistics(userId: string): Promise<Statistic> {
     const { data } = await store.dispatch(statisticApi.endpoints.getStatistic.initiate({ userId }));
 
     if (data === undefined) {
       throw Error('Undefined behavior');
     }
 
-    const { learnedWords, optional } = data;
+    const { optional } = data;
 
-    return { learnedWords, optional };
+    return { optional };
   }
 
   private async updateStatistics(userId: string, newBody: Statistic): Promise<boolean> {
