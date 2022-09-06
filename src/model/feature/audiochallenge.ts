@@ -152,12 +152,21 @@ export const slice = createSlice({
         variants,
         result: isSuccess,
       });
+      
+      const updatedSteps = [...state.stage.steps];
+      updatedSteps.splice(currentStep, 1, completedStep);
 
-      state.stage.steps[currentStep] = completedStep;
 
-      state.stage.currentStep++;
 
-      if (state.stage.currentStep === state.stage.steps.length) {
+      if (state.stage.currentStep < state.stage.steps.length) {
+        return {
+          stage: {
+            ...state.stage,
+            steps: updatedSteps,
+            currentStep: currentStep + 1
+          }
+        }
+      } else {
         const finishedStage: FinishedStage = {
           code: GameStageVariant.Finished,
           steps: state.stage.steps as CompletedStep[],
