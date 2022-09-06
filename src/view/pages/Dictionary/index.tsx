@@ -99,6 +99,7 @@ const Main = () => {
         <RadioGroup row value={group} onChange={(_e, value) => setDifficulty(+value)}>
           {groups.map((color, ind) => (
             <FormControlLabel
+              key={ind}
               value={ind}
               label={ind + 1}
               control={
