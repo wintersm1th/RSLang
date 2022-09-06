@@ -4,4 +4,7 @@ export interface IStatisticsService {
   incrementLearnedWordsCount(userId: string): Promise<boolean>;
 
   decrementLearnedWordsCount(userId: string): Promise<boolean>;
+
+  getTotalNewWords(): number;
+  getTotalLearnedWords(): number;
 }
