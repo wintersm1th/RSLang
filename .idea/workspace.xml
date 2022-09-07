@@ -5,19 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c5829f39-023a-486e-8f69-cbf80c083344" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/model/feature/statistics.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/DI/DIContainer.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/DI/DIContainer.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/model/api/shemas.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/api/shemas.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/model/store.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/store.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/services/AuthService.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/AuthService.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/services/StatisticService.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/StatisticService.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/services/WordsService.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/WordsService.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/services/interfaces/IStatisticService.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/interfaces/IStatisticService.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/view/components/Auth.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/components/Auth.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/view/pages/Statistics/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/pages/Statistics/index.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,7 +27,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="development" />
+        <entry key="$PROJECT_DIR$" value="new-graphs" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -72,7 +62,7 @@
     <option name="stateVersion" value="1" />
   </component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="CurrentFile" />
+    <option name="selectedIndex" value="1" />
   </component>
   <component name="ProjectId" id="2Da9gJB57HljVn35gQmvnqpKhpf" />
   <component name="ProjectViewState">
