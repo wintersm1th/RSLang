@@ -28,25 +28,27 @@ export type StatisticPayload = {
   daysWords: {
     [key: string]: {
       learnedWordsCount: number,
-      newWordsCount: number,
+      totalWordsCount: number,
       sprintGame: {
         learnedWordsCount: number;
-        newWordsCount: number;
+        totalWordsCount: number;
+        bestSession: number;
       },
       audioGame: {
         learnedWordsCount: number;
-        newWordsCount: number;
+        totalWordsCount: number;
+        bestSession: number;
       },
     }
   },
   sprintGame: {
     learnedWordsCount: number;
-    newWordsCount: number;
+    totalWordsCount: number;
     bestSession: number;
   },
   audioGame: {
     learnedWordsCount: number;
-    newWordsCount: number;
+    totalWordsCount: number;
     bestSession: number;
   },
 };

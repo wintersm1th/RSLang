@@ -2,17 +2,21 @@ import React from 'react';
 import { Box, Container, Typography } from '@mui/material';
 import { StatWordCard } from '../../components/statistics/StatWordCard';
 import { StatGamesCard } from '../../components/statistics/StatGamesCard';
-
-import { selectState as selectAuth } from '../../../model/feature/auth';
+import { selectState as selectAuthParams } from '../../../model/feature/auth';
 import { useSelector } from 'react-redux';
-import DIContainer from "../../../DI/DIContainer";
-import DI_TYPES from "../../../DI/DITypes";
-import { IStatisticsService } from "../../../services/interfaces/IStatisticService";
+// import DIContainer from "../../../DI/DIContainer";
+// import DI_TYPES from "../../../DI/DITypes";
+// import { IStatisticsService } from "../../../services/interfaces/IStatisticService";
+// import { Statistic } from "../../../model/api/shemas";
+import { selectState as selectStatisticsState } from "../../../model/feature/statistics";
+
+
 
 const Statistics = () => {
-  const statisticService = DIContainer.get<IStatisticsService>(DI_TYPES.StatisticsService);
-  const totalLearnedWords = statisticService.getTotalNewWords() ?? 0;
-  const totalNewWords = statisticService.getTotalNewWords() ?? 0;
+
+  const { statistics } = useSelector(selectStatisticsState);
+  console.log(statistics);
+
 
   return (
     <Container className="container-stat">
@@ -25,16 +29,16 @@ const Statistics = () => {
             Слова
           </Typography>
           <Box className="stat-word" sx={{ display: 'flex', flexWrap: 'wrap' }}>
-            <StatWordCard value={totalNewWords} title="новых слов"></StatWordCard>
-            <StatWordCard value={totalLearnedWords} title="изученных слов"></StatWordCard>
-            <StatWordCard value={0} title="% правильных ответов"></StatWordCard>
+            <StatWordCard value={0} title="новых слов"/>
+            <StatWordCard value={0} title="изученных слов"/>
+            <StatWordCard value={0} title="% правильных ответов"/>
           </Box>
           <Typography margin="10px auto 5px" variant="h5">
             Мини-игры
           </Typography>
           <Box className="stat-games" sx={{ display: 'flex', flexWrap: 'wrap' }}>
-            <StatGamesCard gameTitle="Аудиовызов" valueWords={0} valuePercents={0} valueSeries={0}></StatGamesCard>
-            <StatGamesCard gameTitle="Спринт" valueWords={0} valuePercents={0} valueSeries={0}></StatGamesCard>
+            <StatGamesCard gameTitle="Аудиовызов" valueWords={0} valuePercents={0} valueSeries={0}/>
+            <StatGamesCard gameTitle="Спринт" valueWords={0} valuePercents={0} valueSeries={0}/>
           </Box>
         </Box>
         <Box className="stat-all-time" sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
@@ -58,9 +62,11 @@ const Statistics = () => {
 };
 
 const StatisticsWrapper = () => {
-  const { user } = useSelector(selectAuth);
-
+  const { user } = useSelector(selectAuthParams);
+  console.log(user);
   const isPageForbidden = user === null;
+
+
 
   return (
     <>

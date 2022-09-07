@@ -1,10 +1,8 @@
+import { Statistic } from "../../model/api/shemas";
+
 export interface IStatisticsService {
-  initializeStatistics(userId: string): Promise<boolean>;
-
-  incrementLearnedWordsCount(userId: string): Promise<boolean>;
-
+  initializeStatistics(): Promise<boolean>;
+  incrementLearnedWordsCount(): Promise<boolean>;
   decrementLearnedWordsCount(userId: string): Promise<boolean>;
-
-  getTotalNewWords(): number;
-  getTotalLearnedWords(): number;
+  getStatistics(userId: string): Promise<Statistic>;
 }

@@ -1,95 +1,177 @@
-import { injectable } from 'inversify';
+import { inject, injectable } from "inversify";
 import { IStatisticsService } from './interfaces/IStatisticService';
 import { statistic as statisticApi } from '../model/api/private';
 import store from '../model/store';
-import { Statistic } from '../model/api/shemas';
+import { Statistic, StatisticPayload } from "../model/api/shemas";
+import { setStatistics } from "../model/feature/statistics";
+import DI_TYPES from "../DI/DITypes";
+import IAuthService from "./interfaces/IAuthService";
+import IAuth from "../core/IAuth";
 
 @injectable()
 export default class StatisticService implements IStatisticsService {
-  async initializeStatistics(userId: string): Promise<boolean> {
+  private userParams: IAuth;
+  constructor(@inject(DI_TYPES.AuthService) authService: IAuthService) {
+    const auth = authService.getAuth();
+    if (auth === null) {
+      throw Error('unauth');
+    }
+
+    this.userParams = auth;
+  }
+
+  async initializeStatistics(): Promise<boolean> {
     try {
-      await this.getStatistics(userId);
+      const { optional } = await this.getStatistics();
+      store.dispatch(setStatistics(optional));
     } catch {
       const body: Statistic = {
         optional: {
-          daysWords: {},
+          daysWords: {
+            '11.08.1994' : {
+              learnedWordsCount: 0,
+                totalWordsCount: 0,
+                sprintGame: {
+                  learnedWordsCount: 0,
+                  totalWordsCount: 0,
+                  bestSession: 0,
+                },
+                audioGame: {
+                  learnedWordsCount: 0,
+                  totalWordsCount: 0,
+                  bestSession: 0,
+                },
+            }
+          },
           sprintGame: {
             learnedWordsCount: 0,
-            newWordsCount: 0,
+            totalWordsCount: 0,
             bestSession: 0,
           },
           audioGame: {
             learnedWordsCount: 0,
-            newWordsCount: 0,
+            totalWordsCount: 0,
             bestSession: 0,
           },
         }
       };
-      await this.updateStatistics(userId, body);
+      console.log('new');
+      console.log(body);
+      this.updateStatistics(body);
     }
 
     return true;
   }
 
-  async incrementLearnedWordsCount(userId: string): Promise<boolean> {
-    const { optional } = await this.getStatistics(userId);
+  async incrementLearnedWordsCount(): Promise<boolean> {
+    return await this.IncrementforDay(1);
+  }
 
+  async decrementLearnedWordsCount(_userId: string): Promise<boolean> {
+    return await this.IncrementforDay(-1);
+  }
+
+  async modifyDaySprintStatistic(wordsCount: number, positiveCount: number, bestSeries: number): Promise<boolean>
+  {
+    return await this.modifyGameStatistic('sprintGame', wordsCount, positiveCount, bestSeries);
+  }
+
+  async modifyDayAudioStatistic(wordsCount: number, positiveCount: number, bestSeries: number): Promise<boolean>
+  {
+    return await this.modifyGameStatistic('audioGame', wordsCount, positiveCount, bestSeries);
+  }
+
+
+  async IncrementforDay(numberCount: number): Promise<boolean> {
+    const { optional } = await this.getStatistics();
     const currentDay = new Date().toLocaleDateString()
-    if (currentDay in optional.daysWords) {
-      optional.daysWords[currentDay]['learnedWordsCount']++
-    } else {
-      optional.daysWords[currentDay]['learnedWordsCount'] = 0
-    }
+    const {
+      daysWords: {
+        [currentDay]: {
+          learnedWordsCount, ...rest3
+        },
+        ...rest2
+      },
+      ...rest1
+    } = optional;
 
-    const updatedBody = {
-      optional,
+    const updated: StatisticPayload = {
+      daysWords: {
+        [currentDay]: {
+          learnedWordsCount: numberCount + learnedWordsCount, ...rest3
+        },
+        ...rest2
+      },
+      ...rest1
     };
 
-    return this.updateStatistics(userId, updatedBody);
-  }
-
-  async decrementLearnedWordsCount(userId: string): Promise<boolean> {
-    const { optional } = await this.getStatistics(userId);
-
-    const currentDay = new Date().toLocaleDateString()
-    if (currentDay in optional.daysWords) {
-      optional.daysWords[currentDay]['learnedWordsCount']--
-    } else {
-      optional.daysWords[currentDay]['learnedWordsCount'] = 0
-    }
-
     const updatedBody = {
-      optional,
+      optional: updated
     };
 
-    return this.updateStatistics(userId, updatedBody);
+    return this.updateStatistics(updatedBody);
   }
 
-  getTotalNewWords(): number
+
+
+  private async modifyGameStatistic(gameKey: 'sprintGame' | 'audioGame', wordsCount: number, positiveCount: number, bestSeries: number)
   {
-    return 0;
+    const { optional } = await this.getStatistics();
+    const currentDay = new Date().toLocaleDateString();
+    const isSprint = (key: 'sprintGame' | 'audioGame'): key is 'sprintGame' => key === 'sprintGame';
+    // const isAudio = (key: 'sprintGame' | 'audioGame'): key is 'audioGame' => key === 'audioGame';
+    const key = isSprint(gameKey) ? 'sprintGame' : 'audioGame';
+
+    const {
+      daysWords: {
+        [currentDay]: {
+          [key]: oldStat,
+          ...rest3
+        },
+        ...rest2
+      },
+      ...rest1
+    } = optional;
+    const { learnedWordsCount, totalWordsCount, bestSession: oldBestSeries } = oldStat;
+    const updated: StatisticPayload = {
+      daysWords: {
+        [currentDay]: {
+          [key]: {
+            learnedWordsCount: learnedWordsCount + positiveCount,
+            totalWordsCount: totalWordsCount + wordsCount,
+            bestSession: Math.max(bestSeries, oldBestSeries)
+          },
+          ...rest3
+        },
+        ...rest2
+      },
+      ...rest1
+    };
+
+    const updatedBody = {
+      optional: updated
+    };
+
+    return this.updateStatistics(updatedBody);
   }
 
-  getTotalLearnedWords(): number
-  {
-    return 0;
-  }
 
-  public async getStatistics(userId: string): Promise<Statistic> {
-    const { data } = await store.dispatch(statisticApi.endpoints.getStatistic.initiate({ userId }));
-
+  public async getStatistics(): Promise<Statistic> {
+    const { data } = await store.dispatch(statisticApi.endpoints.getStatistic.initiate({ userId: this.userParams.id }));
+    console.log(data);
     if (data === undefined) {
+      console.log('error');
       throw Error('Undefined behavior');
     }
 
     const { optional } = data;
-
-    return { optional };
+    const tempProps: StatisticPayload = JSON.parse(JSON.stringify(optional));
+    return { optional: tempProps };
   }
 
-  private async updateStatistics(userId: string, newBody: Statistic): Promise<boolean> {
+  private async updateStatistics(newBody: Statistic): Promise<boolean> {
     const mutationThunk = statisticApi.endpoints.updateStatistic.initiate({
-      userId,
+      userId: this.userParams.id,
       payload: newBody,
     });
 

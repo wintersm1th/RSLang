@@ -24,7 +24,7 @@ export default class WordsService implements IWordsService {
 
     promise.then((result) => {
       if (result === true) {
-        this.statisticService.incrementLearnedWordsCount(userId);
+        this.statisticService.incrementLearnedWordsCount();
       }
     });
 
@@ -85,7 +85,7 @@ export default class WordsService implements IWordsService {
   }
 
   private async unsafeUpdateWord(
-    userId: string,
+    _userId: string,
     {
       id,
       wordId,
@@ -103,7 +103,7 @@ export default class WordsService implements IWordsService {
     });
 
     if (difficulty === WordDifficulty.LEARNED) {
-      this.statisticService.incrementLearnedWordsCount(userId);
+      this.statisticService.incrementLearnedWordsCount();
     }
 
     return store.dispatch(wordUpdateThunk).then((response) => {
@@ -112,7 +112,7 @@ export default class WordsService implements IWordsService {
   }
 
   private async createUserWord(
-    userId: string,
+    _userId: string,
     { id, wordId, difficulty }: { id: string; wordId: string; difficulty: WordDifficulty }
   ) {
     const createUserWordThunk = userWords.endpoints.createUserWord.initiate({
@@ -122,7 +122,7 @@ export default class WordsService implements IWordsService {
     });
 
     if (difficulty === WordDifficulty.LEARNED) {
-      this.statisticService.incrementLearnedWordsCount(userId);
+      this.statisticService.incrementLearnedWordsCount();
     }
 
     return store.dispatch(createUserWordThunk).then((response) => {
