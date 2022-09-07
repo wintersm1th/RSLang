@@ -39,11 +39,11 @@ const Step = ({ rightAnswer, opinion }: StepProps) => {
           </Box>
           
           <Box className="answers-btn">
-            <Button variant="contained" onClick={gameService.makeOpinionYes.bind(gameService)}>
-              Yes
+            <Button variant="contained" color="success" onClick={gameService.makeOpinionYes.bind(gameService)}>
+              Верно
             </Button>
-            <Button variant="contained" onClick={gameService.makeOpinionNo.bind(gameService)}>
-              No
+            <Button variant="contained" color="error" onClick={gameService.makeOpinionNo.bind(gameService)}>
+              Неверно
             </Button>
           </Box>
         </>
