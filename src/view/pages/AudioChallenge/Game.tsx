@@ -13,7 +13,7 @@ type GameProps = {
   currentStep: number;
 }
 
-export const Game = ({ steps, currentStep }: GameProps) => {
+const Game = ({ steps, currentStep }: GameProps) => {
   const { answer, variants } = steps[currentStep];
 
   return (
@@ -26,7 +26,8 @@ export const Game = ({ steps, currentStep }: GameProps) => {
         <StepsStatusBar steps={steps} />
         <StepComponent rightAnswer={answer} variantsIds={variants} />
       </Box>
-      
     </Box>
   )
 }
+
+export default Game;

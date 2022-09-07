@@ -8,7 +8,7 @@ import Main from './pages/Main';
 import Games from './pages/Games';
 import Dictionary from './pages/Dictionary';
 import Sprint from './pages/Sprint';
-import Audiocall from './pages/AudioChallenge';
+import AudioChallenge from './pages/AudioChallenge';
 import Footer from './components/footer/footer';
 import Header from './components/header/Header';
 import Team from './pages/Team';
@@ -28,8 +28,8 @@ export default function WrappedMain() {
           <Route path="games/sprint/" element={<Sprint />} />
           <Route path="games/sprint/:group/:page" element={<Sprint />} />
 
-          <Route path="games/audiocall/" element={<Audiocall />} />
-          <Route path="games/audiocall/:group/:page" element={<Audiocall />} />
+          <Route path="games/audiocall/" element={<AudioChallenge />} />
+          <Route path="games/audiocall/:group/:page" element={<AudioChallenge />} />
 
           <Route path="stats" element={<Statistics />} />
           <Route path="team" element={<Team />} />

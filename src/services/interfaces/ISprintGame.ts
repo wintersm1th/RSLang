@@ -3,12 +3,19 @@ export type StartingParams = {
   page: number;
 }
 
-export interface IAudioChallengeGame {
+export interface ISprintGame {
   startWithParams(params: StartingParams): void;
   startWithSettingsScreen(): void;
+  
   startGame(): void;
-  setGroup(value: number): void;
-  setPage(value: number): void;
-  selectAnswerVariant(wordId: string): void;
+
+  makeOpinionYes(): void;
+  makeOpinionNo(): void;
+
+  selectGroup(value: number): void;
+  selectPage(value: number): void;
+
+  haltByTimeout(): void;
+
   destroy(): void;
 }

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { FinishedStage } from '../../../model/feature/audiochallenge';
+import { FinishedStage } from '../../../model/feature/sprint';
 
 import Box from '@mui/material/Box';
 
@@ -19,10 +19,6 @@ const GameResults = ({ results }: GameResultsProps) => {
               <br/>
               Right answer: {step.answer}
               <br/>
-              Variants:
-              <ul>
-                {step.variants.map((variantId, variantIndex) => <li key={variantIndex}>Id: {variantId}</li>)}
-              </ul>
             </li>
           );
         })}
