@@ -25,6 +25,7 @@ const StartScreen = ({ group, page, setGroup, setPage, startGame }: StartScreenP
         labelId="audio-challenge-start-group"
         value={group}
         onChange={(e) => setGroup(+e.target.value)}
+        sx={{ width: 150, mb: 3 }}
       >
         <MenuItem value={0}>1</MenuItem>
         <MenuItem value={1}>2</MenuItem>
@@ -39,6 +40,7 @@ const StartScreen = ({ group, page, setGroup, setPage, startGame }: StartScreenP
         labelId="audio-challenge-start-page"
         value={page}
         onChange={(e) => setPage(+e.target.value)}
+        sx={{ width: 150, mb: 3 }}
       >
         {pageIndicies.map((page) => (
           <MenuItem key={page} value={page}>{` ${page + 1} `}</MenuItem>

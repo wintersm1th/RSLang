@@ -39,10 +39,7 @@ const Game = ({ steps, currentStep }: GameProps) => {
   return (
     <Box className="word-card">
       <Box className="head">
-        <Typography variant='h2'>Аудиовызов</Typography>
-        <Box className="top">
-          <Typography variant="h5">Счет: {0}</Typography>
-        </Box>
+        <Typography variant='h4' sx={{  mb: 2 }}>Спринт</Typography>
         <Typography>Осталось секунд: {timeLeft}</Typography>
         <StepsStatusBar steps={steps} />
         <StepComponent rightAnswer={answer} opinion={variant} />
