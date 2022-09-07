@@ -25,12 +25,34 @@ export type UserWord = {
 };
 
 export type StatisticPayload = {
-  value: number;
+  daysWords: {
+    [key: string]: {
+      learnedWordsCount: number,
+      newWordsCount: number,
+      sprintGame: {
+        learnedWordsCount: number;
+        newWordsCount: number;
+      },
+      audioGame: {
+        learnedWordsCount: number;
+        newWordsCount: number;
+      },
+    }
+  },
+  sprintGame: {
+    learnedWordsCount: number;
+    newWordsCount: number;
+    bestSession: number;
+  },
+  audioGame: {
+    learnedWordsCount: number;
+    newWordsCount: number;
+    bestSession: number;
+  },
 };
 
 export type Statistic = {
-  learnedWords: number;
-  optional?: Partial<StatisticPayload>;
+  optional: StatisticPayload;
 };
 
 export type SettingPayload = {
