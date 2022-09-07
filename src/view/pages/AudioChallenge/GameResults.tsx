@@ -8,8 +8,7 @@ type GameResultsProps = {
   results: FinishedStage
 }
 
-export const GameResults = ({ results }: GameResultsProps) => {
-  
+const GameResults = ({ results }: GameResultsProps) => {  
   return (
     <Box>
       <ul>
@@ -31,3 +30,5 @@ export const GameResults = ({ results }: GameResultsProps) => {
     </Box>
   );
 }
+
+export default GameResults;
