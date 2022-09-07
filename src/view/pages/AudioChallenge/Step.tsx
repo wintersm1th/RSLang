@@ -22,7 +22,7 @@ type VariantButtonProps = {
 const VariantButton = ({ word, clickHandler }: VariantButtonProps) => {
   return (
     <Button variant="contained" onClick={() => clickHandler(word.id)}>
-      {word.word}
+      {word.wordTranslate}
     </Button>
   )
 }
