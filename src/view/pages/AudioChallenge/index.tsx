@@ -22,11 +22,16 @@ import {
   isGameInStartScreenStage,
   isGameInRunningStage,
   isGameInFinishedStage,
+  FinishedStage,
 } from '../../../model/feature/audiochallenge';
 
 import StartScreen from '../../components/GameStartScreen';
 import Game from './Game';
 import GameResults from './GameResults';
+
+const prepareResults = ({ steps }: FinishedStage) => {
+
+}
 
 const AudioChallenge = () => {
   const gameService: IAudioChallengeGame = DIContainer.get(DI_TYPES.AudioChallengeGame);
