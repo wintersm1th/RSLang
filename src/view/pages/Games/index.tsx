@@ -3,6 +3,7 @@ import { GameCard } from '../../components/gamecard/GameCard';
 import './games.styles.css';
 
 const Games = () => {
+  
   return (
     <div className="games-page">
       <div className="games">

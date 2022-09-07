@@ -1,9 +1,9 @@
 import React from 'react';
 
+import { Step } from '../../../model/feature/sprint';
+
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-
-import { Step } from '../../../model/feature/audiochallenge';
 
 import StepComponent from './Step';
 import StepsStatusBar from './StepsStatusBar';
@@ -14,7 +14,7 @@ type GameProps = {
 }
 
 const Game = ({ steps, currentStep }: GameProps) => {
-  const { answer, variants } = steps[currentStep];
+  const { answer, variant } = steps[currentStep];
 
   return (
     <Box className="word-card">
@@ -24,7 +24,7 @@ const Game = ({ steps, currentStep }: GameProps) => {
           <Typography variant="h5">Счет: {0}</Typography>
         </Box>
         <StepsStatusBar steps={steps} />
-        <StepComponent rightAnswer={answer} variantsIds={variants} />
+        <StepComponent rightAnswer={answer} opinion={variant} />
       </Box>
     </Box>
   )

@@ -26,6 +26,7 @@ import IAuth from '../core/IAuth';
 
 import { IAudioChallengeGame, StartingParams } from './interfaces/IAudioChallengeGame';
 import { AggregatedWord } from '../model/api/private/userWords';
+import { pickWords, pickWordsWithValidation, shuffle } from './utils/randomPicking';
 
 @injectable()
 export default class AudioChallengeGame implements IAudioChallengeGame {
@@ -57,7 +58,7 @@ export default class AudioChallengeGame implements IAudioChallengeGame {
     store.dispatch(startFromStartScreen({ difficulty: 0, page: 0 }));
   }
 
-  async selectGroup(value: number) {
+  async setGroup(value: number) {
     store.dispatch(setGroup(value));
     const { stage } = selectGameState(store.getState());
     const { page, group } = stage as StartScreenStage;
@@ -74,7 +75,7 @@ export default class AudioChallengeGame implements IAudioChallengeGame {
     })
   }
 
-  selectPage(value: number) {
+  setPage(value: number) {
     store.dispatch(setPage(value));
   }
 
@@ -97,7 +98,7 @@ export default class AudioChallengeGame implements IAudioChallengeGame {
     store.dispatch(selectWord(wordId));
   }
 
-  async createStepsForParams({ group, page }: { group: number, page: number}): Promise<IncompletedStep[]> {
+  private async createStepsForParams({ group, page }: { group: number, page: number}): Promise<IncompletedStep[]> {
     const availableUnlearnedWordsThunk = userWordsApi.endpoints.getUnlearnedWordsForPage.initiate({
       userId: this.userParams.id,
       group,
@@ -141,54 +142,4 @@ export default class AudioChallengeGame implements IAudioChallengeGame {
 
     return steps;
   }
-}
-
-function shuffle<T>(target: T[]): void {
-  for (let i = 0; i < target.length; i++) {
-    const randomPosition = Math.floor((Math.random() * target.length));
-    [target[i], target[randomPosition]] = [target[randomPosition], target[i]];
-  }  
-}
-
-function pickWords<T>(sourceWords: T[], count: number): T[] {
-  if (count > sourceWords.length) {
-    throw Error('Insufficient amount of source items');
-  }
-
-  const indicies = Array(sourceWords.length).fill(0).map((_, ind) => ind);
-  shuffle(indicies);
-  
-  const result: T[] = [];
-
-  for (let i = 0; i < count; i++) {
-    result.push(sourceWords[indicies[i]]);
-  }
-
-  return result;
-}
-
-function pickWordsWithValidation<T>(sourceWords: T[], count: number, isValid: (word: T) => boolean): T[] {
-  const indicies = Array(sourceWords.length).fill(0).map((_, ind) => ind);
-  shuffle(indicies);
-  
-  let position = 0;
-  let pickedCount = 0;
-
-  const result: T[] = [];
-
-  while (pickedCount < count && position < indicies.length) {
-    const pickedItem = sourceWords[indicies[position]];
-    if (isValid(pickedItem)) {
-      result.push(pickedItem);
-      pickedCount++;
-    }
-
-    position++;
-  }
-
-  if (pickedCount !== count) {
-    throw Error('Insufficient amount of source items');
-  }
-
-  return result;
 }

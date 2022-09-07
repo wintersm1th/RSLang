@@ -24,7 +24,7 @@ import {
   isGameInFinishedStage,
 } from '../../../model/feature/audiochallenge';
 
-import StartScreen from './StartScreen';
+import StartScreen from '../../components/GameStartScreen';
 import Game from './Game';
 import GameResults from './GameResults';
 
@@ -54,8 +54,8 @@ const AudioChallenge = () => {
               <StartScreen
                 group={gameState.stage.group}
                 page={gameState.stage.page}
-                setGroup={gameService.selectGroup.bind(gameService)}
-                setPage={gameService.selectPage.bind(gameService)}
+                setGroup={gameService.setGroup.bind(gameService)}
+                setPage={gameService.setPage.bind(gameService)}
                 startGame={gameService.startGame.bind(gameService)}
               />
             }
