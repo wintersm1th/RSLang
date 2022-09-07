@@ -56,7 +56,7 @@ export default class WordsService implements IWordsService {
     } else if (word.difficulty !== difficulty) {
       if (word.difficulty === WordDifficulty.HARD) {
       } else if (word.difficulty === WordDifficulty.LEARNED) {
-        this.statisticService.decrementLearnedWordsCount(userId);
+        //his.statisticService.decrementLearnedWordsCount(userId);
       }
 
       return this.unsafeUpdateWord(userId, { id: userId, wordId, difficulty });
@@ -96,7 +96,7 @@ export default class WordsService implements IWordsService {
     });
 
     if (difficulty === WordDifficulty.LEARNED) {
-      this.statisticService.incrementLearnedWordsCount();
+      this.statisticService.incrementLearnedWordsForDay();
     }
 
     return store.dispatch(wordUpdateThunk).then((response) => {
@@ -115,7 +115,7 @@ export default class WordsService implements IWordsService {
     });
 
     if (difficulty === WordDifficulty.LEARNED) {
-      this.statisticService.incrementLearnedWordsCount();
+      this.statisticService.incrementLearnedWordsForDay();
     }
 
     return store.dispatch(createUserWordThunk).then((response) => {

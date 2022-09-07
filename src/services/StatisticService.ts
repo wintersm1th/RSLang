@@ -22,8 +22,7 @@ export default class StatisticService implements IStatisticsService {
 
   async initializeStatistics(): Promise<boolean> {
     try {
-      const { optional } = await this.getStatistics();
-      store.dispatch(setStatistics(optional));
+      await this.getStatistics();
     } catch {
       const body: Statistic = {
         optional: {
@@ -63,20 +62,58 @@ export default class StatisticService implements IStatisticsService {
     return true;
   }
 
-  async incrementLearnedWordsCount(): Promise<boolean> {
-    return this.IncrementLearnedforDay(1);
-  }
+  async incrementLearnedWordsForDay(): Promise<boolean> {
+    const { optional } = await this.getStatistics();
+    const currentDay = new Date().toLocaleDateString()
+    if (currentDay in optional.daysWords) {
+      const {
+        daysWords: {
+          [currentDay]: {
+            learnedWordsCount, ...rest3
+          },
+          ...rest2
+        },
+        ...rest1
+      } = optional;
 
-  async decrementLearnedWordsCount(_userId: string): Promise<boolean> {
-    return this.IncrementLearnedforDay(-1);
-  }
+      const updated: StatisticPayload = {
+        daysWords: {
+          [currentDay]: {
+            learnedWordsCount: 1 + learnedWordsCount, ...rest3
+          },
+          ...rest2
+        },
+        ...rest1
+      };
+      const updatedBody = {
+        optional: updated
+      };
 
-  async incrementTotalWordsCount(): Promise<boolean> {
-    return this.IncrementTotalforDay(1);
-  }
+      return this.updateStatistics(updatedBody);
+    } else {
+      const {
+        daysWords,
+        ...rest1
+      } = optional;
 
-  async decrementTotalWordsCount(): Promise<boolean> {
-    return this.IncrementTotalforDay(-1);
+      const updated: StatisticPayload = {
+        daysWords: {
+          [currentDay]: {
+            learnedWordsCount: 1,
+            audioGame: { learnedWordsCount: 0, totalWordsCount: 0, bestSession: 0 },
+            sprintGame: { learnedWordsCount: 0, totalWordsCount: 0, bestSession: 0 },
+            totalWordsCount: 0,
+          },
+          ...daysWords
+        },
+        ...rest1
+      };
+      const updatedBody = {
+        optional: updated
+      };
+
+      return this.updateStatistics(updatedBody);
+    }
   }
 
   async modifyDaySprintStatistic(wordsCount: number, positiveCount: number, bestSeries: number): Promise<boolean>
@@ -87,130 +124,6 @@ export default class StatisticService implements IStatisticsService {
   async modifyDayAudioStatistic(wordsCount: number, positiveCount: number, bestSeries: number): Promise<boolean>
   {
     return await this.modifyGameStatistic('audioGame', wordsCount, positiveCount, bestSeries);
-  }
-
-  async modifyTotalSprintStatistic(wordsCount: number, positiveCount: number, bestSeries: number): Promise<boolean>
-  {
-    return await this.updateSprintTotal(wordsCount, positiveCount, bestSeries);
-  }
-
-  async modifyTotalAudioStatistic(wordsCount: number, positiveCount: number, bestSeries: number): Promise<boolean>
-  {
-    return await this.updateAudioTotal(wordsCount, positiveCount, bestSeries);
-  }
-
-  private async IncrementLearnedforDay(numberCount: number): Promise<boolean> {
-    const { optional } = await this.getStatistics();
-    const currentDay = new Date().toLocaleDateString()
-    const {
-      daysWords: {
-        [currentDay]: {
-          learnedWordsCount, ...rest3
-        },
-        ...rest2
-      },
-      ...rest1
-    } = optional;
-
-    const updated: StatisticPayload = {
-      daysWords: {
-        [currentDay]: {
-          learnedWordsCount: numberCount + learnedWordsCount, ...rest3
-        },
-        ...rest2
-      },
-      ...rest1
-    };
-
-    const updatedBody = {
-      optional: updated
-    };
-
-    return this.updateStatistics(updatedBody);
-  }
-
-  private async IncrementTotalforDay(numberCount: number): Promise<boolean> {
-    const { optional } = await this.getStatistics();
-    const currentDay = new Date().toLocaleDateString()
-    const {
-      daysWords: {
-        [currentDay]: {
-          totalWordsCount, ...rest3
-        },
-        ...rest2
-      },
-      ...rest1
-    } = optional;
-
-    const updated: StatisticPayload = {
-      daysWords: {
-        [currentDay]: {
-          totalWordsCount: numberCount + totalWordsCount, ...rest3
-        },
-        ...rest2
-      },
-      ...rest1
-    };
-
-    const updatedBody = {
-      optional: updated
-    };
-
-    return this.updateStatistics(updatedBody);
-  }
-
-  private async updateSprintTotal(wordsCount: number, positiveCount: number, bestSeries: number): Promise<boolean> {
-    const { optional } = await this.getStatistics();
-    const {
-      sprintGame: {
-        learnedWordsCount,
-        totalWordsCount,
-        bestSession,
-      },
-      ...rest1
-    } = optional;
-
-    const updated: StatisticPayload = {
-      sprintGame: {
-        learnedWordsCount: learnedWordsCount + positiveCount,
-        totalWordsCount: totalWordsCount + wordsCount,
-        bestSession: Math.max(bestSeries, bestSession),
-      },
-      ...rest1
-    };
-
-    const updatedBody = {
-      optional: updated
-    };
-
-    return this.updateStatistics(updatedBody);
-  }
-
-  private async updateAudioTotal(wordsCount: number, positiveCount: number, bestSeries: number): Promise<boolean> {
-    const { optional } = await this.getStatistics();
-    const {
-      audioGame: {
-        learnedWordsCount,
-        totalWordsCount,
-        bestSession,
-      },
-      ...rest1
-    } = optional;
-
-    const updated: StatisticPayload = {
-      audioGame: {
-        learnedWordsCount: learnedWordsCount + positiveCount,
-        totalWordsCount: totalWordsCount + wordsCount,
-        bestSession: Math.max(bestSeries, bestSession),
-      },
-      ...rest1
-    };
-
-    const updatedBody = {
-      optional: updated
-    };
-
-    return this.updateStatistics(updatedBody);
   }
 
   private async modifyGameStatistic(gameKey: 'sprintGame' | 'audioGame', wordsCount: number, positiveCount: number, bestSeries: number)
@@ -318,6 +231,8 @@ export default class StatisticService implements IStatisticsService {
       userId: this.userParams.id,
       payload: newBody,
     });
+
+    store.dispatch(setStatistics(newBody.optional));
 
     return store.dispatch(mutationThunk).then((response) => !('error' in response));
   }

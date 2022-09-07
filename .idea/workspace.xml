@@ -7,7 +7,9 @@
     <list default="true" id="c5829f39-023a-486e-8f69-cbf80c083344" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/services/StatisticService.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/StatisticService.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/services/WordsService.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/WordsService.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/services/interfaces/IStatisticService.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/interfaces/IStatisticService.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/view/pages/Statistics/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/pages/Statistics/index.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
