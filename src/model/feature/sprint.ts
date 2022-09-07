@@ -59,11 +59,11 @@ export type FinishedStage = {
   steps: CompletedStep[];
 };
 
-type AudioChallengeState = {
+type SprintState = {
   stage: null | StartScreenStage | RunningStage | FinishedStage;
 };
 
-const initialState: AudioChallengeState = {
+const initialState: SprintState = {
   stage: null,
 };
 
@@ -71,13 +71,13 @@ export const isIncompletedStep = (step: Step): step is IncompletedStep => step.c
 
 export const isCompletedStep = (step: Step): step is CompletedStep => step.code === STEP_CODE_COMPLETED;
 
-export const isGameInStartScreenStage = (state: AudioChallengeState): state is { stage: StartScreenStage } =>
+export const isGameInStartScreenStage = (state: SprintState): state is { stage: StartScreenStage } =>
   state.stage?.code === GameStageVariant.StartScreen;
 
-export const isGameInRunningStage = (state: AudioChallengeState): state is { stage: RunningStage } =>
+export const isGameInRunningStage = (state: SprintState): state is { stage: RunningStage } =>
   state.stage?.code === GameStageVariant.Running;
 
-export const isGameInFinishedStage = (state: AudioChallengeState): state is { stage: FinishedStage } =>
+export const isGameInFinishedStage = (state: SprintState): state is { stage: FinishedStage } =>
   state.stage?.code === GameStageVariant.Finished;
 
 type InitialScreenParams = {
@@ -172,6 +172,22 @@ export const slice = createSlice({
       }
     },
 
+    haltByTimeout(state) {
+      if (!isGameInRunningStage(state)) {
+        throw Error('invalid dispatch');
+      }
+      const completedSteps = state.stage.steps.filter(isCompletedStep);
+
+      const finishedStage: FinishedStage = {
+        code: GameStageVariant.Finished,
+        steps: completedSteps
+      }
+
+      return {
+        stage: finishedStage
+      };
+    },
+
     destroyGame(state) {
       state.stage = null;
     },
@@ -191,7 +207,8 @@ export const {
   setGroup,
   setPage,
   startGame,
+  haltByTimeout,
   destroyGame
 } = slice.actions;
 
-export const selectState = (state: RootState): AudioChallengeState => state[slice.name];
+export const selectState = (state: RootState): SprintState => state[slice.name];

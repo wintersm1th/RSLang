@@ -15,5 +15,7 @@ export interface ISprintGame {
   selectGroup(value: number): void;
   selectPage(value: number): void;
 
+  haltByTimeout(): void;
+
   destroy(): void;
 }

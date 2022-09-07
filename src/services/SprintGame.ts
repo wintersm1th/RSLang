@@ -13,6 +13,7 @@ import {
   setPage,
   setGroup,
   startGame,
+  haltByTimeout,
   IncompletedStep,
   createIncompletedStep
 } from '../model/feature/sprint';
@@ -54,6 +55,10 @@ export default class SprintGame implements ISprintGame {
     const steps = await this.createStepsForParams({ group, page });
 
     store.dispatch(startGame(steps));
+  }
+
+  haltByTimeout(): void {
+    store.dispatch(haltByTimeout());
   }
 
   makeOpinionYes(): void {
