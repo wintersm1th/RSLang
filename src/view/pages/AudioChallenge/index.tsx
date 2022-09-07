@@ -55,4 +55,17 @@ const Audiocall = () => {
   );
 };
 
-export default Audiocall;
+const AudioChallengeWrapper = () => {
+  const { user } = useSelector(selectAuthState);
+  
+  return (
+    <>
+      { !user
+        ? <Typography>Вы должны быть авторизированы для просмотра данной страницы</Typography>
+        : <AudioChallenge />
+      }
+    </>
+  );
+}
+
+export default AudioChallengeWrapper;
