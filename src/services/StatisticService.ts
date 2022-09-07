@@ -64,11 +64,11 @@ export default class StatisticService implements IStatisticsService {
   }
 
   async incrementLearnedWordsCount(): Promise<boolean> {
-    return await this.IncrementforDay(1);
+    return this.modifyDaySprintStatistic(15, 20, 7);
   }
 
   async decrementLearnedWordsCount(_userId: string): Promise<boolean> {
-    return await this.IncrementforDay(-1);
+    return this.IncrementforDay(-1);
   }
 
   async modifyDaySprintStatistic(wordsCount: number, positiveCount: number, bestSeries: number): Promise<boolean>
@@ -112,49 +112,92 @@ export default class StatisticService implements IStatisticsService {
     return this.updateStatistics(updatedBody);
   }
 
-
-
   private async modifyGameStatistic(gameKey: 'sprintGame' | 'audioGame', wordsCount: number, positiveCount: number, bestSeries: number)
   {
     const { optional } = await this.getStatistics();
     const currentDay = new Date().toLocaleDateString();
-    const isSprint = (key: 'sprintGame' | 'audioGame'): key is 'sprintGame' => key === 'sprintGame';
-    // const isAudio = (key: 'sprintGame' | 'audioGame'): key is 'audioGame' => key === 'audioGame';
-    const key = isSprint(gameKey) ? 'sprintGame' : 'audioGame';
-
+    const isSprint = (value: 'sprintGame' | 'audioGame'): value is 'sprintGame' => value === 'sprintGame';
     const {
-      daysWords: {
-        [currentDay]: {
-          [key]: oldStat,
-          ...rest3
-        },
-        ...rest2
-      },
+      daysWords: dailyStats,
       ...rest1
     } = optional;
-    const { learnedWordsCount, totalWordsCount, bestSession: oldBestSeries } = oldStat;
-    const updated: StatisticPayload = {
-      daysWords: {
+
+    if (currentDay in dailyStats) {
+      console.log('Update for day');
+
+      const {
         [currentDay]: {
-          [key]: {
-            learnedWordsCount: learnedWordsCount + positiveCount,
-            totalWordsCount: totalWordsCount + wordsCount,
-            bestSession: Math.max(bestSeries, oldBestSeries)
-          },
-          ...rest3
+          sprintGame: oldSprintStats,
+          audioGame: oldAudioStats,
+          ...dayRestStat
         },
-        ...rest2
-      },
-      ...rest1
-    };
+        ...daysRest
+      } = dailyStats;
 
-    const updatedBody = {
-      optional: updated
-    };
+      const { learnedWordsCount, totalWordsCount, bestSession: oldBestSeries } =
+        isSprint(gameKey) ? oldSprintStats : oldAudioStats;
 
-    return this.updateStatistics(updatedBody);
+      console.log('Actual values', learnedWordsCount, totalWordsCount, oldBestSeries)
+
+      const updatedBody = {
+        daysWords: {
+          [currentDay]: {
+            ...(isSprint(gameKey)
+            ? {
+              sprintGame: {
+                learnedWordsCount: learnedWordsCount + positiveCount,
+                totalWordsCount: totalWordsCount + wordsCount,
+                bestSession: Math.max(bestSeries, oldBestSeries)
+              },
+              audioGame: oldAudioStats
+            } : {
+              audioGame: {
+                learnedWordsCount: learnedWordsCount + positiveCount,
+                totalWordsCount: totalWordsCount + wordsCount,
+                bestSession: Math.max(bestSeries, oldBestSeries)
+              },
+              sprintGame: oldSprintStats
+            }),
+            ...dayRestStat
+          },
+          ...daysRest
+        },
+        ...rest1
+      };
+      console.log('updated body', updatedBody)
+      return this.updateStatistics({ optional: updatedBody });
+    } else {
+      const updatedBody = {
+        daysWords: {
+          [currentDay]: {
+
+          ...(isSprint(gameKey)
+            ? {
+              sprintGame: {
+                learnedWordsCount: positiveCount,
+                totalWordsCount: wordsCount,
+                bestSession: bestSeries
+              },
+              audioGame: { learnedWordsCount: 0, totalWordsCount: 0, bestSession: 0 }
+            } : {
+              audioGame: {
+                learnedWordsCount: positiveCount,
+                totalWordsCount: wordsCount,
+                bestSession: bestSeries
+              },
+              sprintGame: { learnedWordsCount: 0, totalWordsCount: 0, bestSession: 0 }
+            }),
+            learnedWordsCount: 0,
+            totalWordsCount: 0
+          },
+          ...dailyStats
+        },
+        ...rest1
+      }
+
+      return this.updateStatistics({ optional: updatedBody });
+    }
   }
-
 
   public async getStatistics(): Promise<Statistic> {
     const { data } = await store.dispatch(statisticApi.endpoints.getStatistic.initiate({ userId: this.userParams.id }));

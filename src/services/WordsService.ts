@@ -21,13 +21,6 @@ export default class WordsService implements IWordsService {
 
   async setWordLearnedMark(userId: string, wordId: string): Promise<boolean> {
     const promise = this.setWordDifficulty(userId, wordId, WordDifficulty.LEARNED);
-
-    promise.then((result) => {
-      if (result === true) {
-        this.statisticService.incrementLearnedWordsCount();
-      }
-    });
-
     return promise;
   }
 
