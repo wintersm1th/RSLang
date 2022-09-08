@@ -27,8 +27,8 @@ const Statistics = ({ userId }: {userId: string} ) => {
             ? <CurrentDayStatistics statistics={stats.optional.daysWords[currentDay]} />
             : <Typography variant='h5'>Нет статистики за текущий день</Typography>
         )}
-        <Box>
-          <Typography variant='h4'>Общая статистика по играм</Typography>
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <Typography margin="30px auto" variant='h4'>Общая статистика по играм</Typography>
           { stats && <GlobalGameStatistics game={GameType.AudioChallenge} statistics={stats.optional.daysWords}/>}
           { stats && <GlobalGameStatistics game={GameType.Sprint} statistics={stats.optional.daysWords}/>}
         </Box>
