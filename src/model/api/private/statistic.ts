@@ -1,20 +1,20 @@
-import { Statistic } from '../shemas';
+import { StatisticsShema } from '../shemas';
 import { baseApi } from './baseApi';
 
 type GetStatisticArg = {
   userId: string;
 };
 
-interface GetStatisticResponse extends Statistic {
+interface GetStatisticResponse extends StatisticsShema {
   id: string;
 }
 
 type UpdateStatisticArg = {
   userId: string;
-  payload: Statistic;
+  payload: StatisticsShema;
 };
 
-interface UpdateStatisticResponse extends Statistic {
+interface UpdateStatisticResponse extends StatisticsShema {
   id: string;
 }
 

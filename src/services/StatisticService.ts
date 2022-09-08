@@ -1,12 +1,18 @@
 import { inject, injectable } from "inversify";
-import { IStatisticsService } from './interfaces/IStatisticService';
-import { statistic as statisticApi } from '../model/api/private';
-import store from '../model/store';
-import { Statistic, StatisticPayload } from "../model/api/shemas";
-import { setStatistics } from "../model/feature/statistics";
+
 import DI_TYPES from "../DI/DITypes";
+
 import IAuthService from "./interfaces/IAuthService";
+import { IStatisticsService } from './interfaces/IStatisticService';
+
 import IAuth from "../core/IAuth";
+import Statistics from "../core/Statistics";
+
+import store from '../model/store';
+import { statistic as statisticApi } from '../model/api/private';
+import { StatisticsShema } from "../model/api/shemas";
+
+export const DAILY_STATS_KEEPING_MARKER = 'keep';
 
 @injectable()
 export default class StatisticService implements IStatisticsService {
@@ -24,10 +30,10 @@ export default class StatisticService implements IStatisticsService {
     try {
       await this.getStatistics();
     } catch {
-      const body: Statistic = {
+      const body: StatisticsShema = {
         optional: {
           daysWords: {
-            '11.08.1994' : {
+            [DAILY_STATS_KEEPING_MARKER] : {
               learnedWordsCount: 0,
                 totalWordsCount: 0,
                 sprintGame: {
@@ -76,7 +82,7 @@ export default class StatisticService implements IStatisticsService {
         ...rest1
       } = optional;
 
-      const updated: StatisticPayload = {
+      const updated: Statistics = {
         daysWords: {
           [currentDay]: {
             learnedWordsCount: 1 + learnedWordsCount, ...rest3
@@ -96,7 +102,7 @@ export default class StatisticService implements IStatisticsService {
         ...rest1
       } = optional;
 
-      const updated: StatisticPayload = {
+      const updated: Statistics = {
         daysWords: {
           [currentDay]: {
             learnedWordsCount: 1,
@@ -213,7 +219,7 @@ export default class StatisticService implements IStatisticsService {
     }
   }
 
-  public async getStatistics(): Promise<Statistic> {
+  public async getStatistics(): Promise<StatisticsShema> {
     const { data } = await store.dispatch(statisticApi.endpoints.getStatistic.initiate({ userId: this.userParams.id }));
     console.log(data);
     if (data === undefined) {
@@ -222,17 +228,15 @@ export default class StatisticService implements IStatisticsService {
     }
 
     const { optional } = data;
-    const tempProps: StatisticPayload = JSON.parse(JSON.stringify(optional));
+    const tempProps: Statistics = JSON.parse(JSON.stringify(optional));
     return { optional: tempProps };
   }
 
-  private async updateStatistics(newBody: Statistic): Promise<boolean> {
+  private async updateStatistics(newBody: StatisticsShema): Promise<boolean> {
     const mutationThunk = statisticApi.endpoints.updateStatistic.initiate({
       userId: this.userParams.id,
       payload: newBody,
     });
-
-    store.dispatch(setStatistics(newBody.optional));
 
     return store.dispatch(mutationThunk).then((response) => !('error' in response));
   }
