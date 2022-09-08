@@ -1,7 +1,4 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import DIContainer from '../../DI/DIContainer';
-import DI_TYPES from '../../DI/DITypes';
-import { ISprintGame } from '../../services/interfaces/ISprintGame';
 import { AppThunk, RootState } from '../store';
 
 type WordId = string;
@@ -168,9 +165,6 @@ export const slice = createSlice({
           code: GameStageVariant.Finished,
           steps: state.stage.steps as CompletedStep[],
         };
-        
-        const gameService = DIContainer.get<ISprintGame>(DI_TYPES.SprintGame);
-        gameService.handleVictory(finishedStage);
 
         return {
           stage: finishedStage,

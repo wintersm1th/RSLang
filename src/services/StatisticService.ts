@@ -50,6 +50,7 @@ export default class StatisticService implements IStatisticsService {
           },
         },
       };
+      
       this.updateStatistics(body);
     }
 
