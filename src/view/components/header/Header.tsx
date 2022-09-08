@@ -9,6 +9,7 @@ import Button from '@mui/material/Button';
 import { Link } from 'react-router-dom';
 import AuthModal from '../AuthModal';
 import UserLink from '../UserLink';
+import { Box, Typography } from '@mui/material';
 
 const Header = () => {
   const { user } = useSelector(selectUserState);
@@ -31,8 +32,11 @@ const Header = () => {
         <Button component={Link} to="/team" color="inherit">
           О команде
         </Button>
-      </Toolbar>
-      {user?.name.length ? <UserLink /> : <AuthModal />}
+        <Typography variant='h6' sx={{ textAlign: 'center', flexGrow: 1 }}>RSLang</Typography>
+        <Box>
+          {user?.name.length ? <UserLink /> : <AuthModal />}
+        </Box>        
+      </Toolbar>      
     </AppBar>
   );
 };
