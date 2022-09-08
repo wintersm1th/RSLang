@@ -4,7 +4,7 @@ import DI_TYPES from '../DI/DITypes';
 
 import IAuthService from './interfaces/IAuthService';
 import store from '../model/store';
-import { selectState as selectGameState, startFromStartScreen, StartScreenStage } from '../model/feature/sprint';
+import { FinishedStage, isGameInFinishedStage, selectState as selectGameState, startFromStartScreen, StartScreenStage } from '../model/feature/sprint';
 import { userWords as userWordsApi } from '../model/api/private';
 import {
   makeOpinionYes,
@@ -22,12 +22,17 @@ import { ISprintGame, StartingParams } from './interfaces/ISprintGame';
 import IAuth from '../core/IAuth';
 import { AggregatedWord } from '../model/api/private/userWords';
 import { pickWords, pickWordsWithValidation } from './utils/randomPicking';
+import { IStatisticsService } from './interfaces/IStatisticService';
+import { calculateStreakLength } from './utils/extractStreak';
 
 @injectable()
 export default class SprintGame implements ISprintGame {
   private userParams: IAuth;
 
-  constructor(@inject(DI_TYPES.AuthService) authService: IAuthService) {
+  constructor(
+    @inject(DI_TYPES.StatisticsService) private statisticsService: IStatisticsService,
+    @inject(DI_TYPES.AuthService) authService: IAuthService
+  ) {
     const auth = authService.getAuth();
 
     if (auth === null) {
@@ -35,6 +40,14 @@ export default class SprintGame implements ISprintGame {
     }
 
     this.userParams = auth;
+  }
+
+  async handleVictory({ steps }: FinishedStage): Promise<void> {
+    const totalCount = steps.length;
+    const learnedCount = steps.filter((step) => step.result).length;
+    const bestStreak = calculateStreakLength(steps, (step) => step.result);
+
+    this.statisticsService.modifyDaySprintStatistic(totalCount, learnedCount, bestStreak);
   }
 
   async startWithParams({ group, page }: StartingParams): Promise<void> {
@@ -57,6 +70,12 @@ export default class SprintGame implements ISprintGame {
 
   haltByTimeout(): void {
     store.dispatch(haltByTimeout());
+
+    const state = selectGameState(store.getState());
+
+    if (isGameInFinishedStage(state)) {
+      this.handleVictory(state.stage);
+    };
   }
 
   makeOpinionYes(): void {

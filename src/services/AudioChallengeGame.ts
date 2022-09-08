@@ -15,26 +15,27 @@ import {
   StartScreenStage,
   createIncompletedStep,
   IncompletedStep,
+  FinishedStage,
+  isGameInFinishedStage,
 } from '../model/feature/audiochallenge';
 
 import DI_TYPES from '../DI/DITypes';
-import IWordsService from './interfaces/IWordsService';
 import IAuthService from './interfaces/IAuthService';
-import { IStatisticsService } from './interfaces/IStatisticService';
 import IAuth from '../core/IAuth';
 
 import { IAudioChallengeGame, StartingParams } from './interfaces/IAudioChallengeGame';
 import { AggregatedWord } from '../model/api/private/userWords';
 import { pickWords, pickWordsWithValidation, shuffle } from './utils/randomPicking';
+import { calculateStreakLength } from './utils/extractStreak';
+import { IStatisticsService } from './interfaces/IStatisticService';
 
 @injectable()
 export default class AudioChallengeGame implements IAudioChallengeGame {
   private userParams: IAuth;
 
   constructor(
-    @inject(DI_TYPES.WordsService) private wordsService: IWordsService,
-    @inject(DI_TYPES.AuthService) authService: IAuthService,
-    @inject(DI_TYPES.StatisticsService) private statisticsService: IStatisticsService
+    @inject(DI_TYPES.StatisticsService) private statisticsService: IStatisticsService,
+    @inject(DI_TYPES.AuthService) authService: IAuthService
   ) {
     const auth = authService.getAuth();
 
@@ -45,15 +46,20 @@ export default class AudioChallengeGame implements IAudioChallengeGame {
     this.userParams = auth;
   }
 
+  async handleVictory({ steps }: FinishedStage): Promise<void> {
+    const totalCount = steps.length;
+    const learnedCount = steps.filter((step) => step.result).length;
+    const bestStreak = calculateStreakLength(steps, (step) => step.result);
+
+    this.statisticsService.modifyDayAudioStatistic(totalCount, learnedCount, bestStreak);
+  }
+
   async startWithParams({ group, page }: StartingParams) {
     const steps = await this.createStepsForParams({ group, page });
     store.dispatch(startGame(steps));
   }
 
   startWithSettingsScreen(): void {
-    console.log(this.statisticsService);
-    console.log(this.wordsService);
-
     store.dispatch(startFromStartScreen({ difficulty: 0, page: 0 }));
   }
 
@@ -92,10 +98,12 @@ export default class AudioChallengeGame implements IAudioChallengeGame {
     store.dispatch(destroyGame());
   }
 
-  startForDifficulty(): void {}
-
   selectAnswerVariant(wordId: string) {
     store.dispatch(selectWord(wordId));
+    const state = selectGameState(store.getState());
+    if (isGameInFinishedStage(state)) {
+      this.handleVictory(state.stage);
+    };
   }
 
   private async createStepsForParams({ group, page }: { group: number; page: number }): Promise<IncompletedStep[]> {

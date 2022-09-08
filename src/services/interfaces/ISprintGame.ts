@@ -1,3 +1,5 @@
+import { FinishedStage } from "../../model/feature/sprint";
+
 export type StartingParams = {
   group: number;
   page: number;
@@ -18,4 +20,7 @@ export interface ISprintGame {
   haltByTimeout(): void;
 
   destroy(): void;
+
+  // Прости меня господь за такие решения
+  handleVictory(stageParams: FinishedStage): void;
 }

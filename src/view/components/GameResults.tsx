@@ -73,8 +73,8 @@ const GameResults = ({ results }: GameResultsProps) => {
   return (
     <Box>
       <Typography variant='h5' sx={{borderBottom: '1px solid grey'}}>Игра окончена</Typography>
-      {results.correctAnswers.length && <WordsList title="Верно" color="green" countAnswers={results.correctAnswers.length} words={results.correctAnswers} />}
-      {results.correctAnswers.length && <WordsList title="Неверно" color="red" countAnswers={results.incorrectAnswers.length} words={results.incorrectAnswers} />}
+      {<WordsList title="Верно" color="green" countAnswers={results.correctAnswers.length} words={results.correctAnswers} />}
+      {<WordsList title="Неверно" color="red" countAnswers={results.incorrectAnswers.length} words={results.incorrectAnswers} />}
       <Box display="flex" gap="40px" justifyContent='center' mt={4}>
         <Button component={Link} to={`/games`} variant="outlined">
           К играм

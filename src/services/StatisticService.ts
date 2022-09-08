@@ -6,13 +6,20 @@ import IAuthService from './interfaces/IAuthService';
 import { IStatisticsService } from './interfaces/IStatisticService';
 
 import IAuth from '../core/IAuth';
-import Statistics from '../core/Statistics';
+import Statistics, { DailyGameStatistics } from '../core/Statistics';
 
 import store from '../model/store';
 import { statistic as statisticApi } from '../model/api/private';
 import { StatisticsShema } from '../model/api/shemas';
+import GameType from '../core/GameType';
 
 export const DAILY_STATS_KEEPING_MARKER = 'keep';
+
+const createEmptyGameStatistic = (): DailyGameStatistics => ({
+  learnedWordsCount: 0,
+  totalWordsCount: 0,
+  bestSession: 0,
+})
 
 @injectable()
 export default class StatisticService implements IStatisticsService {
@@ -37,32 +44,13 @@ export default class StatisticService implements IStatisticsService {
             [DAILY_STATS_KEEPING_MARKER]: {
               learnedWordsCount: 0,
               totalWordsCount: 0,
-              sprintGame: {
-                learnedWordsCount: 0,
-                totalWordsCount: 0,
-                bestSession: 0,
-              },
-              audioGame: {
-                learnedWordsCount: 0,
-                totalWordsCount: 0,
-                bestSession: 0,
-              },
+              sprintGame: createEmptyGameStatistic(),
+              audioGame: createEmptyGameStatistic(),
             },
-          },
-          sprintGame: {
-            learnedWordsCount: 0,
-            totalWordsCount: 0,
-            bestSession: 0,
-          },
-          audioGame: {
-            learnedWordsCount: 0,
-            totalWordsCount: 0,
-            bestSession: 0,
           },
         },
       };
-      console.log('new');
-      console.log(body);
+      
       this.updateStatistics(body);
     }
 
@@ -70,16 +58,16 @@ export default class StatisticService implements IStatisticsService {
   }
 
   async incrementLearnedWordsForDay(): Promise<boolean> {
-    const { optional } = await this.getStatistics();
+    const oldStatistics = await this.getStatistics();
     const currentDay = new Date().toLocaleDateString();
-    if (currentDay in optional.daysWords) {
+    if (currentDay in oldStatistics.daysWords) {
       const {
         daysWords: {
           [currentDay]: { learnedWordsCount, ...rest3 },
           ...rest2
         },
         ...rest1
-      } = optional;
+      } = oldStatistics;
 
       const updated: Statistics = {
         daysWords: {
@@ -97,15 +85,15 @@ export default class StatisticService implements IStatisticsService {
 
       return this.updateStatistics(updatedBody);
     } else {
-      const { daysWords, ...rest1 } = optional;
+      const { daysWords, ...rest1 } = oldStatistics;
 
       const updated: Statistics = {
         daysWords: {
           [currentDay]: {
             learnedWordsCount: 1,
-            audioGame: { learnedWordsCount: 0, totalWordsCount: 0, bestSession: 0 },
-            sprintGame: { learnedWordsCount: 0, totalWordsCount: 0, bestSession: 0 },
             totalWordsCount: 0,
+            audioGame: createEmptyGameStatistic(),
+            sprintGame: createEmptyGameStatistic(),
           },
           ...daysWords,
         },
@@ -120,27 +108,25 @@ export default class StatisticService implements IStatisticsService {
   }
 
   async modifyDaySprintStatistic(wordsCount: number, positiveCount: number, bestSeries: number): Promise<boolean> {
-    return this.modifyGameStatistic('sprintGame', wordsCount, positiveCount, bestSeries);
+    return this.modifyGameStatistic(GameType.Sprint, wordsCount, positiveCount, bestSeries);
   }
 
   async modifyDayAudioStatistic(wordsCount: number, positiveCount: number, bestSeries: number): Promise<boolean> {
-    return this.modifyGameStatistic('audioGame', wordsCount, positiveCount, bestSeries);
+    return this.modifyGameStatistic(GameType.AudioChallenge, wordsCount, positiveCount, bestSeries);
   }
 
   private async modifyGameStatistic(
-    gameKey: 'sprintGame' | 'audioGame',
+    gameKey: GameType,
     wordsCount: number,
     positiveCount: number,
     bestSeries: number
   ) {
-    const { optional } = await this.getStatistics();
+    const oldStatistics = await this.getStatistics();
     const currentDay = new Date().toLocaleDateString();
-    const isSprint = (value: 'sprintGame' | 'audioGame'): value is 'sprintGame' => value === 'sprintGame';
-    const { daysWords: dailyStats, ...rest1 } = optional;
+    const isSprint = (value: GameType): value is GameType.Sprint => value === GameType.Sprint;
+    const { daysWords: dailyStats, ...rest1 } = oldStatistics;
 
     if (currentDay in dailyStats) {
-      console.log('Update for day');
-
       const {
         [currentDay]: { sprintGame: oldSprintStats, audioGame: oldAudioStats, ...dayRestStat },
         ...daysRest
@@ -151,8 +137,6 @@ export default class StatisticService implements IStatisticsService {
         totalWordsCount,
         bestSession: oldBestSeries,
       } = isSprint(gameKey) ? oldSprintStats : oldAudioStats;
-
-      console.log('Actual values', learnedWordsCount, totalWordsCount, oldBestSeries);
 
       const updatedBody = {
         daysWords: {
@@ -180,7 +164,7 @@ export default class StatisticService implements IStatisticsService {
         },
         ...rest1,
       };
-      console.log('updated body', updatedBody);
+
       return this.updateStatistics({ optional: updatedBody });
     } else {
       const updatedBody = {
@@ -215,17 +199,15 @@ export default class StatisticService implements IStatisticsService {
     }
   }
 
-  public async getStatistics(): Promise<StatisticsShema> {
+  public async getStatistics(): Promise<Statistics> {
     const { data } = await store.dispatch(statisticApi.endpoints.getStatistic.initiate({ userId: this.userParams.id }));
-    console.log(data);
     if (data === undefined) {
-      console.log('error');
       throw Error('Undefined behavior');
     }
 
     const { optional } = data;
-    const tempProps: Statistics = JSON.parse(JSON.stringify(optional));
-    return { optional: tempProps };
+
+    return JSON.parse(JSON.stringify(optional));
   }
 
   private async updateStatistics(newBody: StatisticsShema): Promise<boolean> {
