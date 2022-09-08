@@ -18,9 +18,7 @@ import {
 } from '../model/feature/audiochallenge';
 
 import DI_TYPES from '../DI/DITypes';
-import IWordsService from './interfaces/IWordsService';
 import IAuthService from './interfaces/IAuthService';
-import { IStatisticsService } from './interfaces/IStatisticService';
 import IAuth from '../core/IAuth';
 
 import { IAudioChallengeGame, StartingParams } from './interfaces/IAudioChallengeGame';
@@ -32,9 +30,7 @@ export default class AudioChallengeGame implements IAudioChallengeGame {
   private userParams: IAuth;
 
   constructor(
-    @inject(DI_TYPES.WordsService) private wordsService: IWordsService,
-    @inject(DI_TYPES.AuthService) authService: IAuthService,
-    @inject(DI_TYPES.StatisticsService) private statisticsService: IStatisticsService
+    @inject(DI_TYPES.AuthService) authService: IAuthService
   ) {
     const auth = authService.getAuth();
 
@@ -51,9 +47,6 @@ export default class AudioChallengeGame implements IAudioChallengeGame {
   }
 
   startWithSettingsScreen(): void {
-    console.log(this.statisticsService);
-    console.log(this.wordsService);
-
     store.dispatch(startFromStartScreen({ difficulty: 0, page: 0 }));
   }
 
@@ -91,8 +84,6 @@ export default class AudioChallengeGame implements IAudioChallengeGame {
   destroy() {
     store.dispatch(destroyGame());
   }
-
-  startForDifficulty(): void {}
 
   selectAnswerVariant(wordId: string) {
     store.dispatch(selectWord(wordId));
