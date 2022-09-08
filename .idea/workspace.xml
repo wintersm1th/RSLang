@@ -6,6 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="c5829f39-023a-486e-8f69-cbf80c083344" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/view/pages/Statistics/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/pages/Statistics/index.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -59,9 +61,6 @@
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
-  </component>
-  <component name="ProblemsViewState">
-    <option name="selectedIndex" value="1" />
   </component>
   <component name="ProjectId" id="2Da9gJB57HljVn35gQmvnqpKhpf" />
   <component name="ProjectViewState">
@@ -146,7 +145,7 @@
       <workItem from="1662219654957" duration="2805000" />
       <workItem from="1662487259833" duration="563000" />
       <workItem from="1662556223359" duration="13623000" />
-      <workItem from="1662638900980" duration="2139000" />
+      <workItem from="1662638900980" duration="5441000" />
     </task>
     <servers />
   </component>

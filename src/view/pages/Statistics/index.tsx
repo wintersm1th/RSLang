@@ -6,6 +6,25 @@ import { selectState as selectAuthParams } from '../../../model/feature/auth';
 import { useSelector } from 'react-redux';
 import { statistic as statApi } from '../../../model/api/private';
 import { StatisticPayload } from "../../../model/api/shemas";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+import { Bar } from 'react-chartjs-2';
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 
 function getCorrectAnswerPercent(learnedWords: number, totalWords: number): number {
@@ -14,20 +33,6 @@ function getCorrectAnswerPercent(learnedWords: number, totalWords: number): numb
   }
   return Math.ceil(learnedWords * 100 / totalWords);
 }
-
-// function getTotalStats(stats: StatisticPayload) {
-//   let totalLearned = 0;
-//   let totalWords = 0;
-//   Object.keys(stats.daysWords).forEach(function(key) {
-//     const currentDay = stats.daysWords[key];
-//     const audioGame = currentDay['audioGame'];
-//     const sprintGame = currentDay['sprintGame'];
-//     totalLearned = audioGame.learnedWordsCount + sprintGame.learnedWordsCount + currentDay.learnedWordsCount;
-//     totalWords = audioGame.totalWordsCount + sprintGame.totalWordsCount + currentDay.totalWordsCount;;
-//   });
-//
-//   return {totalLearned: totalLearned, totalWords: totalWords, totalPercent: getCorrectAnswerPercent(totalLearned, totalWords)}
-// }
 
 function getDayStats(stats: StatisticPayload | undefined, day: string) {
   if (!stats) {
@@ -40,7 +45,18 @@ function getDayStats(stats: StatisticPayload | undefined, day: string) {
   const sprintGame = currentDay['sprintGame'];
   totalLearned = audioGame.learnedWordsCount + sprintGame.learnedWordsCount + currentDay.learnedWordsCount;
   totalWords = audioGame.totalWordsCount + sprintGame.totalWordsCount + currentDay.totalWordsCount;
+
+  console.log({totalLearned: totalLearned, totalWords: totalWords, totalPercent: getCorrectAnswerPercent(totalLearned, totalWords)});
   return {totalLearned: totalLearned, totalWords: totalWords, totalPercent: getCorrectAnswerPercent(totalLearned, totalWords)}
+}
+
+interface IWordDays {
+  [p: string]: {
+    learnedWordsCount: number,
+    totalWordsCount: number,
+    sprintGame: { learnedWordsCount: number, totalWordsCount: number, bestSession: number },
+    audioGame: { learnedWordsCount: number, totalWordsCount: number, bestSession: number }
+  }
 }
 
 const Statistics = ({ userId }: {userId: string} ) => {
@@ -57,8 +73,38 @@ const Statistics = ({ userId }: {userId: string} ) => {
     currentDayStats = (currentDay in stats.optional.daysWords) ? stats.optional.daysWords[currentDay] : currentDayStats;
   }
 
-  //const totalStats = getTotalStats(stats.optional); // если доберешься до графиков
   const todayStats = getDayStats(stats?.optional, currentDay);
+  const daysWords = stats?.optional?.daysWords as IWordDays ?? {};
+  const labels = Object.keys(daysWords);
+
+  const data = {
+    labels,
+    datasets: [
+      {
+        label: 'Количество новых слов за каждый день',
+        data: labels.map((day) => getDayStats(stats?.optional, day).totalLearned),
+        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+      },
+      {
+        label: 'Увеличение количества изученных слов за весь период обучения',
+        data: labels.map((day) => getDayStats(stats?.optional, day).totalWords),
+        backgroundColor: 'rgba(53, 162, 235, 0.5)',
+      },
+    ],
+  };
+
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top' as const,
+      },
+      title: {
+        display: true,
+        text: 'Два графика сумарной статистики по дням за все время',
+      },
+    },
+  };
 
   return (
     <Container className="container-stat">
@@ -96,20 +142,11 @@ const Statistics = ({ userId }: {userId: string} ) => {
           </Box>
 
           <Box className="stat-all-time" sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-          <Typography margin="30px auto" variant="h4">
-            Статистика за все время
-          </Typography>
-          <Box>
-            <Typography margin="30px auto" variant="h5">
-              Количество новых слов за каждый день
+            <Typography margin="30px auto" variant="h4">
+              Статистика за все время
             </Typography>
+            <Bar options={options} data={data} />
           </Box>
-          <Box>
-            <Typography margin="30px auto" variant="h5">
-              Увеличение количества изученных слов за весь период обучения
-            </Typography>
-          </Box>
-        </Box>
         </>}
       </Box>
     </Container>
@@ -120,8 +157,6 @@ const StatisticsWrapper = () => {
   const { user } = useSelector(selectAuthParams);
 
   const isPageForbidden = user === null;
-
-
 
   return (
     <>
