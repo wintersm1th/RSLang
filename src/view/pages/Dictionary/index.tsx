@@ -24,7 +24,7 @@ import { selectState as selectDictionaryState } from '../../../model/feature/dic
 import { words as wordsApi } from '../../../model/api/public';
 import { userWords as userWordsApi } from '../../../model/api/private';
 import { selectState as selectAuthState } from '../../../model/feature/auth';
-import { GetUserWordResponse } from '../../../model/api/private/userWords';
+import { GetUserWordResponse } from "../../../model/api/private/userWords";
 
 import IWord from '../../../core/IWord';
 
@@ -81,8 +81,14 @@ const Main = () => {
     window.scrollTo(0, 0);
   }, [words]);
 
+  const calculatePageLearned = (wordsMap: WordMapping): boolean => {
+    return Object.entries(wordsMap).filter((word) => word[1].params?.difficulty === 'LEARNED').length === 20;
+  }
+  console.log(wordsParams);
+  const isPageLearned = (wordsParams) ? calculatePageLearned(wordsMap) : false;
+
   return (
-    <Container>
+    <Container sx={{ backgroundColor: isPageLearned ? "#9c27b0" : undefined }}>
       <Paper component={'div'} sx={{ padding: 5 }}>
         <Box display="flex" gap="20px">
           <Button component={Link} to={`/games/sprint/${group}/${page}`} variant="outlined">
@@ -117,16 +123,18 @@ const Main = () => {
             />
           ))}
         </RadioGroup>
-        <Grid container spacing={5} marginBottom="30px">
-          {Object.entries(wordsMap).map(([wordId, { word, params }]) => (
-            <Grid item xs={4} key={wordId}>
-              <WordCard word={word} params={params} hideButtons={false} />
-            </Grid>
-          ))}
-        </Grid>
+        <Box>
+          <Grid container spacing={5} marginBottom="30px" >
+            {Object.entries(wordsMap).map(([wordId, { word, params }]) => (
+              <Grid item xs={4} key={wordId} >
+                <WordCard word={word} params={params} hideButtons={false} />
+              </Grid>
+            ))}
+          </Grid>
+        </Box>
 
-        <Box display="flex" justifyContent="center">
-          <Pagination count={29} page={page} onChange={(_e, newPage) => setPageNumber(newPage)} />
+        <Box display="flex" justifyContent="center" >
+          <Pagination count={29} color={ isPageLearned ? "secondary" : 'standard' } page={page} onChange={(_e, newPage) => setPageNumber(newPage)} />
         </Box>
       </Paper>
     </Container>
