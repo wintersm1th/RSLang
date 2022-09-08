@@ -16,6 +16,7 @@ import {
   createIncompletedStep,
   IncompletedStep,
   FinishedStage,
+  isGameInFinishedStage,
 } from '../model/feature/audiochallenge';
 
 import DI_TYPES from '../DI/DITypes';
@@ -99,6 +100,10 @@ export default class AudioChallengeGame implements IAudioChallengeGame {
 
   selectAnswerVariant(wordId: string) {
     store.dispatch(selectWord(wordId));
+    const state = selectGameState(store.getState());
+    if (isGameInFinishedStage(state)) {
+      this.handleVictory(state.stage);
+    };
   }
 
   private async createStepsForParams({ group, page }: { group: number; page: number }): Promise<IncompletedStep[]> {

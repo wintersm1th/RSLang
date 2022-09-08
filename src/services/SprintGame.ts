@@ -4,7 +4,7 @@ import DI_TYPES from '../DI/DITypes';
 
 import IAuthService from './interfaces/IAuthService';
 import store from '../model/store';
-import { FinishedStage, selectState as selectGameState, startFromStartScreen, StartScreenStage } from '../model/feature/sprint';
+import { FinishedStage, isGameInFinishedStage, selectState as selectGameState, startFromStartScreen, StartScreenStage } from '../model/feature/sprint';
 import { userWords as userWordsApi } from '../model/api/private';
 import {
   makeOpinionYes,
@@ -70,6 +70,12 @@ export default class SprintGame implements ISprintGame {
 
   haltByTimeout(): void {
     store.dispatch(haltByTimeout());
+
+    const state = selectGameState(store.getState());
+
+    if (isGameInFinishedStage(state)) {
+      this.handleVictory(state.stage);
+    };
   }
 
   makeOpinionYes(): void {
