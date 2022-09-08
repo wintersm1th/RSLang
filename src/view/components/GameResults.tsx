@@ -53,11 +53,13 @@ const WordsList = ({ title, words }: WordsListProps) => {
   )
 }
 
+export type Results = {
+  correctAnswers: string[],
+  incorrectAnswers: string[],
+}
+
 type GameResultsProps = {
-  results: {
-    correctAnswers: string[],
-    incorrectAnswers: string[],
-  },
+  results: Results
 }
 
 const GameResults = ({ results }: GameResultsProps) => {  

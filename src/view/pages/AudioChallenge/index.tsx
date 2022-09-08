@@ -22,15 +22,21 @@ import {
   isGameInStartScreenStage,
   isGameInRunningStage,
   isGameInFinishedStage,
-  FinishedStage,
+  CompletedStep,
 } from '../../../model/feature/audiochallenge';
 
 import StartScreen from '../../components/GameStartScreen';
 import Game from './Game';
-import GameResults from './GameResults';
+import GameResults, { Results } from '../../components/GameResults';
 
-const prepareResults = ({ steps }: FinishedStage) => {
+const prepareResults = (steps: CompletedStep[]): Results => {
+  const correctAnswers = steps.filter((step) => step.result).map((step) => step.answer);
+  const incorrectAnswers = steps.filter((step) => !step.result).map((step) => step.answer);
 
+  return {
+    correctAnswers,
+    incorrectAnswers
+  }
 }
 
 const AudioChallenge = () => {
@@ -65,7 +71,7 @@ const AudioChallenge = () => {
               />
             }
             {isGameInRunningStage(gameState) && <Game steps={gameState.stage.steps} currentStep={gameState.stage.currentStep} />}
-            {isGameInFinishedStage(gameState) && <GameResults results={gameState.stage} />}
+            {isGameInFinishedStage(gameState) && <GameResults results={prepareResults(gameState.stage.steps)} />}
           </Box>
         </Container>
       </Box>
