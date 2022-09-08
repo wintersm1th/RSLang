@@ -68,8 +68,8 @@ type GameResultsProps = {
 const GameResults = ({ results }: GameResultsProps) => {
   return (
     <Box>
-      {results.correctAnswers.length && <WordsList title="Верно" words={results.correctAnswers} />}
-      {results.correctAnswers.length && <WordsList title="Неверно" words={results.incorrectAnswers} />}
+      {<WordsList title="Верно" words={results.correctAnswers} />}
+      {<WordsList title="Неверно" words={results.incorrectAnswers} />}
     </Box>
   );
 };
