@@ -23,7 +23,6 @@ import { LOCAL_STORAGE_AUTH_KEY } from '../core/constants';
 
 @injectable()
 export default class AuthService implements IAuthService {
-
   async authorize({ email, password }: AuthorizeParams): Promise<boolean> {
     const result = authApi.endpoints.signin.initiate({ email, password });
     const sub = store.dispatch(result);

@@ -1,8 +1,8 @@
 export function shuffle<T>(target: T[]): void {
   for (let i = 0; i < target.length; i++) {
-    const randomPosition = Math.floor((Math.random() * target.length));
+    const randomPosition = Math.floor(Math.random() * target.length);
     [target[i], target[randomPosition]] = [target[randomPosition], target[i]];
-  }  
+  }
 }
 
 export function pickWords<T>(sourceWords: T[], count: number): T[] {
@@ -10,9 +10,11 @@ export function pickWords<T>(sourceWords: T[], count: number): T[] {
     throw Error('Insufficient amount of source items');
   }
 
-  const indicies = Array(sourceWords.length).fill(0).map((_, ind) => ind);
+  const indicies = Array(sourceWords.length)
+    .fill(0)
+    .map((_, ind) => ind);
   shuffle(indicies);
-  
+
   const result: T[] = [];
 
   for (let i = 0; i < count; i++) {
@@ -23,9 +25,11 @@ export function pickWords<T>(sourceWords: T[], count: number): T[] {
 }
 
 export function pickWordsWithValidation<T>(sourceWords: T[], count: number, isValid: (word: T) => boolean): T[] {
-  const indicies = Array(sourceWords.length).fill(0).map((_, ind) => ind);
+  const indicies = Array(sourceWords.length)
+    .fill(0)
+    .map((_, ind) => ind);
   shuffle(indicies);
-  
+
   let position = 0;
   let pickedCount = 0;
 

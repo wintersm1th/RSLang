@@ -76,9 +76,8 @@ export type GetHardWordsArg = {
   group: number;
 };
 
-
 export type AggregatedWord = {
-  id: string,
+  id: string;
   group: number;
   page: number;
   word: string;
@@ -161,8 +160,8 @@ export const userWords = baseApi.injectEndpoints({
     }),
 
     getAggregatedWordsUpToPage: build.query<AggregatedWord[], GetUnlearnedWordsArg>({
-      transformResponse(baseResult: [{ paginatedResults: (AggregatedWord & { _id: string})[] } ], _meta, _arg) {
-        return baseResult[0].paginatedResults.map(({ _id: id, ...rest}) => ({...rest, id}));
+      transformResponse(baseResult: [{ paginatedResults: (AggregatedWord & { _id: string })[] }], _meta, _arg) {
+        return baseResult[0].paginatedResults.map(({ _id: id, ...rest }) => ({ ...rest, id }));
       },
       query: ({ userId, group, page }) => ({
         url: `/users/${userId}/aggregatedWords`,
@@ -176,8 +175,8 @@ export const userWords = baseApi.injectEndpoints({
     }),
 
     getAggregatedHardWords: build.query<AggregatedWord[], GetHardWordsArg>({
-      transformResponse(baseResult: [{ paginatedResults: (AggregatedWord & { _id: string})[] } ], _meta, _arg) {
-        return baseResult[0].paginatedResults.map(({ _id: id, ...rest}) => ({...rest, id}));
+      transformResponse(baseResult: [{ paginatedResults: (AggregatedWord & { _id: string })[] }], _meta, _arg) {
+        return baseResult[0].paginatedResults.map(({ _id: id, ...rest }) => ({ ...rest, id }));
       },
       query: ({ userId, group }) => ({
         url: `/users/${userId}/aggregatedWords`,
@@ -191,8 +190,8 @@ export const userWords = baseApi.injectEndpoints({
     }),
 
     getUnlearnedWordsForPage: build.query<AggregatedWord[], GetUnlearnedWordsArg>({
-      transformResponse(baseResult: [{ paginatedResults: (AggregatedWord & { _id: string})[] } ], _meta, _arg) {
-        return baseResult[0].paginatedResults.map(({ _id: id, ...rest}) => ({...rest, id}));
+      transformResponse(baseResult: [{ paginatedResults: (AggregatedWord & { _id: string })[] }], _meta, _arg) {
+        return baseResult[0].paginatedResults.map(({ _id: id, ...rest }) => ({ ...rest, id }));
       },
       query: ({ userId, group, page }) => ({
         url: `/users/${userId}/aggregatedWords`,
@@ -200,7 +199,7 @@ export const userWords = baseApi.injectEndpoints({
           group,
           page: 0,
           wordsPerPage: 60000,
-          filter: JSON.stringify({ $and: [{ page: { $eq: page } }, { 'userWord.difficult': { $ne: 'LEARNED' }}]}),
+          filter: JSON.stringify({ $and: [{ page: { $eq: page } }, { 'userWord.difficult': { $ne: 'LEARNED' } }] }),
         },
       }),
     }),

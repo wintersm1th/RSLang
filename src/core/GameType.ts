@@ -1,6 +1,6 @@
 enum GameType {
   Sprint = 'sprintGame',
-  AudioChallenge = 'audioGame'
+  AudioChallenge = 'audioGame',
 }
 
 export default GameType;

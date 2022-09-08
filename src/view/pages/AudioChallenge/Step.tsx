@@ -17,46 +17,42 @@ import DI_TYPES from '../../../DI/DITypes';
 type VariantButtonProps = {
   word: IWord;
   clickHandler: (wordId: string) => void;
-}
+};
 
 const VariantButton = ({ word, clickHandler }: VariantButtonProps) => {
   return (
     <Button variant="contained" onClick={() => clickHandler(word.id)}>
       {word.wordTranslate}
     </Button>
-  )
-}
+  );
+};
 type StepProps = {
   rightAnswer: string;
   variantsIds: [string, string, string, string];
-}
+};
 
 const Step = ({ rightAnswer, variantsIds }: StepProps) => {
-  const { data: word } =  wordsApi.useReadWordQuery({ wordId: rightAnswer });
-  
-  const [
-    { data: wordVariant0 },
-    { data: wordVariant1 },
-    { data: wordVariant2 },
-    { data: wordVariant3 }
-  ] = [
+  const { data: word } = wordsApi.useReadWordQuery({ wordId: rightAnswer });
+
+  const [{ data: wordVariant0 }, { data: wordVariant1 }, { data: wordVariant2 }, { data: wordVariant3 }] = [
     wordsApi.useReadWordQuery({ wordId: variantsIds[0] }),
     wordsApi.useReadWordQuery({ wordId: variantsIds[1] }),
     wordsApi.useReadWordQuery({ wordId: variantsIds[2] }),
-    wordsApi.useReadWordQuery({ wordId: variantsIds[3] })
+    wordsApi.useReadWordQuery({ wordId: variantsIds[3] }),
   ];
 
   const gameService: IAudioChallengeGame = DIContainer.get(DI_TYPES.AudioChallengeGame);
 
   const variantSelectionHandler = (wordId: string) => {
     gameService.selectAnswerVariant(wordId);
-  }
+  };
 
   return (
     <Box>
-      { !word || !wordVariant0 || !wordVariant1 || !wordVariant2 || !wordVariant3
-        ? <CircularProgress />
-        :<>
+      {!word || !wordVariant0 || !wordVariant1 || !wordVariant2 || !wordVariant3 ? (
+        <CircularProgress />
+      ) : (
+        <>
           <Box display="flex" justifyContent="center" alignItems="center">
             <AudioPlayer tracks={[`${FILES_STORAGE_HOST}/${word.audio}`]} />
           </Box>
@@ -68,9 +64,9 @@ const Step = ({ rightAnswer, variantsIds }: StepProps) => {
             <VariantButton word={wordVariant3} clickHandler={variantSelectionHandler} />
           </Box>
         </>
-      }
-    </Box>   
+      )}
+    </Box>
   );
-}
+};
 
 export default Step;

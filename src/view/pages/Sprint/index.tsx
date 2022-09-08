@@ -9,7 +9,12 @@ import DIContainer from '../../../DI/DIContainer';
 import DI_TYPES from '../../../DI/DITypes';
 
 import { selectState as selectAuthState } from '../../../model/feature/auth';
-import { isGameInFinishedStage, isGameInRunningStage, isGameInStartScreenStage, selectState as selectGameState } from '../../../model/feature/sprint';
+import {
+  isGameInFinishedStage,
+  isGameInRunningStage,
+  isGameInStartScreenStage,
+  selectState as selectGameState,
+} from '../../../model/feature/sprint';
 
 import { ISprintGame } from '../../../services/interfaces/ISprintGame';
 
@@ -29,9 +34,9 @@ const prepareResults = (steps: CompletedStep[]): Results => {
 
   return {
     correctAnswers,
-    incorrectAnswers
+    incorrectAnswers,
   };
-}
+};
 
 const Sprint = () => {
   const gameService: ISprintGame = DIContainer.get(DI_TYPES.SprintGame);
@@ -54,7 +59,7 @@ const Sprint = () => {
     <Box className="game-container">
       <Container sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         <Box className="game-wrapper">
-          { isGameInStartScreenStage(gameState) &&
+          {isGameInStartScreenStage(gameState) && (
             <StartScreen
               group={gameState.stage.group}
               page={gameState.stage.page}
@@ -62,8 +67,10 @@ const Sprint = () => {
               setPage={gameService.selectPage.bind(gameService)}
               startGame={gameService.startGame.bind(gameService)}
             />
-          }
-          {isGameInRunningStage(gameState) && <Game steps={gameState.stage.steps} currentStep={gameState.stage.currentStep} />}
+          )}
+          {isGameInRunningStage(gameState) && (
+            <Game steps={gameState.stage.steps} currentStep={gameState.stage.currentStep} />
+          )}
           {isGameInFinishedStage(gameState) && <GameResults results={prepareResults(gameState.stage.steps)} />}
         </Box>
       </Container>
@@ -73,15 +80,10 @@ const Sprint = () => {
 
 const SprintWrapper = () => {
   const { user } = useSelector(selectAuthState);
-  
+
   return (
-    <>
-      { !user
-        ? <Typography>Вы должны быть авторизированы для просмотра данной страницы</Typography>
-        : <Sprint />
-      }
-    </>
+    <>{!user ? <Typography>Вы должны быть авторизированы для просмотра данной страницы</Typography> : <Sprint />}</>
   );
-}
+};
 
 export default SprintWrapper;

@@ -8,17 +8,16 @@ import Container from '@mui/material/Container';
 
 import WordCard from '../WordCard';
 
-import { Typography } from "@mui/material";
-import { selectState as selectAuth } from "../../../../model/feature/auth";
-import { userWords } from "../../../../model/api/private";
-import RadioGroup from "@mui/material/RadioGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Radio from "@mui/material/Radio";
-import { selectState as selectDictionaryState } from "../../../../model/feature/dictionary";
-import DIContainer from "../../../../DI/DIContainer";
-import IDictionaryService from "../../../../services/interfaces/IDictionaryService";
-import DI_TYPES from "../../../../DI/DITypes";
-
+import { Typography } from '@mui/material';
+import { selectState as selectAuth } from '../../../../model/feature/auth';
+import { userWords } from '../../../../model/api/private';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Radio from '@mui/material/Radio';
+import { selectState as selectDictionaryState } from '../../../../model/feature/dictionary';
+import DIContainer from '../../../../DI/DIContainer';
+import IDictionaryService from '../../../../services/interfaces/IDictionaryService';
+import DI_TYPES from '../../../../DI/DITypes';
 
 type HardWordsProps = {
   userId: string;
@@ -28,9 +27,7 @@ const HardWords = ({ userId }: HardWordsProps) => {
   const dictionaryService = DIContainer.get<IDictionaryService>(DI_TYPES.DictionaryService);
   const { group } = useSelector(selectDictionaryState);
 
-  const { data: words } = userWords.useGetAggregatedHardWordsQuery(
-    { userId: userId, group: group },
-  );
+  const { data: words } = userWords.useGetAggregatedHardWordsQuery({ userId: userId, group: group });
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -53,11 +50,12 @@ const HardWords = ({ userId }: HardWordsProps) => {
           <FormControlLabel value="5" control={<Radio />} label="6" />
         </RadioGroup>
         <Grid container spacing={5} marginBottom="30px">
-          {words && words?.map((word) => (
-            <Grid item xs={4} key={word.id}>
-              <WordCard word={ word } hideButtons={true}/>
-            </Grid>
-          ))}
+          {words &&
+            words?.map((word) => (
+              <Grid item xs={4} key={word.id}>
+                <WordCard word={word} hideButtons={true} />
+              </Grid>
+            ))}
         </Grid>
       </Paper>
       {!words ? <Paper>В данном разделе нет слов</Paper> : ''}

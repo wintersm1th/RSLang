@@ -10,8 +10,8 @@ import { calculatePercentage } from './calculations';
 
 export type StatGamesCardProps = {
   gameTitle: string;
-  statistics: DailyGameStatistics
-}
+  statistics: DailyGameStatistics;
+};
 
 const DailyGameStatistics: FC<StatGamesCardProps> = ({ gameTitle, statistics }) => {
   const percentage = calculatePercentage(statistics.learnedWordsCount, statistics.totalWordsCount);

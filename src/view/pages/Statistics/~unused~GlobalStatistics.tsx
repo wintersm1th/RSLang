@@ -21,6 +21,6 @@ const GlobalStatistics = () => {
       </Box>
     </Box>
   );
-}
+};
 
 export default GlobalStatistics;

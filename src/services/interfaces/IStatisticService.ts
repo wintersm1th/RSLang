@@ -1,4 +1,4 @@
-import { StatisticsShema } from "../../model/api/shemas";
+import { StatisticsShema } from '../../model/api/shemas';
 
 export interface IStatisticsService {
   initializeStatistics(): Promise<boolean>;
