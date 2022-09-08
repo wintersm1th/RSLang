@@ -57,9 +57,9 @@ export default class StatisticService implements IStatisticsService {
   }
 
   async incrementLearnedWordsForDay(): Promise<boolean> {
-    const { optional } = await this.getStatistics();
+    const oldStatistics = await this.getStatistics();
     const currentDay = new Date().toLocaleDateString()
-    if (currentDay in optional.daysWords) {
+    if (currentDay in oldStatistics.daysWords) {
       const {
         daysWords: {
           [currentDay]: {
@@ -68,7 +68,7 @@ export default class StatisticService implements IStatisticsService {
           ...rest2
         },
         ...rest1
-      } = optional;
+      } = oldStatistics;
 
       const updated: Statistics = {
         daysWords: {
@@ -88,7 +88,7 @@ export default class StatisticService implements IStatisticsService {
       const {
         daysWords,
         ...rest1
-      } = optional;
+      } = oldStatistics;
 
       const updated: Statistics = {
         daysWords: {
@@ -122,13 +122,13 @@ export default class StatisticService implements IStatisticsService {
 
   private async modifyGameStatistic(gameKey: 'sprintGame' | 'audioGame', wordsCount: number, positiveCount: number, bestSeries: number)
   {
-    const { optional } = await this.getStatistics();
+    const oldStatistics = await this.getStatistics();
     const currentDay = new Date().toLocaleDateString();
     const isSprint = (value: 'sprintGame' | 'audioGame'): value is 'sprintGame' => value === 'sprintGame';
     const {
       daysWords: dailyStats,
       ...rest1
-    } = optional;
+    } = oldStatistics;
 
     if (currentDay in dailyStats) {
       console.log('Update for day');
@@ -172,7 +172,7 @@ export default class StatisticService implements IStatisticsService {
         },
         ...rest1
       };
-      console.log('updated body', updatedBody)
+
       return this.updateStatistics({ optional: updatedBody });
     } else {
       const updatedBody = {
@@ -207,17 +207,15 @@ export default class StatisticService implements IStatisticsService {
     }
   }
 
-  public async getStatistics(): Promise<StatisticsShema> {
+  public async getStatistics(): Promise<Statistics> {
     const { data } = await store.dispatch(statisticApi.endpoints.getStatistic.initiate({ userId: this.userParams.id }));
-    console.log(data);
     if (data === undefined) {
-      console.log('error');
       throw Error('Undefined behavior');
     }
 
     const { optional } = data;
-    const tempProps: Statistics = JSON.parse(JSON.stringify(optional));
-    return { optional: tempProps };
+    
+    return JSON.parse(JSON.stringify(optional));
   }
 
   private async updateStatistics(newBody: StatisticsShema): Promise<boolean> {
