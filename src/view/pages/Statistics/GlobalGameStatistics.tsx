@@ -3,9 +3,7 @@ import React from 'react';
 import { FC } from 'react';
 import GameType from '../../../core/GameType';
 
-import
-  Statistics,
-  {
+import {
     DailyStatistics,
     GlobalGameStatistics
 } from '../../../core/Statistics';
