@@ -19,7 +19,19 @@ import Typography from '@mui/material/Typography';
 
 import StartScreen from '../../components/GameStartScreen';
 import Game from './Game';
-import GameResults from './GameResults';
+import GameResults from './../../components/GameResults';
+import { CompletedStep } from '../../../model/feature/sprint';
+import { Results } from '../../components/GameResults';
+
+const prepareResults = (steps: CompletedStep[]): Results => {
+  const correctAnswers = steps.filter((step) => step.result).map((step) => step.answer);
+  const incorrectAnswers = steps.filter((step) => !step.result).map((step) => step.answer);
+
+  return {
+    correctAnswers,
+    incorrectAnswers
+  };
+}
 
 const Sprint = () => {
   const gameService: ISprintGame = DIContainer.get(DI_TYPES.SprintGame);
@@ -52,7 +64,7 @@ const Sprint = () => {
             />
           }
           {isGameInRunningStage(gameState) && <Game steps={gameState.stage.steps} currentStep={gameState.stage.currentStep} />}
-          {isGameInFinishedStage(gameState) && <GameResults results={gameState.stage} />}
+          {isGameInFinishedStage(gameState) && <GameResults results={prepareResults(gameState.stage.steps)} />}
         </Box>
       </Container>
     </Box>
