@@ -24,6 +24,7 @@ import { AggregatedWord } from '../model/api/private/userWords';
 import { pickWords, pickWordsWithValidation } from './utils/randomPicking';
 import { IStatisticsService } from './interfaces/IStatisticService';
 import { calculateStreakLength } from './utils/extractStreak';
+import IWordsService from './interfaces/IWordsService';
 
 @injectable()
 export default class SprintGame implements ISprintGame {
@@ -31,6 +32,7 @@ export default class SprintGame implements ISprintGame {
 
   constructor(
     @inject(DI_TYPES.StatisticsService) private statisticsService: IStatisticsService,
+    @inject(DI_TYPES.WordsService) private wordsService: IWordsService,
     @inject(DI_TYPES.AuthService) authService: IAuthService
   ) {
     const auth = authService.getAuth();
@@ -43,11 +45,17 @@ export default class SprintGame implements ISprintGame {
   }
 
   async handleVictory({ steps }: FinishedStage): Promise<void> {
+    const succesfulWords = steps.filter((step) => step.result);
     const totalCount = steps.length;
-    const learnedCount = steps.filter((step) => step.result).length;
+    const learnedCount = succesfulWords.length;
     const bestStreak = calculateStreakLength(steps, (step) => step.result);
 
-    this.statisticsService.modifyDaySprintStatistic(totalCount, learnedCount, bestStreak);
+    this.statisticsService.modifyDayAudioStatistic(totalCount, learnedCount, bestStreak);
+
+    succesfulWords.forEach(
+      (word) =>
+        this.wordsService.setWordLearnedMarkWithoutStatsModifying(this.userParams.id, word.answer)
+    );
   }
 
   async startWithParams({ group, page }: StartingParams): Promise<void> {

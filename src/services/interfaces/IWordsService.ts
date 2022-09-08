@@ -24,6 +24,8 @@ interface IWordsService {
   setWordLearnedMark(userId: string, wordId: string): Promise<boolean>;
   removeWordLearnedMark(userId: string, wordId: string): Promise<boolean>;
 
+  setWordLearnedMarkWithoutStatsModifying(userId: string, wordId: string): Promise<boolean>;  
+
   getUnlearnedWordsForPage(params: GetUnlearnedWordsForPage): Promise<AggregatedWord[]>;
   getUnlearnedWordsUpToPage(params: GetUnlearnedWordsUpToPage): Promise<AggregatedWord[]>;
 }

@@ -28,6 +28,7 @@ import { AggregatedWord } from '../model/api/private/userWords';
 import { pickWords, pickWordsWithValidation, shuffle } from './utils/randomPicking';
 import { calculateStreakLength } from './utils/extractStreak';
 import { IStatisticsService } from './interfaces/IStatisticService';
+import IWordsService from './interfaces/IWordsService';
 
 @injectable()
 export default class AudioChallengeGame implements IAudioChallengeGame {
@@ -35,6 +36,7 @@ export default class AudioChallengeGame implements IAudioChallengeGame {
 
   constructor(
     @inject(DI_TYPES.StatisticsService) private statisticsService: IStatisticsService,
+    @inject(DI_TYPES.WordsService) private wordsService: IWordsService,
     @inject(DI_TYPES.AuthService) authService: IAuthService
   ) {
     const auth = authService.getAuth();
@@ -47,11 +49,17 @@ export default class AudioChallengeGame implements IAudioChallengeGame {
   }
 
   async handleVictory({ steps }: FinishedStage): Promise<void> {
+    const succesfulWords = steps.filter((step) => step.result);
     const totalCount = steps.length;
-    const learnedCount = steps.filter((step) => step.result).length;
+    const learnedCount = succesfulWords.length;
     const bestStreak = calculateStreakLength(steps, (step) => step.result);
 
     this.statisticsService.modifyDayAudioStatistic(totalCount, learnedCount, bestStreak);
+
+    succesfulWords.forEach(
+      (word) =>
+        this.wordsService.setWordLearnedMarkWithoutStatsModifying(this.userParams.id, word.answer)
+    );
   }
 
   async startWithParams({ group, page }: StartingParams) {
