@@ -50,8 +50,6 @@ export default class StatisticService implements IStatisticsService {
           }
         }
       };
-      console.log('new');
-      console.log(body);
       this.updateStatistics(body);
     }
 
