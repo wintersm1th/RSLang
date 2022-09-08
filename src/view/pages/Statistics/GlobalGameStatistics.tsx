@@ -36,7 +36,7 @@ const GlobalGameStatistics: FC<GlobalGameStatisticsProps> = ({ game, statistics 
 
   return (
     <Card sx={{ minWidth: 500, margin: 2 }}>
-      <CardContent sx={{ display: 'flex', flexDirection: 'column' }}>
+      <CardContent sx={{ display: "flex", flexDirection: "column" }}>
         <Typography margin="10px auto" variant="h5">
           Статистика по игре "{nameOfGame(game)}"
         </Typography>

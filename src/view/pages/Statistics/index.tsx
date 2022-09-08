@@ -12,6 +12,7 @@ import { Box, Container, Typography } from '@mui/material';
 import CurrentDayStatistics from './CurrentDayStatistics';
 import GlobalGameStatistics from './GlobalGameStatistics';
 import GameType from '../../../core/GameType';
+import GlobalGraphStatistics from "./GlobalGraphStatistics";
 
 const Statistics = ({ userId }: { userId: string }) => {
   const { data: stats } = statApi.useGetStatisticQuery({ userId });
@@ -34,6 +35,7 @@ const Statistics = ({ userId }: { userId: string }) => {
           </Typography>
           {stats && <GlobalGameStatistics game={GameType.AudioChallenge} statistics={stats.optional.daysWords} />}
           {stats && <GlobalGameStatistics game={GameType.Sprint} statistics={stats.optional.daysWords} />}
+          {stats && <GlobalGraphStatistics statistics={stats.optional.daysWords} />}
         </Box>
       </Box>
     </Container>
