@@ -6,13 +6,20 @@ import IAuthService from './interfaces/IAuthService';
 import { IStatisticsService } from './interfaces/IStatisticService';
 
 import IAuth from '../core/IAuth';
-import Statistics from '../core/Statistics';
+import Statistics, { DailyGameStatistics } from '../core/Statistics';
 
 import store from '../model/store';
 import { statistic as statisticApi } from '../model/api/private';
 import { StatisticsShema } from '../model/api/shemas';
+import GameType from '../core/GameType';
 
 export const DAILY_STATS_KEEPING_MARKER = 'keep';
+
+const createEmptyGameStatistic = (): DailyGameStatistics => ({
+  learnedWordsCount: 0,
+  totalWordsCount: 0,
+  bestSession: 0,
+})
 
 @injectable()
 export default class StatisticService implements IStatisticsService {
@@ -37,16 +44,8 @@ export default class StatisticService implements IStatisticsService {
             [DAILY_STATS_KEEPING_MARKER]: {
               learnedWordsCount: 0,
               totalWordsCount: 0,
-              sprintGame: {
-                learnedWordsCount: 0,
-                totalWordsCount: 0,
-                bestSession: 0,
-              },
-              audioGame: {
-                learnedWordsCount: 0,
-                totalWordsCount: 0,
-                bestSession: 0,
-              },
+              sprintGame: createEmptyGameStatistic(),
+              audioGame: createEmptyGameStatistic(),
             },
           },
         },
@@ -91,9 +90,9 @@ export default class StatisticService implements IStatisticsService {
         daysWords: {
           [currentDay]: {
             learnedWordsCount: 1,
-            audioGame: { learnedWordsCount: 0, totalWordsCount: 0, bestSession: 0 },
-            sprintGame: { learnedWordsCount: 0, totalWordsCount: 0, bestSession: 0 },
             totalWordsCount: 0,
+            audioGame: createEmptyGameStatistic(),
+            sprintGame: createEmptyGameStatistic(),
           },
           ...daysWords,
         },
@@ -108,22 +107,22 @@ export default class StatisticService implements IStatisticsService {
   }
 
   async modifyDaySprintStatistic(wordsCount: number, positiveCount: number, bestSeries: number): Promise<boolean> {
-    return this.modifyGameStatistic('sprintGame', wordsCount, positiveCount, bestSeries);
+    return this.modifyGameStatistic(GameType.Sprint, wordsCount, positiveCount, bestSeries);
   }
 
   async modifyDayAudioStatistic(wordsCount: number, positiveCount: number, bestSeries: number): Promise<boolean> {
-    return this.modifyGameStatistic('audioGame', wordsCount, positiveCount, bestSeries);
+    return this.modifyGameStatistic(GameType.AudioChallenge, wordsCount, positiveCount, bestSeries);
   }
 
   private async modifyGameStatistic(
-    gameKey: 'sprintGame' | 'audioGame',
+    gameKey: GameType,
     wordsCount: number,
     positiveCount: number,
     bestSeries: number
   ) {
     const oldStatistics = await this.getStatistics();
     const currentDay = new Date().toLocaleDateString();
-    const isSprint = (value: 'sprintGame' | 'audioGame'): value is 'sprintGame' => value === 'sprintGame';
+    const isSprint = (value: GameType): value is GameType.Sprint => value === GameType.Sprint;
     const { daysWords: dailyStats, ...rest1 } = oldStatistics;
 
     if (currentDay in dailyStats) {
