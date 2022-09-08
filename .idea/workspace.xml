@@ -5,10 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c5829f39-023a-486e-8f69-cbf80c083344" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/view/pages/Statistics/GlobalGraphStatistics.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/services/StatisticService.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/StatisticService.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/services/WordsService.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/WordsService.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/services/interfaces/IStatisticService.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/interfaces/IStatisticService.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/view/pages/Statistics/GlobalGameStatistics.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/pages/Statistics/GlobalGameStatistics.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/view/pages/Statistics/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/pages/Statistics/index.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -29,7 +30,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="new-graphs" />
+        <entry key="$PROJECT_DIR$" value="stats-final" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -73,7 +74,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/model/feature" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/view/pages/Statistics" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="prettierjs.PrettierConfiguration.Package" value="\\wsl$\Ubuntu\home\laiker\RSLang\node_modules\prettier" />
     <property name="ts.external.directory.path" value="\\wsl$\Ubuntu\home\laiker\RSLang\node_modules\typescript\lib" />
@@ -81,11 +82,11 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="\\wsl$\Ubuntu\home\laiker\RSLang\src\view\pages\Statistics" />
       <recent name="\\wsl$\Ubuntu\home\laiker\RSLang\src\model\feature" />
       <recent name="\\wsl$\Ubuntu\home\laiker\RSLang\src\view\pages\Dictionary\HardWords" />
       <recent name="\\wsl$\Ubuntu\home\laiker\RSLang\templates" />
       <recent name="\\wsl$\Ubuntu\home\laiker\RSLang\src\services\interfaces" />
-      <recent name="\\wsl$\Ubuntu\home\laiker\RSLang\src\core" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="\\wsl$\Ubuntu\home\laiker\RSLang" />
