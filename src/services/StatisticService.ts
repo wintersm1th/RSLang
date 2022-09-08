@@ -131,8 +131,6 @@ export default class StatisticService implements IStatisticsService {
     } = oldStatistics;
 
     if (currentDay in dailyStats) {
-      console.log('Update for day');
-
       const {
         [currentDay]: {
           sprintGame: oldSprintStats,
@@ -144,8 +142,6 @@ export default class StatisticService implements IStatisticsService {
 
       const { learnedWordsCount, totalWordsCount, bestSession: oldBestSeries } =
         isSprint(gameKey) ? oldSprintStats : oldAudioStats;
-
-      console.log('Actual values', learnedWordsCount, totalWordsCount, oldBestSeries)
 
       const updatedBody = {
         daysWords: {
