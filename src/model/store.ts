@@ -10,7 +10,6 @@ import { slice as sprintSlice } from './feature/sprint';
 import { baseApi as publicApi } from './api/public';
 import { baseApi as privateApi } from './api/private';
 
-import { slice as statisticsSlice } from './feature/statistics';
 const store = configureStore({
   reducer: {
     [userSlice.name]: userSlice.reducer,
@@ -21,7 +20,6 @@ const store = configureStore({
     [sprintSlice.name]: sprintSlice.reducer,
     [publicApi.reducerPath]: publicApi.reducer,
     [privateApi.reducerPath]: privateApi.reducer,
-    [statisticsSlice.name]: statisticsSlice.reducer,
   },
 
   middleware: (gDM) => {

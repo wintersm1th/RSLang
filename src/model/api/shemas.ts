@@ -1,3 +1,5 @@
+import Statistics from "../../core/Statistics";
+
 export type Word = {
   id: string;
   group: number;
@@ -24,37 +26,8 @@ export type UserWord = {
   optional?: Partial<UserWordPayload>;
 };
 
-export type StatisticPayload = {
-  daysWords: {
-    [key: string]: {
-      learnedWordsCount: number,
-      totalWordsCount: number,
-      sprintGame: {
-        learnedWordsCount: number;
-        totalWordsCount: number;
-        bestSession: number;
-      },
-      audioGame: {
-        learnedWordsCount: number;
-        totalWordsCount: number;
-        bestSession: number;
-      },
-    }
-  },
-  sprintGame: {
-    learnedWordsCount: number;
-    totalWordsCount: number;
-    bestSession: number;
-  },
-  audioGame: {
-    learnedWordsCount: number;
-    totalWordsCount: number;
-    bestSession: number;
-  },
-};
-
-export type Statistic = {
-  optional: StatisticPayload;
+export type StatisticsShema = {
+  optional: Statistics;
 };
 
 export type SettingPayload = {

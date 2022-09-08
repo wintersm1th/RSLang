@@ -1,8 +1,8 @@
-import { Statistic } from "../../model/api/shemas";
+import { StatisticsShema } from "../../model/api/shemas";
 
 export interface IStatisticsService {
   initializeStatistics(): Promise<boolean>;
-  getStatistics(userId: string): Promise<Statistic>;
+  getStatistics(userId: string): Promise<StatisticsShema>;
 
   modifyDaySprintStatistic(wordsCount: number, positiveCount: number, bestSeries: number): Promise<boolean>;
   modifyDayAudioStatistic(wordsCount: number, positiveCount: number, bestSeries: number): Promise<boolean>;

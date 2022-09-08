@@ -2,11 +2,11 @@ import React, { FC } from 'react';
 import { Card, CardContent, Typography } from '@mui/material';
 
 export interface StatWordCardProps {
-  value: number;
+  value: string;
   title: string;
 }
 
-export const StatWordCard: FC<StatWordCardProps> = ({ value, title }) => {
+const StatWordCard: FC<StatWordCardProps> = ({ value, title }) => {
   return (
     <Card sx={{ minWidth: 230, margin: 2 }}>
       <CardContent sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
@@ -16,3 +16,5 @@ export const StatWordCard: FC<StatWordCardProps> = ({ value, title }) => {
     </Card>
   );
 };
+
+export default StatWordCard;
