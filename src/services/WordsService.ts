@@ -21,13 +21,6 @@ export default class WordsService implements IWordsService {
 
   async setWordLearnedMark(userId: string, wordId: string): Promise<boolean> {
     const promise = this.setWordDifficulty(userId, wordId, WordDifficulty.LEARNED);
-
-    promise.then((result) => {
-      if (result === true) {
-        this.statisticService.incrementLearnedWordsCount(userId);
-      }
-    });
-
     return promise;
   }
 
@@ -63,7 +56,7 @@ export default class WordsService implements IWordsService {
     } else if (word.difficulty !== difficulty) {
       if (word.difficulty === WordDifficulty.HARD) {
       } else if (word.difficulty === WordDifficulty.LEARNED) {
-        this.statisticService.decrementLearnedWordsCount(userId);
+        //his.statisticService.decrementLearnedWordsCount(userId);
       }
 
       return this.unsafeUpdateWord(userId, { id: userId, wordId, difficulty });
@@ -85,7 +78,7 @@ export default class WordsService implements IWordsService {
   }
 
   private async unsafeUpdateWord(
-    userId: string,
+    _userId: string,
     {
       id,
       wordId,
@@ -103,7 +96,7 @@ export default class WordsService implements IWordsService {
     });
 
     if (difficulty === WordDifficulty.LEARNED) {
-      this.statisticService.incrementLearnedWordsCount(userId);
+      this.statisticService.incrementLearnedWordsForDay();
     }
 
     return store.dispatch(wordUpdateThunk).then((response) => {
@@ -112,7 +105,7 @@ export default class WordsService implements IWordsService {
   }
 
   private async createUserWord(
-    userId: string,
+    _userId: string,
     { id, wordId, difficulty }: { id: string; wordId: string; difficulty: WordDifficulty }
   ) {
     const createUserWordThunk = userWords.endpoints.createUserWord.initiate({
@@ -122,7 +115,7 @@ export default class WordsService implements IWordsService {
     });
 
     if (difficulty === WordDifficulty.LEARNED) {
-      this.statisticService.incrementLearnedWordsCount(userId);
+      this.statisticService.incrementLearnedWordsForDay();
     }
 
     return store.dispatch(createUserWordThunk).then((response) => {

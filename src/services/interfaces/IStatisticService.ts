@@ -1,10 +1,11 @@
+import { Statistic } from "../../model/api/shemas";
+
 export interface IStatisticsService {
-  initializeStatistics(userId: string): Promise<boolean>;
+  initializeStatistics(): Promise<boolean>;
+  getStatistics(userId: string): Promise<Statistic>;
 
-  incrementLearnedWordsCount(userId: string): Promise<boolean>;
+  modifyDaySprintStatistic(wordsCount: number, positiveCount: number, bestSeries: number): Promise<boolean>;
+  modifyDayAudioStatistic(wordsCount: number, positiveCount: number, bestSeries: number): Promise<boolean>;
 
-  decrementLearnedWordsCount(userId: string): Promise<boolean>;
-
-  getTotalNewWords(): number;
-  getTotalLearnedWords(): number;
+  incrementLearnedWordsForDay(): Promise<boolean>; // Всегда увеличиваем количество изученных слов в дне на +1
 }
