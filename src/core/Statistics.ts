@@ -20,9 +20,7 @@ export type DailyStatistics = {
 type Statistics = {
   daysWords: {
     [key: string]: DailyStatistics
-  },
-  [GameType.Sprint]: GlobalGameStatistics,
-  [GameType.AudioChallenge]: GlobalGameStatistics
+  }
 };
 
 export default Statistics;

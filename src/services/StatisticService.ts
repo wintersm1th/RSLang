@@ -35,29 +35,19 @@ export default class StatisticService implements IStatisticsService {
           daysWords: {
             [DAILY_STATS_KEEPING_MARKER] : {
               learnedWordsCount: 0,
+              totalWordsCount: 0,
+              sprintGame: {
+                learnedWordsCount: 0,
                 totalWordsCount: 0,
-                sprintGame: {
-                  learnedWordsCount: 0,
-                  totalWordsCount: 0,
-                  bestSession: 0,
-                },
-                audioGame: {
-                  learnedWordsCount: 0,
-                  totalWordsCount: 0,
-                  bestSession: 0,
-                },
+                bestSession: 0,
+              },
+              audioGame: {
+                learnedWordsCount: 0,
+                totalWordsCount: 0,
+                bestSession: 0,
+              },
             }
-          },
-          sprintGame: {
-            learnedWordsCount: 0,
-            totalWordsCount: 0,
-            bestSession: 0,
-          },
-          audioGame: {
-            learnedWordsCount: 0,
-            totalWordsCount: 0,
-            bestSession: 0,
-          },
+          }
         }
       };
       console.log('new');
