@@ -11,6 +11,18 @@ import { WordDifficulty } from '../core/WordDifficulty';
 import { AggregatedWord, GetUserWordResponse } from '../model/api/private/userWords';
 import { IStatisticsService } from './interfaces/IStatisticService';
 
+type CreateArgs = {
+  id: string;
+  wordId: string;
+  difficulty: WordDifficulty;
+}
+
+type UpdateArgs = {
+  id: string;
+  wordId: string;
+  difficulty: WordDifficulty;
+}
+
 @injectable()
 export default class WordsService implements IWordsService {
   constructor(@inject(DI_TYPES.StatisticsService) private statisticService: IStatisticsService) {}
@@ -21,6 +33,10 @@ export default class WordsService implements IWordsService {
 
   async setWordLearnedMark(userId: string, wordId: string): Promise<boolean> {
     const promise = this.setWordDifficulty(userId, wordId, WordDifficulty.LEARNED);
+    return promise;
+  }
+  async setWordLearnedMarkWithoutStatsModifying(userId: string, wordId: string): Promise<boolean> {
+    const promise = this.setWordDifficultyWithoutStatsModifying(userId, wordId, WordDifficulty.LEARNED);
     return promise;
   }
 
@@ -46,20 +62,29 @@ export default class WordsService implements IWordsService {
 
   private async setWordDifficulty(userId: string, wordId: string, difficulty: WordDifficulty): Promise<boolean> {
     const word = await this.getUserWord(userId, wordId);
-
     if (word === null) {
-      return this.createUserWord(userId, {
+      return this.createUserWord({
         id: userId,
         wordId,
         difficulty,
       });
     } else if (word.difficulty !== difficulty) {
-      if (word.difficulty === WordDifficulty.HARD) {
-      } else if (word.difficulty === WordDifficulty.LEARNED) {
-        //his.statisticService.decrementLearnedWordsCount(userId);
-      }
+      return this.unsafeUpdateWordWithStatsIncrementing({ id: userId, wordId, difficulty });
+    } else {
+      return false;
+    }
+  }
 
-      return this.unsafeUpdateWord(userId, { id: userId, wordId, difficulty });
+  private async setWordDifficultyWithoutStatsModifying(userId: string, wordId: string, difficulty: WordDifficulty): Promise<boolean> {
+    const word = await this.getUserWord(userId, wordId);
+    if (word === null) {
+      return this.createUserWordWithoutStatsModifying({
+        id: userId,
+        wordId,
+        difficulty,
+      });
+    } else if (word.difficulty !== difficulty) {
+      return this.unsafeUpdateWordWithoutStatsIncrementing({ id: userId, wordId, difficulty });
     } else {
       return false;
     }
@@ -78,16 +103,12 @@ export default class WordsService implements IWordsService {
   }
 
   private async unsafeUpdateWord(
-    _userId: string,
     {
       id,
       wordId,
       difficulty,
-    }: {
-      id: string;
-      wordId: string;
-      difficulty: WordDifficulty;
-    }
+    }: UpdateArgs,
+    withStatsIncrementing: boolean
   ) {
     const wordUpdateThunk = userWords.endpoints.updateUserWord.initiate({
       id,
@@ -95,7 +116,7 @@ export default class WordsService implements IWordsService {
       difficulty,
     });
 
-    if (difficulty === WordDifficulty.LEARNED) {
+    if (withStatsIncrementing && difficulty === WordDifficulty.LEARNED) {
       this.statisticService.incrementLearnedWordsForDay();
     }
 
@@ -104,10 +125,15 @@ export default class WordsService implements IWordsService {
     });
   }
 
-  private async createUserWord(
-    _userId: string,
-    { id, wordId, difficulty }: { id: string; wordId: string; difficulty: WordDifficulty }
-  ) {
+  private async unsafeUpdateWordWithStatsIncrementing(params: UpdateArgs) {
+    return this.unsafeUpdateWord(params, true);
+  }
+
+  private async unsafeUpdateWordWithoutStatsIncrementing(params: UpdateArgs) {
+    return this.unsafeUpdateWord(params, false);
+  }
+
+  private async createUserWord({ id, wordId, difficulty }: CreateArgs) {
     const createUserWordThunk = userWords.endpoints.createUserWord.initiate({
       id,
       wordId,
@@ -117,6 +143,18 @@ export default class WordsService implements IWordsService {
     if (difficulty === WordDifficulty.LEARNED) {
       this.statisticService.incrementLearnedWordsForDay();
     }
+
+    return store.dispatch(createUserWordThunk).then((response) => {
+      return !('error' in response);
+    });
+  }
+
+  private async createUserWordWithoutStatsModifying({ id, wordId, difficulty }: CreateArgs) {
+    const createUserWordThunk = userWords.endpoints.createUserWord.initiate({
+      id,
+      wordId,
+      difficulty,
+    });
 
     return store.dispatch(createUserWordThunk).then((response) => {
       return !('error' in response);
