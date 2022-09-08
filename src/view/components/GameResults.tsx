@@ -9,7 +9,9 @@ import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import AudioPlayer from './AudioPlayer';
+
+const getPath = (entity: string) => `https://react-learnwords-example.herokuapp.com/${entity}`;
 
 type WordProps = {
   wordId: string;
@@ -23,7 +25,9 @@ const Word = ({ wordId }: WordProps) => {
       { word &&
         <>
           <ListItemIcon>
-            <PlayArrowIcon />
+            <AudioPlayer
+              tracks={[getPath(word.audio)]}
+            />
           </ListItemIcon>
           <ListItemText>
             <Typography>{word.word} [{word.transcription}] - {word.wordTranslate}</Typography>            
