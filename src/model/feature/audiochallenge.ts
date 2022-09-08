@@ -19,11 +19,11 @@ const STEP_CODE_COMPLETED = 'COMPLETED';
 const STEP_CODE_INCOMPLETED = 'INCOMPLETED';
 
 export interface IncompletedStep extends StepBase {
-  code: typeof STEP_CODE_INCOMPLETED,
+  code: typeof STEP_CODE_INCOMPLETED;
 }
 
 export interface CompletedStep extends StepBase {
-  code: typeof STEP_CODE_COMPLETED,
+  code: typeof STEP_CODE_COMPLETED;
   result: boolean;
 }
 
@@ -31,13 +31,13 @@ export const createCompletedStep = ({ answer, variants, result }: StepBase & { r
   code: STEP_CODE_COMPLETED,
   answer,
   variants,
-  result
+  result,
 });
 
 export const createIncompletedStep = ({ answer, variants }: StepBase): IncompletedStep => ({
   code: STEP_CODE_INCOMPLETED,
   answer,
-  variants
+  variants,
 });
 
 export type Step = IncompletedStep | CompletedStep;
@@ -152,7 +152,7 @@ export const slice = createSlice({
         variants,
         result: isSuccess,
       });
-      
+
       const updatedSteps = [...state.stage.steps];
       updatedSteps.splice(currentStep, 1, completedStep);
 
@@ -161,9 +161,9 @@ export const slice = createSlice({
           stage: {
             ...state.stage,
             steps: updatedSteps,
-            currentStep: currentStep + 1
-          }
-        }
+            currentStep: currentStep + 1,
+          },
+        };
       } else {
         const finishedStage: FinishedStage = {
           code: GameStageVariant.Finished,

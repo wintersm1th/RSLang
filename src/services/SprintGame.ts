@@ -15,10 +15,10 @@ import {
   startGame,
   haltByTimeout,
   IncompletedStep,
-  createIncompletedStep
+  createIncompletedStep,
 } from '../model/feature/sprint';
 
-import { ISprintGame, StartingParams } from "./interfaces/ISprintGame";
+import { ISprintGame, StartingParams } from './interfaces/ISprintGame';
 import IAuth from '../core/IAuth';
 import { AggregatedWord } from '../model/api/private/userWords';
 import { pickWords, pickWordsWithValidation } from './utils/randomPicking';
@@ -26,10 +26,8 @@ import { pickWords, pickWordsWithValidation } from './utils/randomPicking';
 @injectable()
 export default class SprintGame implements ISprintGame {
   private userParams: IAuth;
-  
-  constructor(
-    @inject(DI_TYPES.AuthService) authService: IAuthService
-  ) {
+
+  constructor(@inject(DI_TYPES.AuthService) authService: IAuthService) {
     const auth = authService.getAuth();
 
     if (auth === null) {
@@ -43,7 +41,7 @@ export default class SprintGame implements ISprintGame {
     const steps = await this.createStepsForParams({ group, page });
     store.dispatch(startGame(steps));
   }
-  
+
   startWithSettingsScreen(): void {
     store.dispatch(startFromStartScreen({ difficulty: 0, page: 0 }));
   }
@@ -81,43 +79,40 @@ export default class SprintGame implements ISprintGame {
     store.dispatch(destroyGame());
   }
 
-  private async createStepsForParams({ group, page }: { group: number, page: number}): Promise<IncompletedStep[]> {
+  private async createStepsForParams({ group, page }: { group: number; page: number }): Promise<IncompletedStep[]> {
     const availableUnlearnedWordsThunk = userWordsApi.endpoints.getUnlearnedWordsForPage.initiate({
       userId: this.userParams.id,
       group,
-      page
+      page,
     });
 
     const availableAsVariantWordsThunk = userWordsApi.endpoints.getAggregatedWordsUpToPage.initiate({
       userId: this.userParams.id,
       group,
-      page
+      page,
     });
 
-    const [
-      { data: availableUnlearnedWords },
-      { data: availableAsVariantWords }
-    ] = await Promise.all([
+    const [{ data: availableUnlearnedWords }, { data: availableAsVariantWords }] = await Promise.all([
       store.dispatch(availableUnlearnedWordsThunk),
-      store.dispatch(availableAsVariantWordsThunk)
+      store.dispatch(availableAsVariantWordsThunk),
     ]);
 
     if (availableUnlearnedWords === undefined || availableAsVariantWords === undefined) {
       throw Error('Cant fetch words for game');
     }
-    
-    const answerWrods = pickWords(availableUnlearnedWords, 10);    
+
+    const answerWrods = pickWords(availableUnlearnedWords, 10);
 
     const steps = answerWrods.map((answer) => {
       const answerId = answer.id;
       const variantValidator = (variant: AggregatedWord) => variant.id !== answerId;
-      const variant: string = pickWordsWithValidation(availableAsVariantWords, 1, variantValidator)
-        .map((variant) => variant.id)
-        [0];
-      
+      const variant: string = pickWordsWithValidation(availableAsVariantWords, 1, variantValidator).map(
+        (variant) => variant.id
+      )[0];
+
       return createIncompletedStep({
         answer: answerId,
-        variant: Math.floor(Math.random() * 2) ? variant : answerId
+        variant: Math.floor(Math.random() * 2) ? variant : answerId,
       });
     });
 

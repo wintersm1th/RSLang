@@ -1,4 +1,4 @@
-import Statistics from "../../core/Statistics";
+import Statistics from '../../core/Statistics';
 
 export type Word = {
   id: string;

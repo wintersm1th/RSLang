@@ -18,26 +18,29 @@ import { Typography } from '@mui/material';
 type StepProps = {
   rightAnswer: string;
   opinion: string;
-}
+};
 
 const Step = ({ rightAnswer, opinion }: StepProps) => {
-  const { data: word } =  wordsApi.useReadWordQuery({ wordId: rightAnswer });
-  const { data: opinionWord } =  wordsApi.useReadWordQuery({ wordId: opinion });
+  const { data: word } = wordsApi.useReadWordQuery({ wordId: rightAnswer });
+  const { data: opinionWord } = wordsApi.useReadWordQuery({ wordId: opinion });
 
   const gameService = DIContainer.get<ISprintGame>(DI_TYPES.SprintGame);
 
   return (
     <Box>
-      { !word || !opinionWord
-        ? <CircularProgress />
-        :<>
+      {!word || !opinionWord ? (
+        <CircularProgress />
+      ) : (
+        <>
           <Box display="flex" justifyContent="center" alignItems="center">
             <AudioPlayer tracks={[`${FILES_STORAGE_HOST}/${word.audio}`]} />
           </Box>
-          <Box className='word'>
-            <Typography variant='subtitle1' className="word-english">{opinionWord.wordTranslate}</Typography>
+          <Box className="word">
+            <Typography variant="subtitle1" className="word-english">
+              {opinionWord.wordTranslate}
+            </Typography>
           </Box>
-          
+
           <Box className="answers-btn">
             <Button variant="contained" color="success" onClick={gameService.makeOpinionYes.bind(gameService)}>
               Верно
@@ -47,9 +50,9 @@ const Step = ({ rightAnswer, opinion }: StepProps) => {
             </Button>
           </Box>
         </>
-      }
-    </Box>   
+      )}
+    </Box>
   );
-}
+};
 
 export default Step;

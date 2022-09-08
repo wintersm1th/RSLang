@@ -63,7 +63,7 @@ const WordCardExtension = ({ wordId, auth: { id: userId }, wordParams }: WordCar
 type WordCardProps = {
   word: IWord;
   params?: GetUserWordResponse;
-  hideButtons: boolean
+  hideButtons: boolean;
 };
 
 const WordCard = ({ word, params, hideButtons }: WordCardProps) => {
@@ -79,9 +79,7 @@ const WordCard = ({ word, params, hideButtons }: WordCardProps) => {
             </Typography>
             <Typography>{word.transcription}</Typography>
           </Box>
-          <AudioPlayer
-            tracks={[getPath(word.audio), getPath(word.audioMeaning), getPath(word.audioExample)]}
-          />
+          <AudioPlayer tracks={[getPath(word.audio), getPath(word.audioMeaning), getPath(word.audioExample)]} />
         </Box>
         <Typography variant="h5" color={'#808080'}>
           {word.wordTranslate}
@@ -105,7 +103,9 @@ const WordCard = ({ word, params, hideButtons }: WordCardProps) => {
           </Box>
         </Box>
       </CardContent>
-      <CardActions>{auth && !hideButtons && <WordCardExtension auth={auth} wordId={word.id} wordParams={params} />}</CardActions>
+      <CardActions>
+        {auth && !hideButtons && <WordCardExtension auth={auth} wordId={word.id} wordParams={params} />}
+      </CardActions>
     </Card>
   );
 };
