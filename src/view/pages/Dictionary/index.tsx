@@ -79,7 +79,7 @@ const Main = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, [words]);  
+  }, [words]);
 
   return (
     <Container>
@@ -91,10 +91,13 @@ const Main = () => {
           <Button component={Link} to={`/games/audiocall/${group}/${page}`} variant="outlined">
             Аудиовызов
           </Button>
-          { user?.id ?
-          <Button component={Link} to={'/dictionary/hardwords'} variant="contained">
-            Сложные слова
-          </Button> : ''}
+          {user?.id ? (
+            <Button component={Link} to={'/dictionary/hardwords'} variant="contained">
+              Сложные слова
+            </Button>
+          ) : (
+            ''
+          )}
         </Box>
         <RadioGroup row value={group} onChange={(_e, value) => setDifficulty(+value)}>
           {groups.map((color, ind) => (

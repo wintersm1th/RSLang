@@ -4,25 +4,25 @@ type GameStatistics = {
   learnedWordsCount: number;
   totalWordsCount: number;
   bestSession: number;
-}
+};
 
 export type DailyGameStatistics = GameStatistics;
 
 export type GlobalGameStatistics = GameStatistics;
 
 export type DailyStatistics = {
-  learnedWordsCount: number,
-  totalWordsCount: number,
-  [GameType.Sprint]: DailyGameStatistics,
-  [GameType.AudioChallenge]: DailyGameStatistics
-}
+  learnedWordsCount: number;
+  totalWordsCount: number;
+  [GameType.Sprint]: DailyGameStatistics;
+  [GameType.AudioChallenge]: DailyGameStatistics;
+};
 
 type Statistics = {
   daysWords: {
-    [key: string]: DailyStatistics
-  },
-  [GameType.Sprint]: GlobalGameStatistics,
-  [GameType.AudioChallenge]: GlobalGameStatistics
+    [key: string]: DailyStatistics;
+  };
+  [GameType.Sprint]: GlobalGameStatistics;
+  [GameType.AudioChallenge]: GlobalGameStatistics;
 };
 
 export default Statistics;

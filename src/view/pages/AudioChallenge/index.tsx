@@ -35,9 +35,9 @@ const prepareResults = (steps: CompletedStep[]): Results => {
 
   return {
     correctAnswers,
-    incorrectAnswers
-  }
-}
+    incorrectAnswers,
+  };
+};
 
 const AudioChallenge = () => {
   const gameService: IAudioChallengeGame = DIContainer.get(DI_TYPES.AudioChallengeGame);
@@ -61,7 +61,7 @@ const AudioChallenge = () => {
       <Box className="game-container">
         <Container sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           <Box className="game-wrapper">
-            {isGameInStartScreenStage(gameState) &&
+            {isGameInStartScreenStage(gameState) && (
               <StartScreen
                 group={gameState.stage.group}
                 page={gameState.stage.page}
@@ -69,8 +69,10 @@ const AudioChallenge = () => {
                 setPage={gameService.setPage.bind(gameService)}
                 startGame={gameService.startGame.bind(gameService)}
               />
-            }
-            {isGameInRunningStage(gameState) && <Game steps={gameState.stage.steps} currentStep={gameState.stage.currentStep} />}
+            )}
+            {isGameInRunningStage(gameState) && (
+              <Game steps={gameState.stage.steps} currentStep={gameState.stage.currentStep} />
+            )}
             {isGameInFinishedStage(gameState) && <GameResults results={prepareResults(gameState.stage.steps)} />}
           </Box>
         </Container>
@@ -81,15 +83,16 @@ const AudioChallenge = () => {
 
 const AudioChallengeWrapper = () => {
   const { user } = useSelector(selectAuthState);
-  
+
   return (
     <>
-      { !user
-        ? <Typography>Вы должны быть авторизированы для просмотра данной страницы</Typography>
-        : <AudioChallenge />
-      }
+      {!user ? (
+        <Typography>Вы должны быть авторизированы для просмотра данной страницы</Typography>
+      ) : (
+        <AudioChallenge />
+      )}
     </>
   );
-}
+};
 
 export default AudioChallengeWrapper;

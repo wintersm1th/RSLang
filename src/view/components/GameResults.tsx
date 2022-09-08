@@ -15,64 +15,63 @@ const getPath = (entity: string) => `https://react-learnwords-example.herokuapp.
 
 type WordProps = {
   wordId: string;
-}
+};
 
 const Word = ({ wordId }: WordProps) => {
   const { data: word } = wordsApi.useReadWordQuery({ wordId });
 
   return (
     <ListItem>
-      { word &&
+      {word && (
         <>
           <ListItemIcon>
-            <AudioPlayer
-              tracks={[getPath(word.audio)]}
-            />
+            <AudioPlayer tracks={[getPath(word.audio)]} />
           </ListItemIcon>
           <ListItemText>
-            <Typography>{word.word} [{word.transcription}] - {word.wordTranslate}</Typography>            
+            <Typography>
+              {word.word} [{word.transcription}] - {word.wordTranslate}
+            </Typography>
           </ListItemText>
         </>
-      }
-      
+      )}
     </ListItem>
   );
-}
+};
 
 type WordsListProps = {
   title: string;
   words: string[];
-}
+};
 
 const WordsList = ({ title, words }: WordsListProps) => {
   return (
     <Box>
       <Typography>{title}</Typography>
-      <List dense >
-        { words.map((wordId) =>
+      <List dense>
+        {words.map((wordId) => (
           <Word key={wordId} wordId={wordId} />
-        )}
+        ))}
       </List>
     </Box>
-  )
-}
+  );
+};
 
 export type Results = {
-  correctAnswers: string[],
-  incorrectAnswers: string[],
-}
+  correctAnswers: string[];
+  incorrectAnswers: string[];
+};
 
 type GameResultsProps = {
-  results: Results
-}
+  results: Results;
+};
 
-const GameResults = ({ results }: GameResultsProps) => {  
+const GameResults = ({ results }: GameResultsProps) => {
   return (
     <Box>
-      { results.correctAnswers.length && <WordsList title='Верно' words={results.correctAnswers} /> }
-      { results.correctAnswers.length && <WordsList title='Неверно' words={results.incorrectAnswers} /> }        
+      {results.correctAnswers.length && <WordsList title="Верно" words={results.correctAnswers} />}
+      {results.correctAnswers.length && <WordsList title="Неверно" words={results.incorrectAnswers} />}
     </Box>
   );
-}
+};
 
 export default GameResults;

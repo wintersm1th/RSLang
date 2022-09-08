@@ -9,9 +9,9 @@ import StepComponent from './Step';
 import StepsStatusBar from './StepsStatusBar';
 
 type GameProps = {
-  steps: Step[],
+  steps: Step[];
   currentStep: number;
-}
+};
 
 const Game = ({ steps, currentStep }: GameProps) => {
   const { answer, variants } = steps[currentStep];
@@ -19,12 +19,14 @@ const Game = ({ steps, currentStep }: GameProps) => {
   return (
     <Box className="word-card">
       <Box className="head">
-        <Typography variant='h4' sx={{ mb: 2 }}>Аудиовызов</Typography>
+        <Typography variant="h4" sx={{ mb: 2 }}>
+          Аудиовызов
+        </Typography>
         <StepsStatusBar steps={steps} />
         <StepComponent rightAnswer={answer} variantsIds={variants} />
       </Box>
     </Box>
-  )
-}
+  );
+};
 
 export default Game;

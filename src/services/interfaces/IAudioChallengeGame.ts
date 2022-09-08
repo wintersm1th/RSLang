@@ -1,7 +1,7 @@
 export type StartingParams = {
   group: number;
   page: number;
-}
+};
 
 export interface IAudioChallengeGame {
   startWithParams(params: StartingParams): void;

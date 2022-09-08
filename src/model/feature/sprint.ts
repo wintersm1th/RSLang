@@ -19,11 +19,11 @@ interface StepBase {
 }
 
 export interface IncompletedStep extends StepBase {
-  code: typeof STEP_CODE_INCOMPLETED,
+  code: typeof STEP_CODE_INCOMPLETED;
 }
 
 export interface CompletedStep extends StepBase {
-  code: typeof STEP_CODE_COMPLETED,
+  code: typeof STEP_CODE_COMPLETED;
   result: boolean;
 }
 
@@ -31,13 +31,13 @@ export const createCompletedStep = ({ answer, variant, result }: StepBase & { re
   code: STEP_CODE_COMPLETED,
   answer,
   variant,
-  result
+  result,
 });
 
 export const createIncompletedStep = ({ answer, variant }: StepBase): IncompletedStep => ({
   code: STEP_CODE_INCOMPLETED,
   answer,
-  variant
+  variant,
 });
 
 export type Step = IncompletedStep | CompletedStep;
@@ -148,7 +148,7 @@ export const slice = createSlice({
         variant,
         result: isSuccess,
       });
-      
+
       const updatedSteps = [...state.stage.steps];
       updatedSteps.splice(currentStep, 1, completedStep);
 
@@ -157,9 +157,9 @@ export const slice = createSlice({
           stage: {
             ...state.stage,
             steps: updatedSteps,
-            currentStep: currentStep + 1
-          }
-        }
+            currentStep: currentStep + 1,
+          },
+        };
       } else {
         const finishedStage: FinishedStage = {
           code: GameStageVariant.Finished,
@@ -180,11 +180,11 @@ export const slice = createSlice({
 
       const finishedStage: FinishedStage = {
         code: GameStageVariant.Finished,
-        steps: completedSteps
-      }
+        steps: completedSteps,
+      };
 
       return {
-        stage: finishedStage
+        stage: finishedStage,
       };
     },
 
@@ -196,19 +196,12 @@ export const slice = createSlice({
 
 export const makeOpinionYes = (): AppThunk => (dispatch) => {
   dispatch(slice.actions.makeOpinion(true));
-}
+};
 
 export const makeOpinionNo = (): AppThunk => (dispatch) => {
   dispatch(slice.actions.makeOpinion(false));
-}
+};
 
-export const {
-  startFromStartScreen,
-  setGroup,
-  setPage,
-  startGame,
-  haltByTimeout,
-  destroyGame
-} = slice.actions;
+export const { startFromStartScreen, setGroup, setPage, startGame, haltByTimeout, destroyGame } = slice.actions;
 
 export const selectState = (state: RootState): SprintState => state[slice.name];

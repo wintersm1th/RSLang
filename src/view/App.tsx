@@ -13,7 +13,7 @@ import Footer from './components/footer/footer';
 import Header from './components/header/Header';
 import Team from './pages/Team';
 import Statistics from './pages/Statistics';
-import HardWords from "./pages/Dictionary/HardWords";
+import HardWords from './pages/Dictionary/HardWords';
 
 export default function WrappedMain() {
   return (
