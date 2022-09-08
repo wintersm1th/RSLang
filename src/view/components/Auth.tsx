@@ -14,6 +14,7 @@ import IAuthService from '../../services/interfaces/IAuthService';
 import { selectState } from '../../model/feature/forms/login';
 import { isFailVariant, isSuccessVariant } from '../../model/helpers/forms';
 import { FormMessage } from './FormMessage';
+import { IStatisticsService } from "../../services/interfaces/IStatisticService";
 
 const registerSchema = object({
   email: string().email('Неверно указан Email'),
@@ -39,6 +40,8 @@ const AuthPage = () => {
   const onSubmitHandler: SubmitHandler<AuthInput> = async (values) => {
     const result = await authService.authorize(values);
     if (result) {
+      const statistics = DIContainer.get<IStatisticsService>(DI_TYPES.StatisticsService);
+      await statistics.initializeStatistics();
       reset();
     }
   };

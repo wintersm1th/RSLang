@@ -32,7 +32,7 @@ DIContainer.bind<IRegisterService>(DI_TYPES.RegistrationService).to(RegisterServ
 DIContainer.bind<IAuthService>(DI_TYPES.AuthService).to(AuthService).inSingletonScope();
 DIContainer.bind<IWordsService>(DI_TYPES.WordsService).to(WordsService).inSingletonScope();
 DIContainer.bind<IDictionaryService>(DI_TYPES.DictionaryService).to(DictionaryService).inSingletonScope();
-DIContainer.bind<IStatisticsService>(DI_TYPES.StatisticsService).to(StatisticService).inSingletonScope();
+DIContainer.bind<IStatisticsService>(DI_TYPES.StatisticsService).to(StatisticService);
 
 DIContainer.bind<IAudioChallengeGame>(DI_TYPES.AudioChallengeGame).to(AudioChallengeGame);
 DIContainer.bind<ISprintGame>(DI_TYPES.SprintGame).to(SprintGame);

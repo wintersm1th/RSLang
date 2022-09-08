@@ -43,6 +43,7 @@ const WordCardExtension = ({ wordId, auth: { id: userId }, wordParams }: WordCar
   };
 
   const handleAddToLearned = () => {
+    console.log('CLICK HANDLER');
     wordsService.setWordLearnedMark(userId, wordId);
   };
 
