@@ -8,11 +8,11 @@ import { statistic as statApi } from '../../../model/api/private';
 import { StatisticPayload } from "../../../model/api/shemas";
 
 
-function getCorrectAnswerPercent(learnedWords: number, totalWords: number) {
+function getCorrectAnswerPercent(learnedWords: number, totalWords: number): number {
   if (!totalWords || !learnedWords) {
     return 0;
   }
-  return learnedWords * 100 / totalWords;
+  return Math.ceil(learnedWords * 100 / totalWords);
 }
 
 // function getTotalStats(stats: StatisticPayload) {
