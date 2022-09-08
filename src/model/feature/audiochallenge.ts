@@ -1,4 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import DIContainer from '../../DI/DIContainer';
+import DI_TYPES from '../../DI/DITypes';
+import { IAudioChallengeGame } from '../../services/interfaces/IAudioChallengeGame';
 import { RootState } from '../store';
 
 type WordId = string;
@@ -169,6 +172,9 @@ export const slice = createSlice({
           code: GameStageVariant.Finished,
           steps: state.stage.steps as CompletedStep[],
         };
+
+        const gameService = DIContainer.get<IAudioChallengeGame>(DI_TYPES.AudioChallengeGame);
+        gameService.handleVictory(finishedStage);
 
         return {
           stage: finishedStage,

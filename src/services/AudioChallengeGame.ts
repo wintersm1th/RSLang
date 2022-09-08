@@ -15,6 +15,7 @@ import {
   StartScreenStage,
   createIncompletedStep,
   IncompletedStep,
+  FinishedStage,
 } from '../model/feature/audiochallenge';
 
 import DI_TYPES from '../DI/DITypes';
@@ -24,12 +25,15 @@ import IAuth from '../core/IAuth';
 import { IAudioChallengeGame, StartingParams } from './interfaces/IAudioChallengeGame';
 import { AggregatedWord } from '../model/api/private/userWords';
 import { pickWords, pickWordsWithValidation, shuffle } from './utils/randomPicking';
+import { calculateStreakLength } from './utils/extractStreak';
+import { IStatisticsService } from './interfaces/IStatisticService';
 
 @injectable()
 export default class AudioChallengeGame implements IAudioChallengeGame {
   private userParams: IAuth;
 
   constructor(
+    @inject(DI_TYPES.StatisticsService) private statisticsService: IStatisticsService,
     @inject(DI_TYPES.AuthService) authService: IAuthService
   ) {
     const auth = authService.getAuth();
@@ -39,6 +43,14 @@ export default class AudioChallengeGame implements IAudioChallengeGame {
     }
 
     this.userParams = auth;
+  }
+
+  async handleVictory({ steps }: FinishedStage): Promise<void> {
+    const totalCount = steps.length;
+    const learnedCount = steps.filter((step) => step.result).length;
+    const bestStreak = calculateStreakLength(steps, (step) => step.result);
+
+    this.statisticsService.modifyDayAudioStatistic(totalCount, learnedCount, bestStreak);
   }
 
   async startWithParams({ group, page }: StartingParams) {
