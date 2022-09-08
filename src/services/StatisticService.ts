@@ -47,9 +47,9 @@ export default class StatisticService implements IStatisticsService {
                 totalWordsCount: 0,
                 bestSession: 0,
               },
-            }
-          }
-        }
+            },
+          },
+        },
       };
       this.updateStatistics(body);
     }
@@ -59,7 +59,7 @@ export default class StatisticService implements IStatisticsService {
 
   async incrementLearnedWordsForDay(): Promise<boolean> {
     const oldStatistics = await this.getStatistics();
-    const currentDay = new Date().toLocaleDateString()
+    const currentDay = new Date().toLocaleDateString();
     if (currentDay in oldStatistics.daysWords) {
       const {
         daysWords: {
@@ -85,10 +85,7 @@ export default class StatisticService implements IStatisticsService {
 
       return this.updateStatistics(updatedBody);
     } else {
-      const {
-        daysWords,
-        ...rest1
-      } = oldStatistics;
+      const { daysWords, ...rest1 } = oldStatistics;
 
       const updated: Statistics = {
         daysWords: {
@@ -167,7 +164,7 @@ export default class StatisticService implements IStatisticsService {
         },
         ...rest1,
       };
-      
+
       return this.updateStatistics({ optional: updatedBody });
     } else {
       const updatedBody = {
@@ -209,7 +206,7 @@ export default class StatisticService implements IStatisticsService {
     }
 
     const { optional } = data;
-    
+
     return JSON.parse(JSON.stringify(optional));
   }
 
